@@ -16,3 +16,5 @@ SOURCES         = \
 # install
 target.path = $$[QT_INSTALL_EXAMPLES]/widgets/richtext/syntaxhighlighter
 INSTALLS += target
+
+FORMS +=
