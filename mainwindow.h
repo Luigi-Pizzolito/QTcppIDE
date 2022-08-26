@@ -53,6 +53,8 @@
 
 #include "highlighter.h"
 
+#include "miniconsole.h"
+
 #include <QMainWindow>
 
 QT_BEGIN_NAMESPACE
@@ -79,6 +81,8 @@ private:
 
     QTextEdit *editor;
     Highlighter *highlighter;
+
+    MiniConsole *console;
 };
 //! [0]
 

@@ -54,6 +54,10 @@
 
 #include "highlighter.h"
 #include "qtextedithighlighter.h"
+#include "miniconsole.h"
+
+#include <QWidget>
+#include <QVBoxLayout>
 
 //! [0]
 MainWindow::MainWindow(QWidget *parent)
@@ -63,8 +67,21 @@ MainWindow::MainWindow(QWidget *parent)
     setupHelpMenu();
     setupEditor();
 
-    setCentralWidget(editor);
-    setWindowTitle(tr("Syntax Highlighter"));
+    //setup split view
+    QWidget *widget = new QWidget(this);
+    QVBoxLayout *layout = new QVBoxLayout(widget);
+
+    setCentralWidget(widget);
+    widget->setLayout(layout);
+
+    layout->addWidget(editor);
+
+    console = new MiniConsole();
+    layout->addWidget(console);
+
+
+//    setCentralWidget(editor);
+    setWindowTitle(tr("C++ IDE"));
 }
 //! [0]
 

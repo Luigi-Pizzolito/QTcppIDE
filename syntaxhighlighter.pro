@@ -5,12 +5,14 @@ HEADERS         = \
                   highlighter.h \
                   linenumberarea.h \
                   mainwindow.h \
+                  miniconsole.h \
                   qtextedithighlighter.h
 SOURCES         = \
                   highlighter.cpp \
                   linenumberarea.cpp \
                   mainwindow.cpp \
                   main.cpp \
+                  miniconsole.cpp \
                   qtextedithighlighter.cpp
 
 # install
