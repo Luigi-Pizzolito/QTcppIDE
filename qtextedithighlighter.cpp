@@ -11,6 +11,8 @@ QTextEditHighlighter::QTextEditHighlighter(QWidget *parent) :
     connect(this->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateLineNumberArea/*_2*/(int)));
     connect(this, SIGNAL(textChanged()), this, SLOT(updateLineNumberArea()));
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(updateLineNumberArea()));
+
+    connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
     ///
     updateLineNumberAreaWidth(0);
 }
@@ -152,7 +154,7 @@ void QTextEditHighlighter::lineNumberAreaPaintEvent(QPaintEvent *event)
 
     int bottom = top + (int) this->document()->documentLayout()->blockBoundingRect(block).height();
 
-    QColor col_1(90, 255, 30);      // Current line (custom green)
+    QColor col_1 = QColor(Qt::blue).lighter(100);      // Current line (custom green)   col_1(90, 255, 30)
     QColor col_0(120, 120, 120);    // Other lines  (custom darkgrey)
 
     // Draw the numbers (displaying the current line number in green)
@@ -172,4 +174,23 @@ void QTextEditHighlighter::lineNumberAreaPaintEvent(QPaintEvent *event)
         ++blockNumber;
     }
 
+}
+
+void QTextEditHighlighter::highlightCurrentLine()
+{
+    QList<QTextEdit::ExtraSelection> extraSelections;
+
+    if (!isReadOnly()) {
+        QTextEdit::ExtraSelection selection;
+
+        QColor lineColor = QColor(Qt::blue).lighter(160);
+
+        selection.format.setBackground(lineColor);
+        selection.format.setProperty(QTextFormat::FullWidthSelection, true);
+        selection.cursor = textCursor();
+        selection.cursor.clearSelection();
+        extraSelections.append(selection);
+    }
+
+    setExtraSelections(extraSelections);
 }

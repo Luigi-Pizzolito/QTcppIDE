@@ -30,6 +30,8 @@ private slots:
     void updateLineNumberArea(int /*slider_pos*/);
     void updateLineNumberArea();
 
+    void highlightCurrentLine();
+
 private:
 
     QWidget *lineNumberArea;
