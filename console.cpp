@@ -9,11 +9,12 @@ Console::Console(QWidget *parent) : QTextEdit(parent)
     setMaximumHeight(200);
     setReadOnly(true);
 
-
+    prunner = new ProcRunner();
     redirect = new QDebugStream(std::cout, this);
 }
 
 //Console::~Console() {
+//    delete procrunner;
 //    delete redirect;
 //}
 
@@ -26,7 +27,7 @@ void Console::clearLog() {
 
 void Console::keyPressEvent(QKeyEvent *ev)
 {
-    if (procRunning) {
+    if (prunner->procRunning) {
         append("You Pressed Key " + ev->text());
     }
 
@@ -39,6 +40,9 @@ void Console::keyPressEvent(QKeyEvent *ev)
 
 
 void Console::run() {
-    procRunning = true;
+//    prunner->procRunning = true;
+    QStringList args;
+    args << "hi";
+    prunner->run("notify-send", args);
     std::cout << "Running";
 }

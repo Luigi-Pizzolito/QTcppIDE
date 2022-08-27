@@ -6,6 +6,7 @@ HEADERS         = \
                   highlighter.h \
                   linenumberarea.h \
                   mainwindow.h \
+                  procrunner.h \
                   qtexteditlineshighlighted.h
 SOURCES         = \
                   console.cpp \
@@ -13,6 +14,7 @@ SOURCES         = \
                   linenumberarea.cpp \
                   mainwindow.cpp \
                   main.cpp \
+                  procrunner.cpp \
                   qtexteditlineshighlighted.cpp
 
 # install
