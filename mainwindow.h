@@ -53,7 +53,7 @@
 
 #include "highlighter.h"
 
-#include "miniconsole.h"
+#include "console.h"
 
 #include <QMainWindow>
 
@@ -82,7 +82,7 @@ private:
     QTextEdit *editor;
     Highlighter *highlighter;
 
-    MiniConsole *console;
+    Console *console;
 };
 //! [0]
 

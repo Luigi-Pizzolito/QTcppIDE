@@ -53,8 +53,8 @@
 #include "mainwindow.h"
 
 #include "highlighter.h"
-#include "qtextedithighlighter.h"
-#include "miniconsole.h"
+#include "qtexteditlineshighlighted.h"
+#include "console.h"
 
 #include <QWidget>
 #include <QVBoxLayout>
@@ -76,7 +76,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     layout->addWidget(editor);
 
-    console = new MiniConsole();
+    console = new Console();
     layout->addWidget(console);
 
 
@@ -122,7 +122,7 @@ void MainWindow::setupEditor()
     font.setPointSize(10);
 
 //    editor = new QTextEdit;
-    editor = new QTextEditHighlighter;
+    editor = new QTextEditLinesHighlighted;
     editor->setFont(font);
 
     highlighter = new Highlighter(editor->document());

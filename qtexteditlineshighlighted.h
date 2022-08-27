@@ -1,16 +1,16 @@
-#ifndef QTEXTEDITHIGHLIGHTER_H
-#define QTEXTEDITHIGHLIGHTER_H
+#ifndef QTEXTEDITLINESHIGHLIGHTED_H
+#define QTEXTEDITLINESHIGHLIGHTED_H
 
 #include <QTextEdit>
 #include <QWidget>
 
-class QTextEditHighlighter : public QTextEdit
+class QTextEditLinesHighlighted : public QTextEdit
 {
     Q_OBJECT
 
 public:
 
-    explicit QTextEditHighlighter(QWidget *parent = 0);
+    explicit QTextEditLinesHighlighted(QWidget *parent = 0);
 
     int getFirstVisibleBlockId();
     void lineNumberAreaPaintEvent(QPaintEvent *event);
@@ -37,4 +37,4 @@ private:
     QWidget *lineNumberArea;
 
 };
-#endif // QTEXTEDITHIGHLIGHTER_H
+#endif // QTEXTEDITLINESHIGHLIGHTED_H

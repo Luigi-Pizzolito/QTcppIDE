@@ -1,7 +1,7 @@
-#include "qtextedithighlighter.h"
+#include "qtexteditlineshighlighted.h"
 #include "linenumberarea.h"
 
-QTextEditHighlighter::QTextEditHighlighter(QWidget *parent) :
+QTextEditLinesHighlighted::QTextEditLinesHighlighted(QWidget *parent) :
     QTextEdit(parent)
 {
     // Line numbers
@@ -17,7 +17,7 @@ QTextEditHighlighter::QTextEditHighlighter(QWidget *parent) :
     updateLineNumberAreaWidth(0);
 }
 
-int QTextEditHighlighter::lineNumberAreaWidth()
+int QTextEditLinesHighlighted::lineNumberAreaWidth()
 {
     int digits = 1;
     int max = qMax(1, this->document()->blockCount());
@@ -31,21 +31,21 @@ int QTextEditHighlighter::lineNumberAreaWidth()
     return space;
 }
 
-void QTextEditHighlighter::updateLineNumberAreaWidth(int /* newBlockCount */)
+void QTextEditLinesHighlighted::updateLineNumberAreaWidth(int /* newBlockCount */)
 {
     setViewportMargins(lineNumberAreaWidth(), 0, 0, 0);
 }
 
 
-void QTextEditHighlighter::updateLineNumberArea(QRectF /*rect_f*/)
+void QTextEditLinesHighlighted::updateLineNumberArea(QRectF /*rect_f*/)
 {
-    QTextEditHighlighter::updateLineNumberArea();
+    QTextEditLinesHighlighted::updateLineNumberArea();
 }
-void QTextEditHighlighter::updateLineNumberArea(int /*slider_pos*/)
+void QTextEditLinesHighlighted::updateLineNumberArea(int /*slider_pos*/)
 {
-    QTextEditHighlighter::updateLineNumberArea();
+    QTextEditLinesHighlighted::updateLineNumberArea();
 }
-void QTextEditHighlighter::updateLineNumberArea()
+void QTextEditLinesHighlighted::updateLineNumberArea()
 {
     /*
      * When the signal is emitted, the sliderPosition has been adjusted according to the action,
@@ -87,7 +87,7 @@ void QTextEditHighlighter::updateLineNumberArea()
 }
 
 
-void QTextEditHighlighter::resizeEvent(QResizeEvent *e)
+void QTextEditLinesHighlighted::resizeEvent(QResizeEvent *e)
 {
     QTextEdit::resizeEvent(e);
 
@@ -96,7 +96,7 @@ void QTextEditHighlighter::resizeEvent(QResizeEvent *e)
 }
 
 
-int QTextEditHighlighter::getFirstVisibleBlockId()
+int QTextEditLinesHighlighted::getFirstVisibleBlockId()
 {
     // Detect the first block for which bounding rect - once translated
     // in absolute coordinated - is contained by the editor's text area
@@ -124,7 +124,7 @@ int QTextEditHighlighter::getFirstVisibleBlockId()
     return 0;
 }
 
-void QTextEditHighlighter::lineNumberAreaPaintEvent(QPaintEvent *event)
+void QTextEditLinesHighlighted::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
     this->verticalScrollBar()->setSliderPosition(this->verticalScrollBar()->sliderPosition());
 
@@ -176,7 +176,7 @@ void QTextEditHighlighter::lineNumberAreaPaintEvent(QPaintEvent *event)
 
 }
 
-void QTextEditHighlighter::highlightCurrentLine()
+void QTextEditLinesHighlighted::highlightCurrentLine()
 {
     QList<QTextEdit::ExtraSelection> extraSelections;
 
