@@ -76,7 +76,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     layout->addWidget(editor);
 
+    // setup console
     console = new Console();
+    QMenu *EtcMenu = new QMenu(tr("&Etc"), this);
+    menuBar()->addMenu(EtcMenu);
+    EtcMenu->addAction(tr("&Clear Log"), this, [this](){console->clearLog();});
+    EtcMenu->addAction(tr("&Run"), this, [this](){console->run();});
+
+
     layout->addWidget(console);
 
 
