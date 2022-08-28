@@ -11,27 +11,33 @@ Still WIP.
 
 ## Features
 
-### Work in Progress
+### Done
 - Text editor with line numbers and syntax highlighting.
-- Search and Replace.
-- File save/open.
+- File Open.
 - Open folder with multiple files.
+- In-Editor help/documentation.
+
+### Work in Progress
+- Search and Replace.
+- File save.
 
 ### Planned
 - Line number and column display and locate.
-- Undo and Redo.
+- Undo and Redo. (add edit menu)
 - Support to use multiple compilers/linkers.
 - C and C++ support (selectable).
 - Debugger support.
 - Breakpoint setting.
-- Cross-platform.
+- Cross-platform testing.
 - Launch in external console.
 - Restore settings on startup and restore defaults.
 - Automatically install compiler/debugger.
 - Switch between .cpp and .h file.
 - Project starter templates.
 - Bottom status bar.
-- In-Editor help/documentation.
+- About markdown file.
+- Documentation markdown file.
+- Alternative welcome screen markdown file.
 - Error handling when launching procceses.
 
 

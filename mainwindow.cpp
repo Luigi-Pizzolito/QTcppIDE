@@ -61,7 +61,6 @@
 #include <QGridLayout>
 
 
-
 //! [0]
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -69,7 +68,7 @@ MainWindow::MainWindow(QWidget *parent)
     setupFileMenu();
     setupEditor();
     setupConsole();
-    setupHelpMenu();
+
 
     //setup split view
     QWidget *widget = new QWidget(this);
@@ -91,7 +90,11 @@ MainWindow::MainWindow(QWidget *parent)
     layout->setRowStretch(0, 9);
     layout->setRowStretch(1, 3);
 
+    setupHelpMenu();
+
     setWindowTitle(tr("C++ IDE"));
+    //editor->setPlainText("Welcome to C++ IDE V1.0\nGo to File > Open and select a folder\ncontaining C/C++ files to get started.\n");
+    showDocs();
 }
 //! [0]
 
@@ -131,11 +134,6 @@ void MainWindow::setupEditor()
     editor->setFont(font);
 
     highlighter = new Highlighter(editor->document());
-
-//    editor->setPlainText("Welcome to C++ IDE V1.0\nGo to File > Open and select a folder\ncontaining C/C++ files to get started.\n");
-    QFile file("../README.md");
-        if (file.open(QFile::ReadOnly | QFile::Text))
-            editor->setMarkdown(file.readAll());
 }
 //! [1]
 
@@ -161,9 +159,33 @@ void MainWindow::setupHelpMenu()
 {
     QMenu *helpMenu = new QMenu(tr("&Help"), this);
     menuBar()->addMenu(helpMenu);
+    helpMenu->addAction(tr("&Documentation"), this, &MainWindow::showDocs);
+    helpMenu->addSeparator();
     //todo: add help menu to temp load readme.md
     helpMenu->addAction(tr("&About"), this, &MainWindow::about);
     helpMenu->addAction(tr("About &Qt"), qApp, &QApplication::aboutQt);
+}
+
+void MainWindow::showDocs() {
+    if (!fileList->fileP.isNull()) // if a previous file was open, store it
+        DocsPFile = fileList->fileP;
+
+    // Open README Documentation
+    QFile file("../README.md");
+        if (file.open(QFile::ReadOnly | QFile::Text))
+            editor->setMarkdown(file.readAll());
+}
+
+void MainWindow::showDocsRestore() {
+    if (!DocsPFile.isNull()) //if there is a prior open document to restore
+        fileList->openFolder(fileList->fileP);
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *ev) {
+    if (ev->key() == Qt::Key::Key_Escape) {
+        // restore if documentation was showing during keypress
+        showDocsRestore();
+    }
 }
 
 void MainWindow::setupConsole() {

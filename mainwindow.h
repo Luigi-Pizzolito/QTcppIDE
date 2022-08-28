@@ -74,6 +74,8 @@ public:
 
 public slots:
     void about();
+    void showDocs();
+    void showDocsRestore();
     void newFile();
     void openFile(const QString &path = QString());
 
@@ -90,6 +92,11 @@ private:
     ConfigGen *configG;
 
     FileManager *fileList;
+
+    QString DocsPFile;
+
+protected:
+    void keyPressEvent(QKeyEvent *event);
 };
 //! [0]
 
