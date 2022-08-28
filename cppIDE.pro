@@ -3,6 +3,7 @@ requires(qtConfig(filedialog))
 
 HEADERS         = \
                   console.h \
+                  filemanager.h \
                   highlighter.h \
                   linenumberarea.h \
                   mainwindow.h \
@@ -10,6 +11,7 @@ HEADERS         = \
                   qtexteditlineshighlighted.h
 SOURCES         = \
                   console.cpp \
+                  filemanager.cpp \
                   highlighter.cpp \
                   linenumberarea.cpp \
                   mainwindow.cpp \

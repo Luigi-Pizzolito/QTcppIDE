@@ -54,6 +54,7 @@
 #include "highlighter.h"
 
 #include "console.h"
+#include "filemanager.h"
 
 #include <QMainWindow>
 #include <QListWidgetItem>
@@ -74,7 +75,6 @@ public slots:
     void about();
     void newFile();
     void openFile(const QString &path = QString());
-    void openFileFList(QListWidgetItem* item);
 
 private:
     void setupEditor();
@@ -86,6 +86,8 @@ private:
     Highlighter *highlighter;
 
     Console *console;
+
+    FileManager *fileList;
 };
 //! [0]
 

@@ -60,7 +60,7 @@
 #include <QListWidget>
 #include <QGridLayout>
 
-#include <iostream>
+
 
 //! [0]
 MainWindow::MainWindow(QWidget *parent)
@@ -79,16 +79,12 @@ MainWindow::MainWindow(QWidget *parent)
     widget->setLayout(layout);
 
     layout->addWidget(editor, 0, 1, 1, 1);
-    layout->setColumnStretch(1, 11);
+    layout->setColumnStretch(1, 10);
 
 
-    QListWidget *fileList = new QListWidget(this);
-    fileList->addItem("one.cpp");
-    fileList->addItem("two.cpp");
-    fileList->addItem("two.h");
-    connect(fileList, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(openFileFList(QListWidgetItem*)));
+    fileList = new FileManager(this, editor);
     layout->addWidget(fileList, 0, 0, 1, 1);
-    layout->setColumnStretch(0, 1);
+    layout->setColumnStretch(0, 2);
 
     layout->addWidget(console, 1, 0, 1, 2);
     layout->setRowStretch(0, 9);
@@ -113,24 +109,9 @@ void MainWindow::newFile()
     editor->clear();
 }
 
-void MainWindow::openFileFList(QListWidgetItem* item) {
-    std::cout << "opening: " << item->text().toStdString() <<"\n";
-    openFile(item->text());
-}
-
 void MainWindow::openFile(const QString &path)
 {
-    QString fileName = path;
-
-    if (fileName.isNull()) {
-        fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", "C++ Files (*.cpp *.hpp *.h);;C Files (*.c *.h);;Any files (*)");
-    }
-
-    if (!fileName.isEmpty()) {
-        QFile file(fileName);
-        if (file.open(QFile::ReadOnly | QFile::Text))
-            editor->setPlainText(file.readAll());
-    }
+    fileList->openFolder(path);
 }
 
 //! [1]
@@ -146,9 +127,7 @@ void MainWindow::setupEditor()
 
     highlighter = new Highlighter(editor->document());
 
-    QFile file("/home/luigipizzolito/Desktop/stdecho/stdecho.cpp");
-    if (file.open(QFile::ReadOnly | QFile::Text))
-        editor->setPlainText(file.readAll());
+    editor->setPlainText("Welcome to C++ IDE V1.0\nGo to File > Open and select a folder\ncontaining C/C++ files to get started.\n");
 }
 //! [1]
 
