@@ -2,6 +2,7 @@ QT += widgets
 requires(qtConfig(filedialog))
 
 HEADERS         = \
+                  configgen.h \
                   console.h \
                   filemanager.h \
                   highlighter.h \
@@ -10,6 +11,7 @@ HEADERS         = \
                   procrunner.h \
                   qtexteditlineshighlighted.h
 SOURCES         = \
+                  configgen.cpp \
                   console.cpp \
                   filemanager.cpp \
                   highlighter.cpp \

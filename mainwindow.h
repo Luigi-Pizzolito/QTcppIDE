@@ -55,6 +55,7 @@
 
 #include "console.h"
 #include "filemanager.h"
+#include "configgen.h"
 
 #include <QMainWindow>
 #include <QListWidgetItem>
@@ -86,6 +87,7 @@ private:
     Highlighter *highlighter;
 
     Console *console;
+    ConfigGen *configG;
 
     FileManager *fileList;
 };

@@ -176,5 +176,10 @@ void MainWindow::setupConsole() {
 //    ConsoleMenu->addAction(tr("Compile and &Run"), this, [this](){console->compile();console->run();});
     ConsoleMenu->addSeparator();
     ConsoleMenu->addAction(tr("&Clear Console"), this, [this](){console->clearLog();});
-    ConsoleMenu->addAction(tr("&Preferences"), this, [this](){console->clearLog();});
+
+
+
+    ConsoleMenu->addSeparator();
+    configG = new ConfigGen(this);
+    ConsoleMenu->addAction(tr("&Preferences"), this, [this](){configG->show();});
 }

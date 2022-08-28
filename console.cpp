@@ -58,6 +58,7 @@ void Console::keyPressEvent(QKeyEvent *ev)
 
 //todo: get these from configgen
 //todo: check errors from starting proccess (wrong bin path, etc)
+//todo: open IDE setup if not yet setup
 void Console::run() {
     QStringList args;
     args << ".." << "test";
