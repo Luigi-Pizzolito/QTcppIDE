@@ -8,6 +8,11 @@ Console::Console(QWidget *parent) : QTextEdit(parent)
 //    setMaximumHeight(200);
     setMinimumHeight(200);
     setReadOnly(true);
+    QFont font;
+    font.setFamily("Courier");
+    font.setFixedPitch(true);
+    font.setPointSize(10);
+    setFont(font);
 
     setTextColor(QColor(Qt::blue).lighter(160));
     append(IDEVER);

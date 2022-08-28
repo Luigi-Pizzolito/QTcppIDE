@@ -97,11 +97,15 @@ MainWindow::MainWindow(QWidget *parent)
 void MainWindow::about()
 {
     //todo: add about description here
-    QMessageBox::about(this, tr("About C++ IDE"),
-                tr("<p>The <b>Syntax Highlighter</b> example shows how " \
-                   "to perform simple syntax highlighting by subclassing " \
-                   "the QSyntaxHighlighter class and describing " \
-                   "highlighting rules using regular expressions.</p>"));
+    QString md = "";
+    QFile file("../doc/about.md");
+        if (file.open(QFile::ReadOnly | QFile::Text))
+            md = file.readAll();
+    //QMessageBox::about(this, tr("About C++ IDE"), md);
+    QMessageBox aboutb;
+    aboutb.setTextFormat(Qt::MarkdownText);
+    aboutb.setText(md);
+    aboutb.exec();
 }
 
 void MainWindow::newFile()
@@ -127,7 +131,10 @@ void MainWindow::setupEditor()
 
     highlighter = new Highlighter(editor->document());
 
-    editor->setPlainText("Welcome to C++ IDE V1.0\nGo to File > Open and select a folder\ncontaining C/C++ files to get started.\n");
+//    editor->setPlainText("Welcome to C++ IDE V1.0\nGo to File > Open and select a folder\ncontaining C/C++ files to get started.\n");
+    QFile file("../README.md");
+        if (file.open(QFile::ReadOnly | QFile::Text))
+            editor->setMarkdown(file.readAll());
 }
 //! [1]
 
