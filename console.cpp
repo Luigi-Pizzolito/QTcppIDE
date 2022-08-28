@@ -5,12 +5,31 @@
 
 Console::Console(QWidget *parent) : QTextEdit(parent)
 {
-    setPlainText(IDEVER);
+    setTextColor(QColor(Qt::blue).lighter(160));
+    append(IDEVER);
+
     setMaximumHeight(200);
     setReadOnly(true);
 
-    prunner = new ProcRunner();
-    redirect = new QDebugStream(std::cout, this);
+    prunner = new ProcRunner(this, this);
+    connect(prunner->proc, SIGNAL(readyReadStandardOutput()), this, SLOT(processProcOutput()));  // connect process signals with your code
+    connect(prunner->proc, SIGNAL(readyReadStandardError()), this, SLOT(processProcOutput()));  // same here
+    connect(prunner->proc, SIGNAL(started()), this, SLOT(processProcStarted()));
+    connect(prunner->proc, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(processProcFinished(int,QProcess::ExitStatus)));
+
+//    redirect = new QDebugStream(std::cout, this);
+}
+
+void Console::processProcOutput() {
+    prunner->takeOutput();
+}
+
+void Console::processProcStarted() {
+    prunner->procStarted();
+}
+
+void Console::processProcFinished(int exitCode, QProcess::ExitStatus exitStatus) {
+    prunner->procFinished(exitCode, exitStatus);
 }
 
 //Console::~Console() {
@@ -21,15 +40,15 @@ Console::Console(QWidget *parent) : QTextEdit(parent)
 
 void Console::clearLog() {
     clear();
-    setPlainText(IDEVER);
+    setTextColor(QColor(Qt::blue).lighter(160));
+    append(IDEVER);
 }
 
 
 void Console::keyPressEvent(QKeyEvent *ev)
 {
-    if (prunner->procRunning) {
-        append("You Pressed Key " + ev->text());
-    }
+//        append("You Pressed Key " + ev->text());
+        prunner->takeInput(ev->text());
 
 }
 
@@ -42,7 +61,8 @@ void Console::keyPressEvent(QKeyEvent *ev)
 void Console::run() {
 //    prunner->procRunning = true;
     QStringList args;
-    args << "hi";
-    prunner->run("notify-send", args);
+//    args << "$(</dev/stdin)";
+    args << ".." << "test";
+    prunner->run("/home/luigipizzolito/Desktop/stdecho/stdecho", args);
     std::cout << "Running";
 }

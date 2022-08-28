@@ -15,6 +15,9 @@ public:
 public slots:
     void clearLog();
     void run();
+    void processProcOutput();
+    void processProcStarted();
+    void processProcFinished(int exitCode, QProcess::ExitStatus exitStatus);
 private:
     QDebugStream *redirect;
     ProcRunner *prunner;

@@ -69,13 +69,17 @@ private:
 class ProcRunner
 {
 public:
-    explicit ProcRunner(QWidget *parent = 0);
-    bool procRunning = false;
+    explicit ProcRunner(QWidget *parent = 0, QTextEdit *text_edit = 0);
+    QProcess *proc;
 public slots:
     void run(QString program, QStringList arguments);
+    void takeInput(QString key);
+    void takeOutput();
+    void procStarted();
+    void procFinished(int exitCode, QProcess::ExitStatus exitStatus);
 private:
-    QProcess *proc;
     QWidget *parentw;
+    QTextEdit *tedit;
 };
 
 
