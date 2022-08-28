@@ -23,6 +23,7 @@ void ProcRunner::procStarted() {
     str+=proc->arguments().join(" ");
     str+="\n";
     tedit->append(str);
+    tedit->ensureCursorVisible();
 }
 
 void ProcRunner::procFinished(int exitCode, QProcess::ExitStatus exitStatus) {
@@ -30,6 +31,7 @@ void ProcRunner::procFinished(int exitCode, QProcess::ExitStatus exitStatus) {
     QString str = "Process finished with exit code ";
     str+= QString::number(exitCode);
     tedit->append(str);
+    tedit->ensureCursorVisible();
 }
 
 

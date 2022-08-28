@@ -15,6 +15,7 @@ public:
 public slots:
     void clearLog();
     void run();
+    void compile();
     void processProcOutput();
     void processProcStarted();
     void processProcFinished(int exitCode, QProcess::ExitStatus exitStatus);

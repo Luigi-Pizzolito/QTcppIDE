@@ -8,8 +8,9 @@ Console::Console(QWidget *parent) : QTextEdit(parent)
     setTextColor(QColor(Qt::blue).lighter(160));
     append(IDEVER);
 
-    setMaximumHeight(200);
+    setMaximumHeight(500);
     setReadOnly(true);
+//    setCenterOnScroll(true);
 
     prunner = new ProcRunner(this, this);
     connect(prunner->proc, SIGNAL(readyReadStandardOutput()), this, SLOT(processProcOutput()));  // connect process signals with your code
@@ -42,6 +43,7 @@ void Console::clearLog() {
     clear();
     setTextColor(QColor(Qt::blue).lighter(160));
     append(IDEVER);
+    ensureCursorVisible();
 }
 
 
@@ -64,5 +66,13 @@ void Console::run() {
 //    args << "$(</dev/stdin)";
     args << ".." << "test";
     prunner->run("/home/luigipizzolito/Desktop/stdecho/stdecho", args);
-    std::cout << "Running";
+
+//    std::cout << "Running";
+}
+
+void Console::compile() {
+    QStringList args;
+    args << "stdecho.cpp" << "-Wall" << "--verbose" << "-o" << "stdecho";
+    prunner->proc->setWorkingDirectory("/home/luigipizzolito/Desktop/stdecho");
+    prunner->run("g++", args);
 }

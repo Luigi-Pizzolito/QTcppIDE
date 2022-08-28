@@ -81,6 +81,7 @@ MainWindow::MainWindow(QWidget *parent)
     QMenu *EtcMenu = new QMenu(tr("&Etc"), this);
     menuBar()->addMenu(EtcMenu);
     EtcMenu->addAction(tr("&Clear Log"), this, [this](){console->clearLog();});
+    EtcMenu->addAction(tr("Com&pile"), this, [this](){console->compile();});
     EtcMenu->addAction(tr("&Run"), this, [this](){console->run();});
 
 
