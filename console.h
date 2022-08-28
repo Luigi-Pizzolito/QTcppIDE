@@ -6,7 +6,6 @@
 
 #include "procrunner.h"
 
-
 class Console : public QTextEdit
 {
     Q_OBJECT
@@ -20,11 +19,9 @@ public slots:
     void processProcStarted();
     void processProcFinished(int exitCode, QProcess::ExitStatus exitStatus);
 private:
-    QDebugStream *redirect;
     ProcRunner *prunner;
 protected:
     void keyPressEvent(QKeyEvent *event);
-//    void keyReleaseEvent(QKeyEvent *event);
 };
 
 #endif // CONSOLE_H

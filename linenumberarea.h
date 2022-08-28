@@ -8,7 +8,6 @@ class LineNumberArea : public QWidget
 {
     Q_OBJECT
 public:
-//    explicit LineNumberArea(QWidget *parent = nullptr);
     LineNumberArea(QTextEdit *editor);
     QSize sizeHint() const;
 

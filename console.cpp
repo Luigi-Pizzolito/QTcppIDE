@@ -5,12 +5,11 @@
 
 Console::Console(QWidget *parent) : QTextEdit(parent)
 {
-    setTextColor(QColor(Qt::blue).lighter(160));
-    append(IDEVER);
-
     setMaximumHeight(500);
     setReadOnly(true);
-//    setCenterOnScroll(true);
+
+    setTextColor(QColor(Qt::blue).lighter(160));
+    append(IDEVER);
 
     prunner = new ProcRunner(this, this);
     connect(prunner->proc, SIGNAL(readyReadStandardOutput()), this, SLOT(processProcOutput()));  // connect process signals with your code
@@ -18,7 +17,6 @@ Console::Console(QWidget *parent) : QTextEdit(parent)
     connect(prunner->proc, SIGNAL(started()), this, SLOT(processProcStarted()));
     connect(prunner->proc, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(processProcFinished(int,QProcess::ExitStatus)));
 
-//    redirect = new QDebugStream(std::cout, this);
 }
 
 void Console::processProcOutput() {
@@ -49,25 +47,14 @@ void Console::clearLog() {
 
 void Console::keyPressEvent(QKeyEvent *ev)
 {
-//        append("You Pressed Key " + ev->text());
         prunner->takeInput(ev->text());
-
 }
-
-//void Console::keyReleaseEvent(QKeyEvent *ev)
-//{
-////    append("You Release Key " + ev->text());
-//}
 
 
 void Console::run() {
-//    prunner->procRunning = true;
     QStringList args;
-//    args << "$(</dev/stdin)";
     args << ".." << "test";
     prunner->run("/home/luigipizzolito/Desktop/stdecho/stdecho", args);
-
-//    std::cout << "Running";
 }
 
 void Console::compile() {

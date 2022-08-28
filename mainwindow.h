@@ -78,6 +78,7 @@ private:
     void setupEditor();
     void setupFileMenu();
     void setupHelpMenu();
+    void setupConsole();
 
     QTextEdit *editor;
     Highlighter *highlighter;

@@ -57,6 +57,7 @@
 #include "console.h"
 
 #include <QWidget>
+#include <QListWidget>
 #include <QVBoxLayout>
 
 //! [0]
@@ -66,6 +67,7 @@ MainWindow::MainWindow(QWidget *parent)
     setupFileMenu();
     setupHelpMenu();
     setupEditor();
+    setupConsole();
 
     //setup split view
     QWidget *widget = new QWidget(this);
@@ -76,26 +78,24 @@ MainWindow::MainWindow(QWidget *parent)
 
     layout->addWidget(editor);
 
-    // setup console
-    console = new Console();
-    QMenu *EtcMenu = new QMenu(tr("&Etc"), this);
-    menuBar()->addMenu(EtcMenu);
-    EtcMenu->addAction(tr("&Clear Log"), this, [this](){console->clearLog();});
-    EtcMenu->addAction(tr("Com&pile"), this, [this](){console->compile();});
-    EtcMenu->addAction(tr("&Run"), this, [this](){console->run();});
 
+    QListWidget *fileList = new QListWidget(this);
+    fileList->addItem("one.cpp");
+    fileList->addItem("two.cpp");
+    fileList->addItem("two.h");
+
+    layout->addWidget(fileList);
 
     layout->addWidget(console);
 
-
-//    setCentralWidget(editor);
     setWindowTitle(tr("C++ IDE"));
 }
 //! [0]
 
 void MainWindow::about()
 {
-    QMessageBox::about(this, tr("About Syntax Highlighter"),
+    //todo: add about description here
+    QMessageBox::about(this, tr("About C++ IDE"),
                 tr("<p>The <b>Syntax Highlighter</b> example shows how " \
                    "to perform simple syntax highlighting by subclassing " \
                    "the QSyntaxHighlighter class and describing " \
@@ -111,8 +111,9 @@ void MainWindow::openFile(const QString &path)
 {
     QString fileName = path;
 
-    if (fileName.isNull())
-        fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", "C++ Files (*.cpp *.h)");
+    if (fileName.isNull()) {
+        fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", "C++ Files (*.cpp *.hpp *.h);;C Files (*.c *.h);;Any files (*)");
+    }
 
     if (!fileName.isEmpty()) {
         QFile file(fileName);
@@ -129,13 +130,12 @@ void MainWindow::setupEditor()
     font.setFixedPitch(true);
     font.setPointSize(10);
 
-//    editor = new QTextEdit;
     editor = new QTextEditLinesHighlighted;
     editor->setFont(font);
 
     highlighter = new Highlighter(editor->document());
 
-    QFile file("mainwindow.h");
+    QFile file("/home/luigipizzolito/Desktop/stdecho/stdecho.cpp");
     if (file.open(QFile::ReadOnly | QFile::Text))
         editor->setPlainText(file.readAll());
 }
@@ -161,4 +161,13 @@ void MainWindow::setupHelpMenu()
 
     helpMenu->addAction(tr("&About"), this, &MainWindow::about);
     helpMenu->addAction(tr("About &Qt"), qApp, &QApplication::aboutQt);
+}
+
+void MainWindow::setupConsole() {
+    console = new Console();
+    QMenu *EtcMenu = new QMenu(tr("&Etc"), this);
+    menuBar()->addMenu(EtcMenu);
+    EtcMenu->addAction(tr("&Clear Log"), this, [this](){console->clearLog();});
+    EtcMenu->addAction(tr("Com&pile"), this, [this](){console->compile();});
+    EtcMenu->addAction(tr("&Run"), this, [this](){console->run();});
 }
