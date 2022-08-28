@@ -56,6 +56,7 @@
 #include "console.h"
 
 #include <QMainWindow>
+#include <QListWidgetItem>
 
 QT_BEGIN_NAMESPACE
 class QTextEdit;
@@ -73,6 +74,7 @@ public slots:
     void about();
     void newFile();
     void openFile(const QString &path = QString());
+    void openFileFList(QListWidgetItem* item);
 
 private:
     void setupEditor();

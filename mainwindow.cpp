@@ -58,7 +58,9 @@
 
 #include <QWidget>
 #include <QListWidget>
-#include <QVBoxLayout>
+#include <QGridLayout>
+
+#include <iostream>
 
 //! [0]
 MainWindow::MainWindow(QWidget *parent)
@@ -71,22 +73,26 @@ MainWindow::MainWindow(QWidget *parent)
 
     //setup split view
     QWidget *widget = new QWidget(this);
-    QVBoxLayout *layout = new QVBoxLayout(widget);
+    QGridLayout *layout = new QGridLayout(widget);
 
     setCentralWidget(widget);
     widget->setLayout(layout);
 
-    layout->addWidget(editor);
+    layout->addWidget(editor, 0, 1, 1, 1);
+    layout->setColumnStretch(1, 11);
 
 
     QListWidget *fileList = new QListWidget(this);
     fileList->addItem("one.cpp");
     fileList->addItem("two.cpp");
     fileList->addItem("two.h");
+    connect(fileList, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(openFileFList(QListWidgetItem*)));
+    layout->addWidget(fileList, 0, 0, 1, 1);
+    layout->setColumnStretch(0, 1);
 
-    layout->addWidget(fileList);
-
-    layout->addWidget(console);
+    layout->addWidget(console, 1, 0, 1, 2);
+    layout->setRowStretch(0, 9);
+    layout->setRowStretch(1, 3);
 
     setWindowTitle(tr("C++ IDE"));
 }
@@ -105,6 +111,11 @@ void MainWindow::about()
 void MainWindow::newFile()
 {
     editor->clear();
+}
+
+void MainWindow::openFileFList(QListWidgetItem* item) {
+    std::cout << "opening: " << item->text().toStdString() <<"\n";
+    openFile(item->text());
 }
 
 void MainWindow::openFile(const QString &path)

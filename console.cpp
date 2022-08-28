@@ -5,7 +5,8 @@
 
 Console::Console(QWidget *parent) : QTextEdit(parent)
 {
-    setMaximumHeight(500);
+//    setMaximumHeight(200);
+    setMinimumHeight(200);
     setReadOnly(true);
 
     setTextColor(QColor(Qt::blue).lighter(160));
