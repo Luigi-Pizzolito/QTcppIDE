@@ -27,6 +27,11 @@ Still WIP.
 - Cross-platform.
 - Launch in external console.
 - Restore settings on startup and restore defaults.
+- Automatically install compiler/debugger.
+- switch between .cpp and .h file.
+- project starter templates.
+- bottom status bar.
+
 
 ## How to use
 1. Open a folder containing C/C++ files or create a new project.

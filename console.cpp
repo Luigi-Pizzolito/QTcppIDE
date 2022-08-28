@@ -56,7 +56,8 @@ void Console::keyPressEvent(QKeyEvent *ev)
         prunner->takeInput(ev->text());
 }
 
-
+//todo: get these from configgen
+//todo: check errors from starting proccess (wrong bin path, etc)
 void Console::run() {
     QStringList args;
     args << ".." << "test";

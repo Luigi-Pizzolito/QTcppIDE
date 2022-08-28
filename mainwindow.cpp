@@ -67,9 +67,9 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     setupFileMenu();
-    setupHelpMenu();
     setupEditor();
     setupConsole();
+    setupHelpMenu();
 
     //setup split view
     QWidget *widget = new QWidget(this);
@@ -83,6 +83,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     fileList = new FileManager(this, editor);
+    //todo: add button for new file and delete file here
     layout->addWidget(fileList, 0, 0, 1, 1);
     layout->setColumnStretch(0, 2);
 
@@ -138,6 +139,7 @@ void MainWindow::setupEditor()
 }
 //! [1]
 
+//todo: add keyboard shortcuts to all menus
 void MainWindow::setupFileMenu()
 {
     QMenu *fileMenu = new QMenu(tr("&File"), this);
@@ -145,8 +147,12 @@ void MainWindow::setupFileMenu()
 
     fileMenu->addAction(tr("&New"), QKeySequence::New,
                         this, &MainWindow::newFile);
+    fileMenu->addSeparator();
     fileMenu->addAction(tr("&Open..."), QKeySequence::Open,
                         this, [this](){ openFile(); });
+    fileMenu->addSeparator();
+    //todo: implement save
+    //todo: add aliases here for delete file
     fileMenu->addAction(tr("E&xit"), QKeySequence::Quit,
                         qApp, &QApplication::quit);
 }
@@ -155,16 +161,20 @@ void MainWindow::setupHelpMenu()
 {
     QMenu *helpMenu = new QMenu(tr("&Help"), this);
     menuBar()->addMenu(helpMenu);
-
+    //todo: add help menu to temp load readme.md
     helpMenu->addAction(tr("&About"), this, &MainWindow::about);
     helpMenu->addAction(tr("About &Qt"), qApp, &QApplication::aboutQt);
 }
 
 void MainWindow::setupConsole() {
     console = new Console();
-    QMenu *EtcMenu = new QMenu(tr("&Etc"), this);
-    menuBar()->addMenu(EtcMenu);
-    EtcMenu->addAction(tr("&Clear Log"), this, [this](){console->clearLog();});
-    EtcMenu->addAction(tr("Com&pile"), this, [this](){console->compile();});
-    EtcMenu->addAction(tr("&Run"), this, [this](){console->run();});
+    QMenu *ConsoleMenu = new QMenu(tr("&Console"), this);
+    menuBar()->addMenu(ConsoleMenu);
+    ConsoleMenu->addAction(tr("Com&pile"), this, [this](){console->compile();});
+    ConsoleMenu->addAction(tr("Ru&n"), this, [this](){console->run();});
+    //todo: add wait for compile and then run
+//    ConsoleMenu->addAction(tr("Compile and &Run"), this, [this](){console->compile();console->run();});
+    ConsoleMenu->addSeparator();
+    ConsoleMenu->addAction(tr("&Clear Console"), this, [this](){console->clearLog();});
+    ConsoleMenu->addAction(tr("&Preferences"), this, [this](){console->clearLog();});
 }
