@@ -12,8 +12,9 @@ public:
     explicit ConfigGen(QWidget *parent = 0);
 public slots:
     void show();
+    //todo: save, gencompile, genrun, gendebug
 private:
-
+    //todo: loadsave, createoutputdirs
 };
 
 #endif // CONFIGGEN_H

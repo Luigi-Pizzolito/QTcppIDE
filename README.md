@@ -28,9 +28,11 @@ Still WIP.
 - Launch in external console.
 - Restore settings on startup and restore defaults.
 - Automatically install compiler/debugger.
-- switch between .cpp and .h file.
-- project starter templates.
-- bottom status bar.
+- Switch between .cpp and .h file.
+- Project starter templates.
+- Bottom status bar.
+- In-Editor help/documentation.
+- Error handling when launching procceses.
 
 
 ## How to use

@@ -61,9 +61,9 @@ ConfigGen::ConfigGen(QWidget *parent):QDialog(parent)
 "Here you can set which compiler to use and the command line flags that get passed to the compiler.\n\n\
 There are also default presets to pick from that should work on systems with those respective compilers installed.\n\n\
 The following fields are available:\n\n\
-**%in**: Parsed list of input files relative paths, determined by input file expression.\n\n\
 **%root**: Absolute path to the project root directory.\n\n\
 **%rootn**: Name of the project root directory.\n\n\
+**%in**: Parsed list of input files relative paths, may only be used in compiler arguments section.\n\n\
 **%inc**: Parsed include directories absolute path expression, may only be used in compiler arguments section.\n\n\
 **%out**: Parsed output absolute path expression, may only be used in compiler arguments section.\n\n\
 On Linux systems, you probably already have gcc/g++ installed. Otherwise you may install via your package manager.\n\n\
