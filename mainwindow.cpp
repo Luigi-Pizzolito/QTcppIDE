@@ -203,5 +203,5 @@ void MainWindow::setupConsole() {
 
     ConsoleMenu->addSeparator();
     configG = new ConfigGen(this);
-    ConsoleMenu->addAction(tr("&Preferences"), this, [this](){configG->show();});
+    ConsoleMenu->addAction(tr("&Preferences"), this, [this](){configG->exec();});
 }

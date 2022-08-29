@@ -1,61 +1,55 @@
 #include "configgen.h"
 
-#include <QFormLayout>
-#include <QComboBox>
-#include <QLineEdit>
-#include <QPushButton>
-#include <QLabel>
-
+#include <iostream>
 
 ConfigGen::ConfigGen(QWidget *parent):QDialog(parent)
 {
-    //todo: add defaults loader based on events of preset selection
-
+    // Setup config screen GUI Elements
     setWindowTitle("Preferences");
-    QFormLayout *flayout = new QFormLayout();
+    flayout = new QFormLayout();
     setLayout(flayout);
 
-    QComboBox *presetS = new QComboBox();
-    presetS->addItem("Linux G++");
-    presetS->addItem("Linux GCC");
-    presetS->addItem("Windows MinGW");
+    // Preset Selector
+    presetS = new QComboBox();
+    for (auto &preset : ConfigDefaults) {
+        presetS->addItem(preset.name);
+    }
     presetS->addItem("Custom");
     flayout->addRow(tr("Compiler Settings Preset"), presetS);
-    //todo: add hooks for onchanged and set this value on chage callback
+    connect(presetS, SIGNAL(currentIndexChanged(int)), this, SLOT(loadPresetGUI(int)));
 
-    QFont mfont;
+    // Monospace Font for LineEdits
     mfont.setFamily("Courier");
     mfont.setFixedPitch(true);
     mfont.setPointSize(10);
 
-    QLineEdit *cargs = new QLineEdit();
+    // Compiler Settings
+    cargs = new QLineEdit();
     cargs->setMinimumWidth(350);
     cargs->setFont(mfont);
-    cargs->setText("g++ %in -I %inc -o %out --verbose -Wall");
     flayout->addRow(tr("Compiler Arguments"), cargs);
-    //todo: add hooks for done editing / onchanged
+    connect(cargs, SIGNAL(textEdited(QString)), this, SLOT(switchCustomPreset()));
 
-    QLineEdit *cinf = new QLineEdit();
+    cinf = new QLineEdit();
     cinf->setMinimumWidth(350);
     cinf->setFont(mfont);
-    cinf->setText("*.cpp");
     flayout->addRow(tr("Input Files"), cinf);
-    //todo: add hooks for done editing / onchanged
+    connect(cinf, SIGNAL(textEdited(QString)), this, SLOT(switchCustomPreset()));
 
-    QLineEdit *cicd = new QLineEdit();
+    cicd = new QLineEdit();
     cicd->setMinimumWidth(350);
     cicd->setFont(mfont);
-    cicd->setText("%root");
     flayout->addRow(tr("Include Directories"), cicd);
-    //todo: add hooks for done editing / onchanged
+    connect(cicd, SIGNAL(textEdited(QString)), this, SLOT(switchCustomPreset()));
 
-    QLineEdit *coutf = new QLineEdit();
+    coutf = new QLineEdit();
     coutf->setMinimumWidth(350);
     coutf->setFont(mfont);
-    coutf->setText("bin/%rootn");
     flayout->addRow(tr("Output File"), coutf);
+    connect(coutf, SIGNAL(textEdited(QString)), this, SLOT(switchCustomPreset()));
 
-    QLabel *compilerabt = new QLabel();
+    // Help label explaining fields system.
+    compilerabt = new QLabel();
     compilerabt->setTextFormat(Qt::MarkdownText);
     compilerabt->setText(
 "Here you can set which compiler to use and the command line flags that get passed to the compiler.\n\n\
@@ -71,14 +65,47 @@ On Windows systems, it is recommended to install MinGW to *C:\\MinGW*.\n\n\
     ");
     flayout->addRow(tr("Help"), compilerabt);
 
-    QPushButton *okbtn = new QPushButton("OK", this);
-    okbtn->setDefault(true);
-    okbtn->setAutoDefault(true);
+    // Settings for launching in external console.
+    extCon = new QCheckBox();
+    flayout->addRow(tr("Launch in External Console"), extCon);
+    connect(extCon, SIGNAL(stateChanged(int)), this, SLOT(switchCustomPreset()));
+
+    conCom = new QLineEdit();
+    conCom->setMinimumWidth(350);
+    conCom->setFont(mfont);
+    flayout->addRow(tr("Ext. Console Arguments"), conCom);
+    connect(conCom, SIGNAL(textEdited(QString)), this, SLOT(switchCustomPreset()));
+
+    // Close button
+    okbtn = new QPushButton("OK", this);
     flayout->addWidget(okbtn);
-    //todo: figure out how to make on enter default to save and close dialog
+    connect(okbtn, SIGNAL(clicked(bool)), this, SLOT(close()));
+
+
+
+    //default load if not set, add here
+    loadPresetGUI(0);
 
 }
 
-void ConfigGen::show() {
-    exec();
+void ConfigGen::loadPresetGUI(int i) {
+    if (i<numPresets) {
+        // load selected default preset
+        cargs->setText(ConfigDefaults[i].CompileArgs);
+        cinf->setText(ConfigDefaults[i].InFiles);
+        cicd->setText(ConfigDefaults[i].IncDirs);
+        coutf->setText(ConfigDefaults[i].OutFile);
+        extCon->setChecked(ConfigDefaults[i].ExtCon);
+        conCom->setText(ConfigDefaults[i].ConArgs);
+        saveConfig();
+    } // else custom selected
+}
+
+void ConfigGen::switchCustomPreset() {
+    presetS->setCurrentIndex(numPresets); //Switch to custom preset when any field is changed.
+    saveConfig();
+}
+
+void ConfigGen::saveConfig() {
+    std::cout << "saved config: "<<cargs->text().toStdString()<<"\n";
 }
