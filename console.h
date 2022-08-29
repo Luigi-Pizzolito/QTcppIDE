@@ -13,8 +13,7 @@ public:
     explicit Console(QWidget *parent = 0);
 public slots:
     void clearLog();
-    void run();
-    void compile();
+    void run(QString comm, QString cwd);
     void processProcOutput();
     void processProcStarted();
     void processProcFinished(int exitCode, QProcess::ExitStatus exitStatus);

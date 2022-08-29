@@ -52,6 +52,8 @@
 
 #include "mainwindow.h"
 
+#include "globaldefs.h"
+
 #include "highlighter.h"
 #include "qtexteditlineshighlighted.h"
 #include "console.h"
@@ -60,14 +62,15 @@
 #include <QListWidget>
 #include <QGridLayout>
 
+#include <iostream>
 
 //! [0]
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     setupFileMenu();
-    setupEditor();
-    setupConsole();
+
+
 
 
     //setup split view
@@ -77,6 +80,7 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(widget);
     widget->setLayout(layout);
 
+    setupEditor();
     layout->addWidget(editor, 0, 1, 1, 1);
     layout->setColumnStretch(1, 10);
 
@@ -86,13 +90,15 @@ MainWindow::MainWindow(QWidget *parent)
     layout->addWidget(fileList, 0, 0, 1, 1);
     layout->setColumnStretch(0, 2);
 
+
+    setupHelpMenu();
+
+    setupConsole();
     layout->addWidget(console, 1, 0, 1, 2);
     layout->setRowStretch(0, 9);
     layout->setRowStretch(1, 3);
 
-    setupHelpMenu();
-
-    setWindowTitle(tr("C++ IDE"));
+    setWindowTitle(tr(APPHNAME));
     //editor->setPlainText("Welcome to C++ IDE V1.0\nGo to File > Open and select a folder\ncontaining C/C++ files to get started.\n");
     showDocs();
 }
@@ -120,6 +126,7 @@ void MainWindow::newFile()
 void MainWindow::openFile(const QString &path)
 {
     fileList->openFolder(path);
+    updateComms();
 }
 
 //! [1]
@@ -190,10 +197,11 @@ void MainWindow::keyPressEvent(QKeyEvent *ev) {
 
 void MainWindow::setupConsole() {
     console = new Console();
+
     QMenu *ConsoleMenu = new QMenu(tr("&Console"), this);
     menuBar()->addMenu(ConsoleMenu);
-    ConsoleMenu->addAction(tr("Com&pile"), this, [this](){console->compile();});
-    ConsoleMenu->addAction(tr("Ru&n"), this, [this](){console->run();});
+    ConsoleMenu->addAction(tr("Com&pile"), this, [this](){console->run(commG->compile(), fileList->dirP.absolutePath());});
+    ConsoleMenu->addAction(tr("Ru&n"), this, [this](){console->run(commG->run(), fileList->dirP.absolutePath());});
     //todo: add wait for compile and then run
 //    ConsoleMenu->addAction(tr("Compile and &Run"), this, [this](){console->compile();console->run();});
     ConsoleMenu->addSeparator();
@@ -203,5 +211,14 @@ void MainWindow::setupConsole() {
 
     ConsoleMenu->addSeparator();
     configG = new ConfigGen(this);
+    connect(configG, SIGNAL(finished(int)), this, SLOT(updateComms()));
+
     ConsoleMenu->addAction(tr("&Preferences"), this, [this](){configG->exec();});
+
+
+    commG = new CommandGen(&fileList->dirP);
+}
+
+void MainWindow::updateComms() {
+    commG->update();
 }

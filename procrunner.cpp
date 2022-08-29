@@ -5,9 +5,9 @@ ProcRunner::ProcRunner(QWidget *parent, QTextEdit *text_edit) : parentw(parent),
     proc = new QProcess(parentw);
 }
 
-void ProcRunner::run(QString program, QStringList arguments) {
+void ProcRunner::run(QString program, QStringList arguments, QString cwd) {
     proc->setProcessChannelMode(QProcess::MergedChannels); // merge stdout and stderr
-
+    proc->setWorkingDirectory(cwd);
     proc->start(program, arguments);
     proc->waitForStarted();
 }

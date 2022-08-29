@@ -19,10 +19,9 @@ class ConfigGen : public QDialog
     Q_OBJECT
 public:
     explicit ConfigGen(QWidget *parent = 0);
-public slots:
-    //todo: save, gencompile, genrun, gendebug
+
 private:
-    //todo: loadsave, createoutputdirs
+    //todo: createoutputdirs
     // GUI Elements
     QFormLayout *flayout;
     QComboBox *presetS;
@@ -47,8 +46,8 @@ private:
     };
     #define numPresets 3
     ConfigSet ConfigDefaults[numPresets] = {
-        {"Linux G++",     "g++ %in -I %inc -o %out -Wall", "*.cpp", "%root", "bin/%rootn", false, "xterm %out"},
-        {"Linux GCC",     "gcc %in -I %inc -o %out -Wall", "*.c",   "%root", "bin/%rootn", false, "xterm %out"},
+        {"Linux G++",     "g++ %in -I %inc -o %out -Wall", "*.cpp", "%root", "bin/%rootn", false, "xterm -e %out"},
+        {"Linux GCC",     "gcc %in -I %inc -o %out -Wall", "*.c",   "%root", "bin/%rootn", false, "xterm -e %out"},
         {"Windows MinGW", "", "", "", "", false, ""}
     };
 

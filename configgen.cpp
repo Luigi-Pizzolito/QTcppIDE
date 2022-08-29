@@ -1,6 +1,6 @@
 #include "configgen.h"
 
-#include <iostream>
+#include "globaldefs.h"
 
 ConfigGen::ConfigGen(QWidget *parent):QDialog(parent)
 {
@@ -83,7 +83,7 @@ On Windows systems, it is recommended to install MinGW to *C:\\MinGW*.\n\n\
 
 
     // Load Settings
-    csettings = new QSettings("LPSoft", "CPPIDE");
+    csettings = new QSettings(COMPANY, APPNAME);
     int cspreset = csettings->value("Pindex", 0).toInt();    //load preset index, default to 0 (first preset)
     presetS->setCurrentIndex(cspreset);
     loadPresetGUI(cspreset); //load to GUI and save

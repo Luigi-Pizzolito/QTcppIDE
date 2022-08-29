@@ -1,7 +1,7 @@
 #include "console.h"
 #include <QtGui>
 
-#define IDEVER "C++ IDE V1.0"
+#include "globaldefs.h"
 
 Console::Console(QWidget *parent) : QTextEdit(parent)
 {
@@ -15,7 +15,7 @@ Console::Console(QWidget *parent) : QTextEdit(parent)
     setFont(font);
 
     setTextColor(QColor(Qt::blue).lighter(160));
-    append(IDEVER);
+    append(APPHNAME " " IDEVER);
 
     prunner = new ProcRunner(this, this);
     connect(prunner->proc, SIGNAL(readyReadStandardOutput()), this, SLOT(processProcOutput()));  // connect process signals with your code
@@ -46,7 +46,7 @@ void Console::processProcFinished(int exitCode, QProcess::ExitStatus exitStatus)
 void Console::clearLog() {
     clear();
     setTextColor(QColor(Qt::blue).lighter(160));
-    append(IDEVER);
+    append(APPHNAME " " IDEVER);
     ensureCursorVisible();
 }
 
@@ -59,15 +59,14 @@ void Console::keyPressEvent(QKeyEvent *ev)
 //todo: get these from configgen
 //todo: check errors from starting proccess (wrong bin path, etc)
 //todo: open IDE setup if not yet setup
-void Console::run() {
-    QStringList args;
-    args << ".." << "test";
-    prunner->run("/home/luigipizzolito/Desktop/stdecho/stdecho", args);
-}
+void Console::run(QString comm, QString cwd) {
+//    QStringList args;
+//    args << ".." << "test";
+//    prunner->run("/home/luigipizzolito/Desktop/stdecho/stdecho", args);
+//    append(comm);
 
-void Console::compile() {
-    QStringList args;
-    args << "stdecho.cpp" << "-Wall" << "--verbose" << "-o" << "stdecho";
-    prunner->proc->setWorkingDirectory("/home/luigipizzolito/Desktop/stdecho");
-    prunner->run("g++", args);
+    QStringList args = comm.split(" ");
+    QString bin = args[0];
+    args.removeFirst();
+    prunner->run(bin, args, cwd);
 }

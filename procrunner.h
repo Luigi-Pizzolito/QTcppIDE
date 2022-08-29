@@ -11,7 +11,7 @@ public:
     explicit ProcRunner(QWidget *parent = 0, QTextEdit *text_edit = 0);
     QProcess *proc;
 public slots:
-    void run(QString program, QStringList arguments);
+    void run(QString program, QStringList arguments, QString cwd);
     void takeInput(QString key);
     void takeOutput();
     void procStarted();

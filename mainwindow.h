@@ -56,6 +56,7 @@
 #include "console.h"
 #include "filemanager.h"
 #include "configgen.h"
+#include "commandgen.h"
 
 #include <QMainWindow>
 #include <QListWidgetItem>
@@ -90,10 +91,12 @@ private:
 
     Console *console;
     ConfigGen *configG;
-
+    CommandGen *commG;
     FileManager *fileList;
 
     QString DocsPFile;
+private slots:
+    void updateComms();
 
 protected:
     void keyPressEvent(QKeyEvent *event);
