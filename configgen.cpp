@@ -82,9 +82,12 @@ On Windows systems, it is recommended to install MinGW to *C:\\MinGW*.\n\n\
     connect(okbtn, SIGNAL(clicked(bool)), this, SLOT(close()));
 
 
+    // Load Settings
+    csettings = new QSettings("LPSoft", "CPPIDE");
+    int cspreset = csettings->value("Pindex", 0).toInt();    //load preset index, default to 0 (first preset)
+    presetS->setCurrentIndex(cspreset);
+    loadPresetGUI(cspreset); //load to GUI and save
 
-    //default load if not set, add here
-    loadPresetGUI(0);
 
 }
 
@@ -97,15 +100,36 @@ void ConfigGen::loadPresetGUI(int i) {
         coutf->setText(ConfigDefaults[i].OutFile);
         extCon->setChecked(ConfigDefaults[i].ExtCon);
         conCom->setText(ConfigDefaults[i].ConArgs);
-        saveConfig();
-    } // else custom selected
+        // save to non-volatile
+        saveConfig(i);
+
+        presetS->setCurrentIndex(i);
+    } else {
+        // load custom preset from settings
+        cargs->setText(csettings->value("CompileArgs").toString());
+        cinf->setText(csettings->value("InFiles").toString());
+        cicd->setText(csettings->value("IncDirs").toString());
+        coutf->setText(csettings->value("OutFile").toString());
+        conCom->setText(csettings->value("ConArgs").toString());
+        extCon->setChecked(csettings->value("ExtCon").toBool());
+    }
 }
 
 void ConfigGen::switchCustomPreset() {
-    presetS->setCurrentIndex(numPresets); //Switch to custom preset when any field is changed.
-    saveConfig();
+    //Switch to custom preset when any field is changed.
+    saveConfig(numPresets);
+    csettings->setValue("Pindex", numPresets);
+    presetS->setCurrentIndex(numPresets);
 }
 
-void ConfigGen::saveConfig() {
-    std::cout << "saved config: "<<cargs->text().toStdString()<<"\n";
+void ConfigGen::saveConfig(int Pi) {
+    // save to settings (non-volatile)
+    csettings->setValue("Pindex",       Pi);
+    csettings->setValue("CompileArgs",  cargs->text());
+    csettings->setValue("InFiles",      cinf->text());
+    csettings->setValue("IncDirs",      cicd->text());
+    csettings->setValue("OutFile",      coutf->text());
+    csettings->setValue("ConArgs",      conCom->text());
+    csettings->setValue("ExtCon",       extCon->isChecked());
+    csettings->sync();
 }

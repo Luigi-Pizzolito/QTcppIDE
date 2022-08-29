@@ -12,6 +12,8 @@
 #include <QPushButton>
 #include <QLabel>
 
+#include <QSettings>
+
 class ConfigGen : public QDialog
 {
     Q_OBJECT
@@ -33,7 +35,7 @@ private:
     QCheckBox *extCon;
     QLineEdit *conCom;
     QPushButton *okbtn;
-    // Struct to store default configuration hardcoded?
+    // Struct to store default configuration hardcoded
     struct ConfigSet {
         QString name;
         QString CompileArgs;
@@ -49,11 +51,15 @@ private:
         {"Linux GCC",     "gcc %in -I %inc -o %out -Wall", "*.c",   "%root", "bin/%rootn", false, "xterm %out"},
         {"Windows MinGW", "", "", "", "", false, ""}
     };
+
+    // QSettings to store settings non-volatile
+    QSettings *csettings;
+
 private slots:
     // Internal GUI callbacks
     void loadPresetGUI(int i);
     void switchCustomPreset();
-    void saveConfig();
+    void saveConfig(int Pi);
 };
 
 #endif // CONFIGGEN_H
