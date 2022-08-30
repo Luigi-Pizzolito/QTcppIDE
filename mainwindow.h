@@ -45,6 +45,7 @@ public slots:
     void newFile();
     void newFolder();
     void openFile(const QString &path = QString());
+    void deleteFile();
 
 private:
     // settings

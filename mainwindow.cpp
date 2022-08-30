@@ -49,7 +49,6 @@ MainWindow::MainWindow(QWidget *parent)
     // add file manager
     setupFileMenu();
     fileList = new FileManager(this, editor);
-    //todo: add button for new file and delete file here
     layout->addWidget(fileList, 0, 0, 1, 1);
     layout->setColumnStretch(0, 2);
 
@@ -109,13 +108,32 @@ void MainWindow::newFolder() {
 
 void MainWindow::openFile(const QString &path)
 {
-    // open folderz
+    // open folder
     fileList->openFolder(path);
 
     // save to last opened file settings and update command generator
     if (!path.isNull()) {
         settings->setValue("LastOpenedFile", path);
         updateComms();
+    }
+}
+
+void MainWindow::deleteFile() {
+    if (QMessageBox(QMessageBox::Information, "Delete "+QFileInfo(fileList->fileP).fileName(), "Are you sure you want to delete "+QFileInfo(fileList->fileP).fileName()+"?", QMessageBox::Yes|QMessageBox::No).exec() == QMessageBox::Yes) {
+        fileList->dirP.remove(fileList->fileP);
+        fileList->dirP.setPath(fileList->dirP.absolutePath());
+        fileList->clear();
+        if (fileList->dirP.isEmpty()) {
+            // if there are n more files prompt to create
+            editor->clear();
+            fileList->setFileMain();
+            fileList->createNewFileRequest();
+        } else {
+            // otherwise open first file
+            QString ffile = fileList->dirP.absolutePath()+"/"+fileList->dirP.entryList().at(0);
+            fileList->openFolder(ffile);
+            settings->setValue("LastOpenedFile", ffile);
+        }
     }
 }
 
@@ -163,6 +181,7 @@ void MainWindow::setupFileMenu()
     fileMenu->addSeparator();
     //todo: implement save
     //todo: add aliases here for delete file
+    fileMenu->addAction(tr("&Delete File"), QKeySequence(tr("Ctrl+Shift+w")), this, &MainWindow::deleteFile);
     fileMenu->addAction(tr("E&xit"), QKeySequence::Quit,
                         qApp, &QApplication::quit);
 }

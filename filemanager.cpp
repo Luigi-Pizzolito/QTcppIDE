@@ -55,7 +55,6 @@ void FileManager::setupNewFileDialog() {
 
     fileT = new QComboBox();
     //fileT->setEditable(true);
-    //todo: alow creating and editing of any file, turn off highlihgitng if not a c file
     fileT->setFont(mfont);
     fileT->addItem("cpp/h");
     fileT->insertSeparator(1);
@@ -79,11 +78,13 @@ void FileManager::setupNewFileDialog() {
 }
 
 void FileManager::openFile(QListWidgetItem* item) {
-    // get file path and load
     QString fpath = dirP.absolutePath() + "/" + item->text();
-    loadFile(fpath);
-    // save last opened file to settings
-    settings->setValue("LastOpenedFile", fpath);
+    if (dirP.exists(fpath)) {
+        // get file path and load
+        loadFile(fpath);
+        // save last opened file to settings
+        settings->setValue("LastOpenedFile", fpath);
+    }
 }
 
 void FileManager::openFolder(QString fileName) {
@@ -94,7 +95,7 @@ void FileManager::openFolder(QString fileName) {
         fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", "C++ Files (*.cpp *.hpp *.h *.cxx *.cc);;C Files (*.c *.h);;Any files (*)");
     }
 
-    if (!fileName.isEmpty()) {
+    if (!fileName.isEmpty() && dirP.exists(fileName)) {
 
         //todo: save current file if there is contetn before opening, add flag above in isNull to detect opening over previous
 
@@ -110,7 +111,7 @@ void FileManager::openFolder(QString fileName) {
             item(count()-1)->setFont(mfont);
         }
         // Select currently open file's list item
-        setCurrentItem(findItems(QFileInfo(fileName).fileName(), Qt::MatchExactly)[0]);
+        setCurrentItem(findItems(QFileInfo(fileName).fileName(), Qt::MatchExactly).at(0));
         // open file
         loadFile(fileName);
     }
