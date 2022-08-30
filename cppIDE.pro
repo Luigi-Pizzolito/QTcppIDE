@@ -2,6 +2,7 @@ QT += widgets
 requires(qtConfig(filedialog))
 
 HEADERS         = \
+                  codeeditor.h \
                   commandgen.h \
                   configgen.h \
                   console.h \
@@ -10,9 +11,9 @@ HEADERS         = \
                   highlighter.h \
                   linenumberarea.h \
                   mainwindow.h \
-                  procrunner.h \
-                  qtexteditlineshighlighted.h
+                  procrunner.h
 SOURCES         = \
+                  codeeditor.cpp \
                   commandgen.cpp \
                   configgen.cpp \
                   console.cpp \
@@ -21,8 +22,7 @@ SOURCES         = \
                   linenumberarea.cpp \
                   mainwindow.cpp \
                   main.cpp \
-                  procrunner.cpp \
-                  qtexteditlineshighlighted.cpp
+                  procrunner.cpp
 
 # install
 target.path = $$[QT_INSTALL_EXAMPLES]/widgets/richtext/syntaxhighlighter

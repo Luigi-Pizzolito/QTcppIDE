@@ -1,3 +1,15 @@
+/*
+ * Config Generator Class
+ * 
+ * C++ IDE by Luigi Pizzolito
+ *            Zhang Ruiqing
+ *            Ruan Zihang
+ *            Lin Zhenmin
+ *            Yang Zhaoyi
+ * For 1703-ECE Class by Nie Qing and Wu Hao
+ * At Beijing Insitute of Techology
+*/
+
 #include "configgen.h"
 
 #include "globaldefs.h"

@@ -1,3 +1,15 @@
+/*
+ * Command Generator Class
+ * 
+ * C++ IDE by Luigi Pizzolito
+ *            Zhang Ruiqing
+ *            Ruan Zihang
+ *            Lin Zhenmin
+ *            Yang Zhaoyi
+ * For 1703-ECE Class by Nie Qing and Wu Hao
+ * At Beijing Insitute of Techology
+*/
+
 #include "commandgen.h"
 
 #include "globaldefs.h"
@@ -29,6 +41,7 @@ QString CommandGen::compile() {
 
 QString CommandGen::run() {
     QString comm;
+    // return run command, depending if external console is selected
     if (csettings->value("ExtCon").toBool()) {
         comm = rplr->Gext;
     } else {
@@ -39,18 +52,20 @@ QString CommandGen::run() {
 
 QString CommandGen::debug() {
     QString comm;
+    //todo: return debug command
     return comm;
 }
 
 CommandGen::ReplaceEngine::ReplaceEngine(QDir *dir, QSettings *cfg) : dirP(dir),Cfg(cfg) {
-    update();
+    update(); // initial update
 }
 
 void CommandGen::update() {
-    rplr->update();
+    rplr->update(); // forward update to replace engine
 }
 
 void CommandGen::ReplaceEngine::update() {
+    // update internal generated strings
     // generate %root and %rootn
     Groot = dirP->absolutePath();
     Grootn = dirP->dirName();
@@ -67,6 +82,7 @@ void CommandGen::ReplaceEngine::update() {
 }
 
 QString CommandGen::ReplaceEngine::rootRplr(QString str) {
+    // utility for replacing root dir labels
     str.replace("%rootn", Grootn);
     str.replace("%root", Groot);
     return str;

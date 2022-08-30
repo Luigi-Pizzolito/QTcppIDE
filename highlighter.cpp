@@ -1,11 +1,23 @@
+/*
+ * Syntax Highlighter Class
+ * 
+ * C++ IDE by Luigi Pizzolito
+ *            Zhang Ruiqing
+ *            Ruan Zihang
+ *            Lin Zhenmin
+ *            Yang Zhaoyi
+ * For 1703-ECE Class by Nie Qing and Wu Hao
+ * At Beijing Insitute of Techology
+*/
+
 #include "highlighter.h"
-#include "qregularexpression.h"
+#include <QRegularExpression>
 
 Highlighter::Highlighter(QTextDocument *parent)
     : QSyntaxHighlighter(parent)
 {
     HighlightingRule rule;
-
+    // create highlight rule for keywords
     keywordFormat.setForeground(Qt::darkBlue);
     keywordFormat.setFontWeight(QFont::Bold);
     const QString keywordPatterns[] = {
@@ -25,35 +37,37 @@ Highlighter::Highlighter(QTextDocument *parent)
         rule.format = keywordFormat;
         highlightingRules.append(rule);
     }
+    // create highlight rule for class names
     classFormat.setFontWeight(QFont::Bold);
     classFormat.setForeground(Qt::darkMagenta);
     rule.pattern = QRegularExpression(QStringLiteral("\\bQ[A-Za-z]+\\b"));
     rule.format = classFormat;
     highlightingRules.append(rule);
-
+    // create highlight rule for quotes
     quotationFormat.setForeground(Qt::darkGreen);
     rule.pattern = QRegularExpression(QStringLiteral("\".*\""));
     rule.format = quotationFormat;
     highlightingRules.append(rule);
-
+    // create highlight rule for functions
     functionFormat.setFontItalic(true);
     functionFormat.setForeground(Qt::blue);
     rule.pattern = QRegularExpression(QStringLiteral("\\b[A-Za-z0-9_]+(?=\\()"));
     rule.format = functionFormat;
     highlightingRules.append(rule);
+    // create highlight rule for comments
     singleLineCommentFormat.setForeground(Qt::red);
     rule.pattern = QRegularExpression(QStringLiteral("//[^\n]*"));
     rule.format = singleLineCommentFormat;
     highlightingRules.append(rule);
-
+    // create highlight rule for multiline comments
     multiLineCommentFormat.setForeground(Qt::red);
-
     commentStartExpression = QRegularExpression(QStringLiteral("/\\*"));
     commentEndExpression = QRegularExpression(QStringLiteral("\\*/"));
 }
 
 void Highlighter::highlightBlock(const QString &text)
 {
+    // Apply format for each highlight rule
     for (const HighlightingRule &rule : qAsConst(highlightingRules)) {
         QRegularExpressionMatchIterator matchIterator = rule.pattern.globalMatch(text);
         while (matchIterator.hasNext()) {
@@ -61,6 +75,7 @@ void Highlighter::highlightBlock(const QString &text)
             setFormat(match.capturedStart(), match.capturedLength(), rule.format);
         }
     }
+    // cross-block serarch for applying multi-line comment format highlight rule
     setCurrentBlockState(0);
     int startIndex = 0;
     if (previousBlockState() != 1)

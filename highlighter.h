@@ -1,7 +1,19 @@
+/*
+ * Syntax Highlighter Class
+ * 
+ * C++ IDE by Luigi Pizzolito
+ *            Zhang Ruiqing
+ *            Ruan Zihang
+ *            Lin Zhenmin
+ *            Yang Zhaoyi
+ * For 1703-ECE Class by Nie Qing and Wu Hao
+ * At Beijing Insitute of Techology
+*/
+
 #ifndef HIGHLIGHTER_H
 #define HIGHLIGHTER_H
 
-#include "qregularexpression.h"
+#include <QRegularExpression>
 #include <QSyntaxHighlighter>
 #include <QObject>
 
@@ -22,10 +34,10 @@ private:
         QTextCharFormat format;
     };
     QVector<HighlightingRule> highlightingRules;
-
+    // multi-line comment expressions
     QRegularExpression commentStartExpression;
     QRegularExpression commentEndExpression;
-
+    // formattings
     QTextCharFormat keywordFormat;
     QTextCharFormat classFormat;
     QTextCharFormat singleLineCommentFormat;

@@ -1,24 +1,39 @@
-#include "qtexteditlineshighlighted.h"
+/*
+ * Code Editor Class
+ * 
+ * C++ IDE by Luigi Pizzolito
+ *            Zhang Ruiqing
+ *            Ruan Zihang
+ *            Lin Zhenmin
+ *            Yang Zhaoyi
+ * For 1703-ECE Class by Nie Qing and Wu Hao
+ * At Beijing Insitute of Techology
+ *
+ * This file includes code that is part of the examples of the Qt Toolkit.
+*/
+
+#include "codeeditor.h"
 #include "linenumberarea.h"
 
-QTextEditLinesHighlighted::QTextEditLinesHighlighted(QWidget *parent) :
+CodeEditor::CodeEditor(QWidget *parent) :
     QTextEdit(parent)
 {
     // Line numbers
     lineNumberArea = new LineNumberArea(this);
-    ///
+    // Signals to update line number area
     connect(this->document(), SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
     connect(this->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateLineNumberArea/*_2*/(int)));
     connect(this, SIGNAL(textChanged()), this, SLOT(updateLineNumberArea()));
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(updateLineNumberArea()));
-
+    // Highlight current line
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
-    ///
+    // Initial update
     updateLineNumberAreaWidth(0);
 }
 
-int QTextEditLinesHighlighted::lineNumberAreaWidth()
+int CodeEditor::lineNumberAreaWidth()
 {
+    // calculate max line number area width given the amount of digits
     int digits = 1;
     int max = qMax(1, this->document()->blockCount());
     while (max >= 10) {
@@ -31,21 +46,21 @@ int QTextEditLinesHighlighted::lineNumberAreaWidth()
     return space;
 }
 
-void QTextEditLinesHighlighted::updateLineNumberAreaWidth(int /* newBlockCount */)
+void CodeEditor::updateLineNumberAreaWidth(int /* newBlockCount */)
 {
     setViewportMargins(lineNumberAreaWidth(), 0, 0, 0);
 }
 
 
-void QTextEditLinesHighlighted::updateLineNumberArea(QRectF /*rect_f*/)
+void CodeEditor::updateLineNumberArea(QRectF /*rect_f*/)
 {
-    QTextEditLinesHighlighted::updateLineNumberArea();
+    CodeEditor::updateLineNumberArea();
 }
-void QTextEditLinesHighlighted::updateLineNumberArea(int /*slider_pos*/)
+void CodeEditor::updateLineNumberArea(int /*slider_pos*/)
 {
-    QTextEditLinesHighlighted::updateLineNumberArea();
+    CodeEditor::updateLineNumberArea();
 }
-void QTextEditLinesHighlighted::updateLineNumberArea()
+void CodeEditor::updateLineNumberArea()
 {
     /*
      * When the signal is emitted, the sliderPosition has been adjusted according to the action,
@@ -54,7 +69,7 @@ void QTextEditLinesHighlighted::updateLineNumberArea()
      * adjust any action by calling setSliderPosition() yourself, based on both the action and the
      * slider's value.
      */
-    // Make sure the sliderPosition triggers one last time the valueChanged() signal with the actual value !!!!
+    // Make sure the sliderPosition triggers one last time the valueChanged() signal with the actual value!
     this->verticalScrollBar()->setSliderPosition(this->verticalScrollBar()->sliderPosition());
 
     // Since "QTextEdit" does not have an "updateRequest(...)" signal, we chose
@@ -70,33 +85,25 @@ void QTextEditLinesHighlighted::updateLineNumberArea()
         lineNumberArea->scroll(0, dy);
     }
 
-    // Addjust slider to alway see the number of the currently being edited line...
+    // Adjust slider to always see the number of the currently being edited line...
     int first_block_id = getFirstVisibleBlockId();
     if (first_block_id == 0 || this->textCursor().block().blockNumber() == first_block_id-1)
         this->verticalScrollBar()->setSliderPosition(dy-this->document()->documentMargin());
 
-//    // Snap to first line (TODO...)
-//    if (first_block_id > 0)
-//    {
-//        int slider_pos = this->verticalScrollBar()->sliderPosition();
-//        int prev_block_height = (int) this->document()->documentLayout()->blockBoundingRect(this->document()->findBlockByNumber(first_block_id-1)).height();
-//        if (dy <= this->document()->documentMargin() + prev_block_height)
-//            this->verticalScrollBar()->setSliderPosition(slider_pos - (this->document()->documentMargin() + prev_block_height));
-//    }
-
 }
 
 
-void QTextEditLinesHighlighted::resizeEvent(QResizeEvent *e)
+void CodeEditor::resizeEvent(QResizeEvent *e)
 {
+    // Update QTextEdit on resize
     QTextEdit::resizeEvent(e);
-
+    // Update line number area rectangle on resize
     QRect cr = this->contentsRect();
     lineNumberArea->setGeometry(QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
 }
 
 
-int QTextEditLinesHighlighted::getFirstVisibleBlockId()
+int CodeEditor::getFirstVisibleBlockId()
 {
     // Detect the first block for which bounding rect - once translated
     // in absolute coordinated - is contained by the editor's text area
@@ -124,8 +131,10 @@ int QTextEditLinesHighlighted::getFirstVisibleBlockId()
     return 0;
 }
 
-void QTextEditLinesHighlighted::lineNumberAreaPaintEvent(QPaintEvent *event)
+void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
+    // Draw line number area
+
     this->verticalScrollBar()->setSliderPosition(this->verticalScrollBar()->sliderPosition());
 
     QPainter painter(lineNumberArea);
@@ -176,8 +185,10 @@ void QTextEditLinesHighlighted::lineNumberAreaPaintEvent(QPaintEvent *event)
 
 }
 
-void QTextEditLinesHighlighted::highlightCurrentLine()
+void CodeEditor::highlightCurrentLine()
 {
+    // Draw highlight on current line
+
     QList<QTextEdit::ExtraSelection> extraSelections;
 
     if (!isReadOnly()) {
