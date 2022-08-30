@@ -110,11 +110,11 @@ void MainWindow::openFile(const QString &path)
 {
     // open folder
     fileList->openFolder(path);
+    updateComms();
 
     // save to last opened file settings and update command generator
     if (!path.isNull()) {
         settings->setValue("LastOpenedFile", path);
-        updateComms();
     }
 }
 
@@ -131,8 +131,7 @@ void MainWindow::deleteFile() {
         } else {
             // otherwise open first file
             QString ffile = fileList->dirP.absolutePath()+"/"+fileList->dirP.entryList().at(0);
-            fileList->openFolder(ffile);
-            settings->setValue("LastOpenedFile", ffile);
+            openFile(ffile);
         }
     }
 }
@@ -149,11 +148,11 @@ void MainWindow::showDocs() {
 
 void MainWindow::showDocsRestore() {
     if (!DocsPFile.isNull()) //if there is a prior open document to restore
-        fileList->openFolder(fileList->fileP);
+        openFile(fileList->fileP);
 }
 
 void MainWindow::updateComms() {
-    commG->update();
+    commG->update(&fileList->dirP);
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *ev) {

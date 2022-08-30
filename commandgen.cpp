@@ -57,15 +57,16 @@ QString CommandGen::debug() {
 }
 
 CommandGen::ReplaceEngine::ReplaceEngine(QDir *dir, QSettings *cfg) : dirP(dir),Cfg(cfg) {
-    update(); // initial update
+    update(dir); // initial update
 }
 
-void CommandGen::update() {
-    rplr->update(); // forward update to replace engine
+void CommandGen::update(QDir *dir) {
+    rplr->update(dir); // forward update to replace engine
 }
 
-void CommandGen::ReplaceEngine::update() {
+void CommandGen::ReplaceEngine::update(QDir *dir) {
     // update internal generated strings
+    dirP = dir;
     // generate %root and %rootn
     Groot = dirP->absolutePath();
     Grootn = dirP->dirName();

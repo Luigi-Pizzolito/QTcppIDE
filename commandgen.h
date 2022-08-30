@@ -20,7 +20,7 @@ class CommandGen
 {
 public:
     CommandGen(QDir *dir);
-    void update();
+    void update(QDir *dir);
     // commands to generate
     QString compile();
     QString run();
@@ -31,7 +31,7 @@ private:
     class ReplaceEngine {
         public:
             ReplaceEngine(QDir *dir, QSettings *cfg);
-            void update();
+            void update(QDir *dir);
             // Strings to generate
             QString Gin;
             QString Ginc;
