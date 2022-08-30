@@ -33,7 +33,6 @@ public:
     explicit ConfigGen(QWidget *parent = 0);
 
 private:
-    //todo: createoutputdirs
     // GUI Elements
     QFormLayout *flayout;
     QComboBox *presetS;

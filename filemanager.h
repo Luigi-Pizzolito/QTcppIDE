@@ -13,6 +13,7 @@
 #ifndef FILEMANAGER_H
 #define FILEMANAGER_H
 
+#include <QSettings>
 #include <QListWidget>
 #include <QObject>
 #include <QWidget>
@@ -31,6 +32,7 @@ public slots:
     void openFile(QListWidgetItem* item);
 private:
     QWidget *parentw;
+    QSettings *settings;
     QTextEdit *editor;
     void loadFile(QString fileName);
 };

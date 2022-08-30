@@ -23,6 +23,7 @@
 #include "commandgen.h"
 
 #include <QMainWindow>
+#include <QSettings>
 #include <QListWidgetItem>
 
 QT_BEGIN_NAMESPACE
@@ -45,6 +46,8 @@ public slots:
     void openFile(const QString &path = QString());
 
 private:
+    // settings
+    QSettings *settings;
     // setup functions
     void setupEditor();
     void setupFileMenu();

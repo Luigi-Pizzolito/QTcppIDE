@@ -30,7 +30,7 @@ public slots:
     void procFinished(int exitCode, QProcess::ExitStatus exitStatus);
 private:
     QWidget *parentw;
-    QTextEdit *tedit;
+    QTextEdit *tedit; //pointer to console
 };
 
 

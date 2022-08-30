@@ -31,7 +31,10 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    //setup view layout
+    // load settings
+    settings = new QSettings(COMPANY, APPNAME);
+
+    // setup view layout
     QWidget *widget = new QWidget(this);
     QGridLayout *layout = new QGridLayout(widget);
 
@@ -61,6 +64,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     // set window
     setWindowTitle(tr(APPHNAME));
+    // open last opened file
+    QString lastfile = settings->value("LastOpenedFile").toString();
+    if (!lastfile.isNull() && !lastfile.isEmpty())
+           openFile(lastfile);
     showDocs();
 }
 
@@ -90,6 +97,8 @@ void MainWindow::openFile(const QString &path)
     // open folder and update command generator
     fileList->openFolder(path);
     updateComms();
+    // save to last opened file settings
+    settings->setValue("LastOpenedFile", path);
 }
 
 void MainWindow::showDocs() {

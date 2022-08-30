@@ -10,6 +10,8 @@
  * At Beijing Insitute of Techology
 */
 
+#include "globaldefs.h"
+
 #include "filemanager.h"
 #include <QDir>
 #include <QFileInfo>
@@ -17,6 +19,8 @@
 
 FileManager::FileManager(QWidget *parent, QTextEdit *editor) : QListWidget(parent),parentw(parent),editor(editor)
 {
+    // load settings
+    settings = new QSettings(COMPANY, APPNAME);
     // open file when list item is clicked
     connect(this, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(openFile(QListWidgetItem*)));
 }
@@ -25,6 +29,8 @@ void FileManager::openFile(QListWidgetItem* item) {
     // get file path and load
     QString fpath = dirP.absolutePath() + "/" + item->text();
     loadFile(fpath);
+    // save last opened file to settings
+    settings->setValue("LastOpenedFile", fpath);
 }
 
 void FileManager::openFolder(QString fileName) {
