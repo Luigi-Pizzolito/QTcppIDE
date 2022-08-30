@@ -88,13 +88,28 @@ void MainWindow::about()
 
 void MainWindow::newFile()
 {
-    //todo: make this actually create new file thru filemanager
     fileList->createNewFileRequest();
+}
+
+void MainWindow::newFolder() {
+    // prompt folder name
+    QString dirp = QFileDialog::getExistingDirectory(this, tr("Open Directory"), "/", QFileDialog::ShowDirsOnly);
+    if (!dirp.isNull()) {
+        // create new folder
+        QDir dir;
+        dir.mkpath(dirp);
+        // switch to new folder
+        fileList->dirP.setPath(dirp);
+        // prompt create new main file
+        fileList->setFileMain();
+        fileList->createNewFileRequest();
+
+    }
 }
 
 void MainWindow::openFile(const QString &path)
 {
-    // open folde
+    // open folderz
     fileList->openFolder(path);
 
     // save to last opened file settings and update command generator
@@ -127,6 +142,7 @@ void MainWindow::keyPressEvent(QKeyEvent *ev) {
     if (ev->key() == Qt::Key::Key_Escape) {
         // restore if documentation was showing during keypress
         showDocsRestore();
+        editor->setFont(efont);
     }
 }
 
@@ -137,10 +153,12 @@ void MainWindow::setupFileMenu()
     QMenu *fileMenu = new QMenu(tr("&File"), this);
     menuBar()->addMenu(fileMenu);
 
-    fileMenu->addAction(tr("&New"), QKeySequence::New,
+    fileMenu->addAction(tr("&New File"), QKeySequence::New,
                         this, &MainWindow::newFile);
+    fileMenu->addAction(tr("&New Project"), QKeySequence(tr("Ctrl+Shift+n")),
+                        this, &MainWindow::newFolder);
     fileMenu->addSeparator();
-    fileMenu->addAction(tr("&Open..."), QKeySequence::Open,
+    fileMenu->addAction(tr("&Open"), QKeySequence::Open,
                         this, [this](){ openFile(); });
     fileMenu->addSeparator();
     //todo: implement save
@@ -163,13 +181,12 @@ void MainWindow::setupHelpMenu()
 void MainWindow::setupEditor()
 {
     // set font
-    QFont font;
-    font.setFamily("Courier");
-    font.setFixedPitch(true);
-    font.setPointSize(10);
+    efont.setFamily("Courier");
+    efont.setFixedPitch(true);
+    efont.setPointSize(10);
     // create editor
     editor = new CodeEditor;
-    editor->setFont(font);
+    editor->setFont(efont);
     // set syntax highlighter
     highlighter = new Highlighter(editor->document());
 }

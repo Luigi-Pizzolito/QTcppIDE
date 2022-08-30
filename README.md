@@ -19,6 +19,8 @@ Still WIP.
 - Support to use multiple compilers/linkers.
     - C and C++ support (selectable).
     - Launch in external console.
+- Restore settings on startup and restore defaults.
+- Project starter templates.
 
 ### Work in Progress
 - *Toolbar
@@ -35,10 +37,8 @@ Still WIP.
     - Support to use multiple debuggers.
 - Breakpoint setting.
 - *Cross-platform testing.
-- Restore settings on startup and restore defaults.
 - Automatically install compiler/debugger for Windows.
 - Switch between .cpp and .h file.
-- Project starter templates.
 - Bottom status bar.
 - About markdown file.
 - Documentation markdown file.

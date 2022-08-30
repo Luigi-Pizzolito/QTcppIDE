@@ -25,6 +25,7 @@
 #include <QLineEdit>
 #include <QComboBox>
 #include <QPushButton>
+#include <QMap>
 
 class FileManager : public QListWidget
 {
@@ -38,6 +39,7 @@ public slots:
     void openFile(QListWidgetItem* item);
     void createNewFileRequest();
     void createNewFiles();
+    void setFileMain();
 private:
     QWidget *parentw;
     QSettings *settings;
@@ -51,6 +53,20 @@ private:
     QLineEdit *fileN;
     QComboBox *fileT;
     QPushButton *okbtn;
+    // file starter templates
+    #define mainStarter "// %filen\n#include <iostream>\nusing namespace std;\n\nint main(int argc, char *argv[]) {\n    \n    return 0;\n}"
+    #define cppStarter  "// %filen\n#include \"%filenl.h\"\n\n%file::%file() {\n    \n}\n\n%file::~%file() {\n    \n}"
+    #define cStarter    "// %filen\n#include <stdio.h>\n\nint main(int argc, char *argv[]) {\n    \n    return 0;\n}"
+    #define hStarter    "// %filen\n#pragma once\n\nclass %file {\n    public:\n        %file();\n        ~%file();\n    private:\n\n};"
+    const QMap<QString,QString> FileTemplates {
+            {"main", mainStarter},
+            {"cpp", cppStarter},
+            {"cxx", cppStarter},
+            {"cc" , cppStarter},
+            {"c"  , cStarter},
+            {"h"  , hStarter},
+            {"hpp", hStarter}
+    };
 };
 
 #endif // FILEMANAGER_H

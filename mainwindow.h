@@ -43,6 +43,7 @@ public slots:
     void showDocs();
     void showDocsRestore();
     void newFile();
+    void newFolder();
     void openFile(const QString &path = QString());
 
 private:
@@ -54,6 +55,7 @@ private:
     void setupHelpMenu();
     void setupConsole();
     // code editor
+    QFont efont;
     QTextEdit *editor;
     Highlighter *highlighter;
     // other GUI elements

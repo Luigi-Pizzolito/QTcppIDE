@@ -58,16 +58,15 @@ void FileManager::setupNewFileDialog() {
     //todo: alow creating and editing of any file, turn off highlihgitng if not a c file
     fileT->setFont(mfont);
     fileT->addItem("cpp/h");
-    fileT->addItem("c/h");
-    fileT->insertSeparator(2);
+    fileT->insertSeparator(1);
     fileT->addItem("cpp");
     fileT->addItem("c");
     fileT->addItem("h");
-    fileT->insertSeparator(6);
+    fileT->insertSeparator(5);
     fileT->addItem("cxx");
     fileT->addItem("cc");
     fileT->addItem("hpp");
-    fileT->insertSeparator(10);
+    fileT->insertSeparator(9);
     fileT->addItem("cpp/hpp");
     fileT->addItem("cxx/h");
     fileT->addItem("cxx/hpp");
@@ -108,9 +107,9 @@ void FileManager::openFolder(QString fileName) {
         clear();
         for ( const auto& i : dirI ) {
             addItem(i);
+            item(count()-1)->setFont(mfont);
         }
         // Select currently open file's list item
-//        dirP.setFilter(QDir::Files);
         setCurrentItem(findItems(QFileInfo(fileName).fileName(), Qt::MatchExactly)[0]);
         // open file
         loadFile(fileName);
@@ -132,6 +131,12 @@ void FileManager::createNewFileRequest() { //change to bool, rename to request
     newFileD->exec();
 }
 
+void FileManager::setFileMain() {
+    fileN->setText("main");
+    fileT->setCurrentIndex(1);
+    fileT->setCurrentText("cpp");
+}
+
 void FileManager::createNewFiles() {
     // parse requested files to create
     QStringList files;
@@ -146,8 +151,20 @@ void FileManager::createNewFiles() {
     }
     // create files
     for (const auto &file : files) {
-        QFile qfile(dirP.absolutePath()+"/"+file);
+        QString fpath = dirP.absolutePath()+"/"+file.toLower();
+        QFile qfile(fpath);
         qfile.open(QIODevice::WriteOnly);
+        // generate and write file templates
+        QString templatef = FileTemplates[QFileInfo(fpath).suffix()];
+        if (file.toLower()=="main.cpp") {
+            templatef = FileTemplates["main"];
+        } else if (!fileT->currentText().contains("/") && !file.endsWith(".c")) {
+            templatef = "// %filen\n\n";
+        }
+        templatef.replace("%filenl",fileN->text().toLower());
+        templatef.replace("%filen",file.toLower());
+        templatef.replace("%file",fileN->text());
+        qfile.write(templatef.toUtf8());
         qfile.close();
     }
     // close dialog
@@ -158,5 +175,5 @@ void FileManager::createNewFiles() {
     fileT->setCurrentIndex(0);
     // open file
     delay(100); //delay to maake sure files were created
-    openFolder(dirP.absolutePath()+"/"+files[0]);
+    openFolder(dirP.absolutePath()+"/"+files[0].toLower());
 }
