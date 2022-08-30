@@ -89,16 +89,19 @@ void MainWindow::about()
 void MainWindow::newFile()
 {
     //todo: make this actually create new file thru filemanager
-    editor->clear();
+    fileList->createNewFileRequest();
 }
 
 void MainWindow::openFile(const QString &path)
 {
-    // open folder and update command generator
+    // open folde
     fileList->openFolder(path);
-    updateComms();
-    // save to last opened file settings
-    settings->setValue("LastOpenedFile", path);
+
+    // save to last opened file settings and update command generator
+    if (!path.isNull()) {
+        settings->setValue("LastOpenedFile", path);
+        updateComms();
+    }
 }
 
 void MainWindow::showDocs() {

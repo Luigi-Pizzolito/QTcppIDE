@@ -20,6 +20,12 @@
 #include <QTextEdit>
 #include <QDir>
 
+#include <QDialog>
+#include <QFormLayout>
+#include <QLineEdit>
+#include <QComboBox>
+#include <QPushButton>
+
 class FileManager : public QListWidget
 {
     Q_OBJECT
@@ -30,11 +36,21 @@ public:
 public slots:
     void openFolder(QString fileName);
     void openFile(QListWidgetItem* item);
+    void createNewFileRequest();
+    void createNewFiles();
 private:
     QWidget *parentw;
     QSettings *settings;
     QTextEdit *editor;
     void loadFile(QString fileName);
+    // new file dialog
+    void setupNewFileDialog();
+    QDialog *newFileD;
+    QFormLayout *flayout;
+    QFont mfont;
+    QLineEdit *fileN;
+    QComboBox *fileT;
+    QPushButton *okbtn;
 };
 
 #endif // FILEMANAGER_H
