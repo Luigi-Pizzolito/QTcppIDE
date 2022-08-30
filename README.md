@@ -13,25 +13,30 @@ Still WIP.
 
 ### Done
 - Text editor with line numbers and syntax highlighting.
+- In-Editor help/documentation.
 - File Open.
 - Open folder with multiple files.
-- In-Editor help/documentation.
+- Support to use multiple compilers/linkers.
+    - C and C++ support (selectable).
+    - Launch in external console.
 
 ### Work in Progress
-- Search and Replace.
+- *Toolbar
+    - Undo and Redo. (add edit menu)
+- *Search and Replace.
+- *Right click menu.
+- *Code Folding.
 - File save.
+- Change file open to QTreeView to support subfolders.
 
 ### Planned
 - Line number and column display and locate.
-- Undo and Redo. (add edit menu)
-- Support to use multiple compilers/linkers.
-- C and C++ support (selectable).
 - Debugger support.
+    - Support to use multiple debuggers.
 - Breakpoint setting.
-- Cross-platform testing.
-- Launch in external console.
+- *Cross-platform testing.
 - Restore settings on startup and restore defaults.
-- Automatically install compiler/debugger.
+- Automatically install compiler/debugger for Windows.
 - Switch between .cpp and .h file.
 - Project starter templates.
 - Bottom status bar.
