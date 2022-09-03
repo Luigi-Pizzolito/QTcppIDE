@@ -58,6 +58,8 @@ void Console::processProcFinished(int exitCode, QProcess::ExitStatus exitStatus)
         } else {
             // on fail or end of jobs, reset batch flag
             batchJob = false;
+            batchOpts.first.clear();
+            batchOpts.second.clear();
         }
     }
 }

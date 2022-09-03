@@ -45,6 +45,7 @@ void ProcRunner::procFinished(int exitCode, QProcess::ExitStatus exitStatus) {
     tedit->setTextColor(QColor(Qt::blue).lighter(160));
     QString str;
     if (exitStatus == QProcess::CrashExit) {
+        tedit->setTextColor(Qt::red);
         str+="Process crashed with exit code ";
     } else {
         str+="Process finished with exit code ";

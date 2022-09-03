@@ -68,6 +68,8 @@ private:
     void setupHelpMenu();
     void setupConsole();
     void setupSearchMenu(QTextEdit *search_object);
+    void setupEditMenu();
+    void setupViewMenu();
     // code editor
     QFont efont;
     QTextEdit *editor;

@@ -53,6 +53,9 @@ MainWindow::MainWindow(QWidget *parent)
     layout->addWidget(fileList, 0, 0, 1, 1);
     layout->setColumnStretch(0, 2);
 
+    // add edit menu
+    setupEditMenu();
+
     // add search menu
     setupSearchMenu(editor);
 
@@ -61,6 +64,9 @@ MainWindow::MainWindow(QWidget *parent)
     layout->addWidget(console, 1, 0, 1, 2);
     layout->setRowStretch(0, 9);
     layout->setRowStretch(1, 3);
+
+    // add view menu
+    setupViewMenu();
 
     // add help
     setupHelpMenu();
@@ -184,7 +190,6 @@ void MainWindow::setupFileMenu()
                         this, [this](){ openFile(); });
     fileMenu->addSeparator();
     //todo: implement save
-    //todo: add aliases here for delete file
     fileMenu->addAction(tr("&Delete File"), QKeySequence(tr("Ctrl+Shift+w")), this, &MainWindow::deleteFile);
     fileMenu->addAction(tr("E&xit"), QKeySequence::Quit,
                         qApp, &QApplication::quit);
@@ -217,7 +222,7 @@ void MainWindow::setupEditor()
 void MainWindow::setupConsole() {
     console = new Console();
 
-    QMenu *ConsoleMenu = new QMenu(tr("&Console"), this);
+    QMenu *ConsoleMenu = new QMenu(tr("&Run"), this);
     menuBar()->addMenu(ConsoleMenu);
     ConsoleMenu->addAction(tr("Com&pile"), QKeySequence(tr("Ctrl+b")), this, [this](){console->run(commG->compile(), fileList->dirP.absolutePath());});
     ConsoleMenu->addAction(tr("Ru&n"), QKeySequence(tr("Ctrl+e")), this, [this](){console->run(commG->run(), fileList->dirP.absolutePath());});
@@ -231,64 +236,80 @@ void MainWindow::setupConsole() {
         QDir bin(fileList->dirP.absolutePath()+"/bin");
         if (bin.exists()) {
             bin.removeRecursively();
+            console->setTextColor(QColor(Qt::blue).lighter(160));
             console->append("Cleaned project.");
             console->ensureCursorVisible();
         } else {
+            console->setTextColor(QColor(Qt::blue).lighter(160));
             console->append("No build files to clean.");
             console->ensureCursorVisible();
         }
     });
     ConsoleMenu->addSeparator();
-    ConsoleMenu->addAction(tr("Stop Pro&cess"), QKeySequence(tr("Ctrl+Shift+c")), this, [this](){console->stop();});
+    ConsoleMenu->addAction(tr("Stop/&Kill"), QKeySequence(tr("Ctrl+Shift+c")), this, [this](){console->stop();});
     ConsoleMenu->addAction(tr("C&lear Console"), QKeySequence(tr("Ctrl+l")), this, [this](){console->clearLog();});
 
     ConsoleMenu->addSeparator();
     configG = new ConfigGen(this);
     connect(configG, SIGNAL(finished(int)), this, SLOT(updateComms()));
 
-    ConsoleMenu->addAction(tr("&Preferences"), QKeySequence(tr("Ctrl+,")), this, [this](){configG->exec();});
+    ConsoleMenu->addAction(tr("&Settings"), QKeySequence(tr("Ctrl+,")), this, [this](){configG->exec();});
 
 
     commG = new CommandGen(&fileList->dirP);
 }
 
+void MainWindow::setupEditMenu() {
+    // edit menu items
+    QMenu *EditMenu = new QMenu(tr("&Edit"), this);
+    menuBar()->addMenu(EditMenu);
+    QAction *undo = new QAction(tr("&Undo"), this);
+    undo->setShortcut(QKeySequence::Undo);
+    EditMenu->addAction(undo);
+    connect(undo,SIGNAL(triggered()),editor,SLOT(undo()));
+    QAction *redo = new QAction(tr("&Redo"), this);
+    redo->setShortcut(QKeySequence::Redo);
+    EditMenu->addAction(redo);
+    connect(redo,SIGNAL(triggered()),editor,SLOT(redo()));
+    EditMenu->addSeparator();
+    QAction *cut = new QAction(tr("Cu&t"), this);
+    cut->setShortcut(QKeySequence::Cut);
+    EditMenu->addAction(cut);
+    connect(cut,SIGNAL(triggered()),editor,SLOT(cut()));
+    QAction *copy = new QAction(tr("&Copy"), this);
+    copy->setShortcut(QKeySequence::Copy);
+    EditMenu->addAction(copy);
+    connect(copy,SIGNAL(triggered()),editor,SLOT(copy()));
+    QAction *paste = new QAction(tr("&Paste"), this);
+    paste->setShortcut(QKeySequence::Paste);
+    EditMenu->addAction(paste);
+    connect(paste,SIGNAL(triggered()),editor,SLOT(paste()));
+    EditMenu->addSeparator();
+    QAction *selectAll = new QAction(tr("Select &All"), this);
+    selectAll->setShortcut(QKeySequence::SelectAll);
+    EditMenu->addAction(selectAll);
+    connect(selectAll,SIGNAL(triggered()),editor,SLOT(selectAll()));
+    EditMenu->addSeparator();
+}
+
+void MainWindow::setupViewMenu() {
+    QMenu *ViewMenu = new QMenu(tr("&View"), this);
+    menuBar()->addMenu(ViewMenu);
+    ViewMenu->addAction(tr("Zoom &In"), QKeySequence::ZoomIn, this, [=](){
+        editor->zoomIn();
+    });
+    ViewMenu->addAction(tr("Zoom &Out"), QKeySequence::ZoomOut, this, [=](){
+        editor->zoomOut();
+    });
+}
 
 
 //------ Search and Replace Menu
 
 void MainWindow::setupSearchMenu(QTextEdit *search_object)//当前文档页的指针
 {
-    QMenu *SearchMenu = new QMenu(tr("&Edit"), this);
+    QMenu *SearchMenu = new QMenu(tr("&Search"), this);
     menuBar()->addMenu(SearchMenu);
-
-    // edit menu items
-    QAction *undo = new QAction(tr("&Undo"), SearchMenu);
-    undo->setShortcut(QKeySequence::Undo);
-    SearchMenu->addAction(undo);
-    connect(undo,SIGNAL(triggered()),search_object,SLOT(undo()));
-    QAction *redo = new QAction(tr("&Redo"), SearchMenu);
-    redo->setShortcut(QKeySequence::Redo);
-    SearchMenu->addAction(redo);
-    connect(redo,SIGNAL(triggered()),search_object,SLOT(redo()));
-    SearchMenu->addSeparator();
-    QAction *cut = new QAction(tr("Cu&t"), SearchMenu);
-    cut->setShortcut(QKeySequence::Cut);
-    SearchMenu->addAction(cut);
-    connect(cut,SIGNAL(triggered()),search_object,SLOT(cut()));
-    QAction *copy = new QAction(tr("&Copy"), SearchMenu);
-    copy->setShortcut(QKeySequence::Copy);
-    SearchMenu->addAction(copy);
-    connect(copy,SIGNAL(triggered()),search_object,SLOT(copy()));
-    QAction *paste = new QAction(tr("&Paste"), SearchMenu);
-    paste->setShortcut(QKeySequence::Paste);
-    SearchMenu->addAction(paste);
-    connect(paste,SIGNAL(triggered()),search_object,SLOT(paste()));
-    SearchMenu->addSeparator();
-    QAction *selectAll = new QAction(tr("Select &All"), SearchMenu);
-    selectAll->setShortcut(QKeySequence::SelectAll);
-    SearchMenu->addAction(selectAll);
-    connect(selectAll,SIGNAL(triggered()),search_object,SLOT(selectAll()));
-    SearchMenu->addSeparator();
 
     // search and replace menu items
     srMenu=new Search_Replace(search_object,this);
