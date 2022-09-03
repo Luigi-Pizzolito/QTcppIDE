@@ -12,6 +12,8 @@
 
 #include "procrunner.h"
 
+#include "globaldefs.h"
+
 ProcRunner::ProcRunner(QWidget *parent, QTextEdit *text_edit) : parentw(parent),tedit(text_edit)
 {
     // Create process runner
@@ -29,8 +31,8 @@ void ProcRunner::run(QString program, QStringList arguments, QString cwd) {
 }
 
 void ProcRunner::procStarted() {
-    // print process started message to console
-    tedit->setTextColor(QColor(Qt::blue).lighter(160));
+    // started message to console
+    tedit->setTextColor(CONSOLETCOLOR);
     QString str = "Started process ";
     str+=proc->program();
     str+=" ";
@@ -40,9 +42,9 @@ void ProcRunner::procStarted() {
     tedit->ensureCursorVisible();
 }
 
-void ProcRunner::procFinished(int exitCode, QProcess::ExitStatus exitStatus) {
+void ProcRunner::procFinished(int exitCode,QProcess::ExitStatus exitStatus) {
     // print process finished message to console
-    tedit->setTextColor(QColor(Qt::blue).lighter(160));
+    tedit->setTextColor(CONSOLETCOLOR);
     QString str;
     if (exitStatus == QProcess::CrashExit) {
         tedit->setTextColor(Qt::red);

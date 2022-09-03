@@ -31,7 +31,7 @@ class FileManager : public QListWidget
 {
     Q_OBJECT
 public:
-    explicit FileManager(QWidget *parent = 0, QTextEdit *editor=0);
+    explicit FileManager(QWidget *parent = 0, QTextEdit *editor=0, bool *showingDocs=0);
     QDir dirP;
     QString fileP;
 public slots:
@@ -44,6 +44,7 @@ private:
     QWidget *parentw;
     QSettings *settings;
     QTextEdit *editor;
+    bool *showingDocs;
     void loadFile(QString fileName);
     // new file dialog
     void setupNewFileDialog();

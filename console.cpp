@@ -27,7 +27,7 @@ Console::Console(QWidget *parent) : QTextEdit(parent)
     font.setPointSize(10);
     setFont(font);
     // Print starter line
-    setTextColor(QColor(Qt::blue).lighter(160));
+    setTextColor(CONSOLETCOLOR);
     append(APPHNAME " " IDEVER);
     // Setup process runner
     prunner = new ProcRunner(this, this);
@@ -64,10 +64,22 @@ void Console::processProcFinished(int exitCode, QProcess::ExitStatus exitStatus)
     }
 }
 
+void Console::log(QString logt) {
+    setTextColor(CONSOLETCOLOR);
+    append(logt);
+    ensureCursorVisible();
+}
+
+void Console::err(QString logt) {
+    setTextColor(CONSOLEERRCOLOR);
+    append(logt);
+    ensureCursorVisible();
+}
+
 void Console::clearLog() {
     // clear console
     clear();
-    setTextColor(QColor(Qt::blue).lighter(160));
+    setTextColor(CONSOLETCOLOR);
     append(APPHNAME " " IDEVER);
     ensureCursorVisible();
 }
@@ -103,7 +115,7 @@ void Console::stop() {
 
 // handle QProcess errors
 void Console::processProcError(QProcess::ProcessError error) {
-    setTextColor(Qt::red);
+    setTextColor(CONSOLEERRCOLOR);
     switch (error) {
         case QProcess::ProcessError::FailedToStart:
             append("Process failed to start.");

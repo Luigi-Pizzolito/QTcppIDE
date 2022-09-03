@@ -47,6 +47,7 @@ public slots:
     void newFolder();
     void openFile(const QString &path = QString());
     void deleteFile();
+    void saveFile();
 
     // for right click menu on windows only
     #ifdef _WIN32
@@ -82,6 +83,8 @@ private:
     Search_Replace *srMenu;
     // last opened file flag
     QString DocsPFile;
+    // showing documentation flag (to implement readonly docs)
+    bool showingDocs = true;
 private slots:
     void updateComms();
 

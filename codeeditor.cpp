@@ -12,6 +12,8 @@
  * This file includes code that is part of the examples of the Qt Toolkit.
 */
 
+#include "globaldefs.h"
+
 #include "codeeditor.h"
 #include "linenumberarea.h"
 
@@ -194,7 +196,7 @@ void CodeEditor::highlightCurrentLine()
     if (!isReadOnly()) {
         QTextEdit::ExtraSelection selection;
 
-        QColor lineColor = QColor(Qt::blue).lighter(160);
+        QColor lineColor = CONSOLETCOLOR;
 
         selection.format.setBackground(lineColor);
         selection.format.setProperty(QTextFormat::FullWidthSelection, true);

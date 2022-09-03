@@ -49,7 +49,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // add file manager
     setupFileMenu();
-    fileList = new FileManager(this, editor);
+    fileList = new FileManager(this, editor, &showingDocs);
     layout->addWidget(fileList, 0, 0, 1, 1);
     layout->setColumnStretch(0, 2);
 
@@ -128,6 +128,24 @@ void MainWindow::openFile(const QString &path)
     }
 }
 
+void MainWindow::saveFile() {
+    // check if (read-only) documentation is open
+    if (showingDocs) {
+        console->log("Please select and open a file before saving.");
+    } else {
+        //todo: save file here
+        QFile file(fileList->fileP);
+        if(file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            QTextStream fstream(&file);
+            fstream << editor->toPlainText();
+            file.close();
+            console->log("Saved file "+fileList->fileP);
+        } else {
+            console->err("Error saving file "+fileList->fileP);
+        }
+    }
+}
+
 void MainWindow::deleteFile() {
     if (QMessageBox(QMessageBox::Information, "Delete "+QFileInfo(fileList->fileP).fileName(), "Are you sure you want to delete "+QFileInfo(fileList->fileP).fileName()+"?", QMessageBox::Yes|QMessageBox::No).exec() == QMessageBox::Yes) {
         fileList->dirP.remove(fileList->fileP);
@@ -151,14 +169,18 @@ void MainWindow::showDocs() {
         DocsPFile = fileList->fileP;
 
     // Open README Documentation
-    QFile file("../README.md");
-        if (file.open(QFile::ReadOnly | QFile::Text))
-            editor->setMarkdown(file.readAll());
+    QFile file(READMEDOCPATH);
+    if (file.open(QFile::ReadOnly | QFile::Text)) {
+        editor->setMarkdown(file.readAll());
+        showingDocs = true;
+    }
 }
 
 void MainWindow::showDocsRestore() {
-    if (!DocsPFile.isNull()) //if there is a prior open document to restore
+    if (!DocsPFile.isNull()) { //if there is a prior open document to restore
         openFile(fileList->fileP);
+        showingDocs = false;
+    }
 }
 
 void MainWindow::updateComms() {
@@ -175,7 +197,6 @@ void MainWindow::keyPressEvent(QKeyEvent *ev) {
 }
 
 //----- Setup menu functions
-//todo: add keyboard shortcuts to all menus
 void MainWindow::setupFileMenu()
 {
     QMenu *fileMenu = new QMenu(tr("&File"), this);
@@ -190,6 +211,8 @@ void MainWindow::setupFileMenu()
                         this, [this](){ openFile(); });
     fileMenu->addSeparator();
     //todo: implement save
+    fileMenu->addAction(tr("&Save"), QKeySequence::Save, this, &MainWindow::saveFile);
+    fileMenu->addSeparator();
     fileMenu->addAction(tr("&Delete File"), QKeySequence(tr("Ctrl+Shift+w")), this, &MainWindow::deleteFile);
     fileMenu->addAction(tr("E&xit"), QKeySequence::Quit,
                         qApp, &QApplication::quit);
@@ -236,13 +259,9 @@ void MainWindow::setupConsole() {
         QDir bin(fileList->dirP.absolutePath()+"/bin");
         if (bin.exists()) {
             bin.removeRecursively();
-            console->setTextColor(QColor(Qt::blue).lighter(160));
-            console->append("Cleaned project.");
-            console->ensureCursorVisible();
+            console->log("Cleaned project.");
         } else {
-            console->setTextColor(QColor(Qt::blue).lighter(160));
-            console->append("No build files to clean.");
-            console->ensureCursorVisible();
+            console->log("No build files to clean.");
         }
     });
     ConsoleMenu->addSeparator();

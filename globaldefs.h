@@ -18,4 +18,8 @@
 #define APPNAME "CPPIDE"
 #define COMPANY "LPSoft"
 
+#define READMEDOCPATH "../README.md"
+#define CONSOLETCOLOR QColor(Qt::blue).lighter(160)
+#define CONSOLEERRCOLOR Qt::red
+
 #endif // GLOBALDEFS_H

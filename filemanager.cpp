@@ -29,7 +29,7 @@ void delay( int millisecondsToWait )
     }
 }
 
-FileManager::FileManager(QWidget *parent, QTextEdit *editor) : QListWidget(parent),parentw(parent),editor(editor)
+FileManager::FileManager(QWidget *parent, QTextEdit *editor, bool *showingDocs) : QListWidget(parent),parentw(parent),editor(editor),showingDocs(showingDocs)
 {
     // load settings
     settings = new QSettings(COMPANY, APPNAME);
@@ -84,6 +84,7 @@ void FileManager::openFile(QListWidgetItem* item) {
         loadFile(fpath);
         // save last opened file to settings
         settings->setValue("LastOpenedFile", fpath);
+        *showingDocs = false;
     }
 }
 
