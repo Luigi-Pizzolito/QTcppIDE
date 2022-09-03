@@ -26,7 +26,7 @@
 #include <QListWidget>
 #include <QGridLayout>
 
-// #include <iostream>
+ #include <iostream>
 
 //----- Main window startup
 MainWindow::MainWindow(QWidget *parent)
@@ -206,7 +206,7 @@ void MainWindow::setupEditor()
     // set font
     efont.setFamily("Courier");
     efont.setFixedPitch(true);
-    efont.setPointSize(9);
+    efont.setPointSize(10);
     // create editor
     editor = new CodeEditor;
     editor->setFont(efont);
@@ -226,6 +226,17 @@ void MainWindow::setupConsole() {
         comms << commG->compile();
         comms << commG->run();
         console->runBatch(comms, fileList->dirP.absolutePath());
+    });
+    ConsoleMenu->addAction(tr("Clea&n"), QKeySequence(tr("Ctrl+Alt+c")), this, [this]() {
+        QDir bin(fileList->dirP.absolutePath()+"/bin");
+        if (bin.exists()) {
+            bin.removeRecursively();
+            console->append("Cleaned project.");
+            console->ensureCursorVisible();
+        } else {
+            console->append("No build files to clean.");
+            console->ensureCursorVisible();
+        }
     });
     ConsoleMenu->addSeparator();
     ConsoleMenu->addAction(tr("Stop Pro&cess"), QKeySequence(tr("Ctrl+Shift+c")), this, [this](){console->stop();});

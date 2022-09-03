@@ -25,12 +25,13 @@ Still WIP.
     - Undo and Redo. (add edit menu)
 - *Search and Replace.
 - *Right click menu.
+- Clean project folder
 
 ### Work in Progress
 - *Code Folding.
 - File save.
 - Change file open to QTreeView to support subfolders.
-- Clean project folder
+- View menu for zoom in and out.
 
 ### Planned
 - Line number and column display and locate.
