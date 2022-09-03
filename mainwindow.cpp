@@ -320,6 +320,17 @@ void MainWindow::setupViewMenu() {
     ViewMenu->addAction(tr("Zoom &Out"), QKeySequence::ZoomOut, this, [=](){
         editor->zoomOut();
     });
+    ViewMenu->addSeparator();
+    ViewMenu->addAction(tr("&Goto Line"), QKeySequence(tr("Ctrl+g")), this, [=](){
+        int line = QInputDialog::getInt(this, tr("Goto Line"), tr("Line Number:"), 1, 1);
+        if (line > 0) {
+            QTextCursor csr = editor->textCursor();
+            csr.movePosition(QTextCursor::StartOfLine);
+            csr.movePosition(QTextCursor::Start);
+            csr.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor, line-1);
+            editor->setTextCursor(csr);
+        }
+    });
 }
 
 
