@@ -21,6 +21,7 @@
 #include "filemanager.h"
 #include "configgen.h"
 #include "commandgen.h"
+#include "search_replace.h"
 
 #include <QMainWindow>
 #include <QSettings>
@@ -47,6 +48,17 @@ public slots:
     void openFile(const QString &path = QString());
     void deleteFile();
 
+    // for right click menu on windows only
+    #ifdef _WIN32
+    void CMundo();
+    void CMredo();
+    void CMcut();
+    void CMcopy();
+    void CMpaste();
+    void CMselectAll();
+    #endif
+
+
 private:
     // settings
     QSettings *settings;
@@ -55,6 +67,7 @@ private:
     void setupFileMenu();
     void setupHelpMenu();
     void setupConsole();
+    void setupSearchMenu(QTextEdit *search_object);
     // code editor
     QFont efont;
     QTextEdit *editor;
@@ -64,6 +77,7 @@ private:
     ConfigGen *configG;
     CommandGen *commG;
     FileManager *fileList;
+    Search_Replace *srMenu;
     // last opened file flag
     QString DocsPFile;
 private slots:

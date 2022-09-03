@@ -20,6 +20,7 @@
 #include "highlighter.h"
 #include "codeeditor.h"
 #include "console.h"
+#include "ui_search_replace.h"
 
 #include <QWidget>
 #include <QListWidget>
@@ -52,14 +53,17 @@ MainWindow::MainWindow(QWidget *parent)
     layout->addWidget(fileList, 0, 0, 1, 1);
     layout->setColumnStretch(0, 2);
 
-    // add help
-    setupHelpMenu();
+    // add search menu
+    setupSearchMenu(editor);
 
     // add console
     setupConsole();
     layout->addWidget(console, 1, 0, 1, 2);
     layout->setRowStretch(0, 9);
     layout->setRowStretch(1, 3);
+
+    // add help
+    setupHelpMenu();
 
     // set window
     setWindowTitle(tr(APPHNAME));
@@ -230,3 +234,128 @@ void MainWindow::setupConsole() {
 
     commG = new CommandGen(&fileList->dirP);
 }
+
+
+
+//------ Search and Replace Menu
+
+void MainWindow::setupSearchMenu(QTextEdit *search_object)//当前文档页的指针
+{
+    QMenu *SearchMenu = new QMenu(tr("&Edit"), this);
+    menuBar()->addMenu(SearchMenu);
+
+    // edit menu items
+    QAction *undo = new QAction(tr("&Undo"), SearchMenu);
+    undo->setShortcut(QKeySequence::Undo);
+    SearchMenu->addAction(undo);
+    connect(undo,SIGNAL(triggered()),search_object,SLOT(undo()));
+    QAction *redo = new QAction(tr("&Redo"), SearchMenu);
+    redo->setShortcut(QKeySequence::Redo);
+    SearchMenu->addAction(redo);
+    connect(redo,SIGNAL(triggered()),search_object,SLOT(redo()));
+    SearchMenu->addSeparator();
+    QAction *cut = new QAction(tr("Cu&t"), SearchMenu);
+    cut->setShortcut(QKeySequence::Cut);
+    SearchMenu->addAction(cut);
+    connect(cut,SIGNAL(triggered()),search_object,SLOT(cut()));
+    QAction *copy = new QAction(tr("&Copy"), SearchMenu);
+    copy->setShortcut(QKeySequence::Copy);
+    SearchMenu->addAction(copy);
+    connect(copy,SIGNAL(triggered()),search_object,SLOT(copy()));
+    QAction *paste = new QAction(tr("&Paste"), SearchMenu);
+    paste->setShortcut(QKeySequence::Paste);
+    SearchMenu->addAction(paste);
+    connect(paste,SIGNAL(triggered()),search_object,SLOT(paste()));
+    SearchMenu->addSeparator();
+    QAction *selectAll = new QAction(tr("Select &All"), SearchMenu);
+    selectAll->setShortcut(QKeySequence::SelectAll);
+    SearchMenu->addAction(selectAll);
+    connect(selectAll,SIGNAL(triggered()),search_object,SLOT(selectAll()));
+    SearchMenu->addSeparator();
+
+    // search and replace menu items
+    srMenu=new Search_Replace(search_object,this);
+    SearchMenu->addAction(tr("&Search"), QKeySequence::Find, this, [=](){
+        srMenu->setCurrentTab(1);
+        srMenu->show();
+        QTimer::singleShot(0, srMenu->ui->keywords, SLOT(setFocus()));
+    });
+
+    SearchMenu->addAction(tr("Search and &Replace"), QKeySequence(tr("Ctrl+Shift+f")), this, [=](){
+        srMenu->setCurrentTab(2);
+        srMenu->show();
+        QTimer::singleShot(0, srMenu->ui->keywords_2, SLOT(setFocus()));
+    });
+}
+
+
+//------ Right click editor menu for windows only
+#ifdef _WIN32
+void QWidget::mousePressEvent(QMouseEvent *event)
+{
+    if(event->button() == Qt::RightButton)
+    {
+        QPointF pos = event->globalPosition();
+
+        QMenu *menu=new QMenu(this);
+
+        QAction *undo = new QAction(menu);
+        undo->setText("&Undo");
+        menu->addAction(undo);
+        connect(undo,SIGNAL(triggered()),this,SLOT(CMundo()));
+
+        QAction *redo = new QAction(menu);
+        redo->setText("&Redo");
+        menu->addAction(redo);
+        connect(redo,SIGNAL(triggered()),this,SLOT(CMredo()));
+
+        QAction *cut = new QAction(menu);
+        cut->setText("Cu&t");
+        menu->addAction(cut);
+        connect(cut,SIGNAL(triggered()),this,SLOT(CMcut()));
+
+        QAction *copy = new QAction(menu);
+        copy->setText("&Copy");
+        menu->addAction(copy);
+        connect(copy,SIGNAL(triggered()),this,SLOT(CMcopy()));
+
+        QAction *paste = new QAction(menu);
+        paste->setText("&Paste");
+        menu->addAction(paste);
+        connect(paste,SIGNAL(triggered()),this,SLOT(CMpaste()));
+
+        QAction *selectAll = new QAction(menu);
+        selectAll->setText("Select &All");
+        menu->addAction(selectAll);
+        connect(selectAll,SIGNAL(triggered()),this,SLOT(CMselectAll()));
+
+        menu->move(pos.rx(),pos.ry());
+        menu->show();
+
+   }
+}
+
+void MainWindow::CMundo(){
+    editor->undo();
+}
+
+void MainWindow::CMredo(){
+    editor->redo();
+}
+
+void MainWindow::CMcut(){
+    editor->cut();
+}
+
+void MainWindow::CMcopy(){
+    editor->copy();
+}
+
+void MainWindow::CMpaste(){
+    editor->paste();
+}
+
+void MainWindow::CMselectAll(){
+    editor->selectAll();
+}
+#endif
