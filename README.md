@@ -29,23 +29,23 @@ Still WIP.
 
 ### Work in Progress
 - *Code Folding.
+- Error handling when launching procceses.
 - File save.
-- Change file open to QTreeView to support subfolders.
 - View menu for zoom in and out.
+- Change file open to QTreeView to support subfolders.
 
 ### Planned
-- Line number and column display and locate.
+- Switch between .cpp and .h file.
+- Bottom status bar.
+    - Line number and column display and locate.
 - Debugger support.
     - Support to use multiple debuggers.
 - Breakpoint setting.
-- *Cross-platform testing.
 - Automatically install compiler/debugger for Windows.
-- Switch between .cpp and .h file.
-- Bottom status bar.
+- *Cross-platform testing.
 - About markdown file.
 - Documentation markdown file.
 - Alternative welcome screen markdown file.
-- Error handling when launching procceses.
 
 
 ## How to use
