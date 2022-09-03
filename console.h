@@ -31,6 +31,7 @@ public slots:
     void processProcStarted();
     void processProcFinished(int exitCode, QProcess::ExitStatus exitStatus);
     void stop();
+    void processProcError(QProcess::ProcessError error);
 private:
     ProcRunner *prunner;
     QPair<QStringList,QString> batchOpts;

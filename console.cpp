@@ -35,7 +35,7 @@ Console::Console(QWidget *parent) : QTextEdit(parent)
     connect(prunner->proc, SIGNAL(readyReadStandardError()), this, SLOT(processProcOutput()));  // same here
     connect(prunner->proc, SIGNAL(started()), this, SLOT(processProcStarted()));                // connect process start/finish
     connect(prunner->proc, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(processProcFinished(int,QProcess::ExitStatus)));
-
+    connect(prunner->proc, SIGNAL(errorOccurred(QProcess::ProcessError)), this, SLOT(processProcError(QProcess::ProcessError)));
 }
 
 // Forwards events to process runner
@@ -96,6 +96,32 @@ void Console::runBatch(QStringList comms, QString cwd) {
     batchJob = true;
 }
 
+// stop proccess
 void Console::stop() {
     prunner->proc->kill();
+}
+
+// handle QProcess errors
+void Console::processProcError(QProcess::ProcessError error) {
+    setTextColor(Qt::red);
+    switch (error) {
+        case QProcess::ProcessError::FailedToStart:
+            append("Process failed to start.");
+            break;
+        case QProcess::ProcessError::Crashed:
+            //append("Process crashed.");
+            break;
+        case QProcess::ProcessError::Timedout:
+            append("Process timeout.");
+            break;
+        case QProcess::ProcessError::ReadError:
+            append("Process read error.");
+            break;
+        case QProcess::ProcessError::WriteError:
+            append("Process write error.");
+            break;
+        case QProcess::ProcessError::UnknownError:
+            append("Process unknown error.");
+            break;
+    }
 }

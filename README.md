@@ -26,12 +26,12 @@ Still WIP.
 - *Search and Replace.
 - *Right click menu.
 - Clean project folder
+- View menu for zoom in and out.
+- Error handling when launching procceses.
 
 ### Work in Progress
 - *Code Folding.
-- Error handling when launching procceses.
 - File save.
-- View menu for zoom in and out.
 - Change file open to QTreeView to support subfolders.
 
 ### Planned
@@ -39,8 +39,8 @@ Still WIP.
 - Bottom status bar.
     - Line number and column display and locate.
 - Debugger support.
+    - Breakpoint setting.
     - Support to use multiple debuggers.
-- Breakpoint setting.
 - Automatically install compiler/debugger for Windows.
 - *Cross-platform testing.
 - About markdown file.
