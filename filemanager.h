@@ -20,6 +20,8 @@
 #include <QTextEdit>
 #include <QDir>
 
+#include "console.h"
+
 #include <QDialog>
 #include <QFormLayout>
 #include <QLineEdit>
@@ -31,7 +33,7 @@ class FileManager : public QListWidget
 {
     Q_OBJECT
 public:
-    explicit FileManager(QWidget *parent = 0, QTextEdit *editor=0, bool *showingDocs=0);
+    explicit FileManager(QWidget *parent = 0, QTextEdit *editor=0, bool *showingDocs=0, Console *console=0);
     QDir dirP;
     QString fileP;
 public slots:
@@ -40,11 +42,13 @@ public slots:
     void createNewFileRequest();
     void createNewFiles();
     void setFileMain();
+    void saveFile(bool prompt = false);
 private:
     QWidget *parentw;
     QSettings *settings;
     QTextEdit *editor;
     bool *showingDocs;
+    Console *console;
     void loadFile(QString fileName);
     // new file dialog
     void setupNewFileDialog();

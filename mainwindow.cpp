@@ -47,9 +47,12 @@ MainWindow::MainWindow(QWidget *parent)
     layout->addWidget(editor, 0, 1, 1, 1);
     layout->setColumnStretch(1, 10);
 
+    // instantiate console
+    console = new Console();
+
     // add file manager
     setupFileMenu();
-    fileList = new FileManager(this, editor, &showingDocs);
+    fileList = new FileManager(this, editor, &showingDocs, console);
     layout->addWidget(fileList, 0, 0, 1, 1);
     layout->setColumnStretch(0, 2);
 
@@ -101,6 +104,7 @@ void MainWindow::newFile()
 }
 
 void MainWindow::newFolder() {
+    fileList->saveFile(true); //prompt to save file before loosing work
     // prompt folder name
     QString dirp = QFileDialog::getExistingDirectory(this, tr("Open Directory"), "/", QFileDialog::ShowDirsOnly);
     if (!dirp.isNull()) {
@@ -118,31 +122,16 @@ void MainWindow::newFolder() {
 
 void MainWindow::openFile(const QString &path)
 {
+    bool pfileexist = QFile(fileList->fileP).exists();
     // open folder
     fileList->openFolder(path);
+    // and update command generator
     updateComms();
 
-    // save to last opened file settings and update command generator
-    if (!path.isNull()) {
+    // save to last opened file settings and prompt to save previous file, if it was not deleted
+    if (!path.isNull() && pfileexist) {
+        fileList->saveFile(true);
         settings->setValue("LastOpenedFile", path);
-    }
-}
-
-void MainWindow::saveFile() {
-    // check if (read-only) documentation is open
-    if (showingDocs) {
-        console->log("Please select and open a file before saving.");
-    } else {
-        //todo: save file here
-        QFile file(fileList->fileP);
-        if(file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            QTextStream fstream(&file);
-            fstream << editor->toPlainText();
-            file.close();
-            console->log("Saved file "+fileList->fileP);
-        } else {
-            console->err("Error saving file "+fileList->fileP);
-        }
     }
 }
 
@@ -165,8 +154,10 @@ void MainWindow::deleteFile() {
 }
 
 void MainWindow::showDocs() {
-    if (!fileList->fileP.isNull()) // if a previous file was open, store it
+    if (!fileList->fileP.isNull()) { // if a previous file was open, save and then store it
+        fileList->saveFile();
         DocsPFile = fileList->fileP;
+    }
 
     // Open README Documentation
     QFile file(READMEDOCPATH);
@@ -211,7 +202,7 @@ void MainWindow::setupFileMenu()
                         this, [this](){ openFile(); });
     fileMenu->addSeparator();
     //todo: implement save
-    fileMenu->addAction(tr("&Save"), QKeySequence::Save, this, &MainWindow::saveFile);
+    fileMenu->addAction(tr("&Save"), QKeySequence::Save, this, [=](){fileList->saveFile(false);});
     fileMenu->addSeparator();
     fileMenu->addAction(tr("&Delete File"), QKeySequence(tr("Ctrl+Shift+w")), this, &MainWindow::deleteFile);
     fileMenu->addAction(tr("E&xit"), QKeySequence::Quit,
@@ -243,8 +234,6 @@ void MainWindow::setupEditor()
 }
 
 void MainWindow::setupConsole() {
-    console = new Console();
-
     QMenu *ConsoleMenu = new QMenu(tr("&Run"), this);
     menuBar()->addMenu(ConsoleMenu);
     ConsoleMenu->addAction(tr("Com&pile"), QKeySequence(tr("Ctrl+b")), this, [this](){console->run(commG->compile(), fileList->dirP.absolutePath());});

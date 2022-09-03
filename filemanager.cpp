@@ -16,6 +16,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QFileDialog>
+#include <QMessageBox>
 
 #include <QTime>
 #include <QCoreApplication>
@@ -29,7 +30,7 @@ void delay( int millisecondsToWait )
     }
 }
 
-FileManager::FileManager(QWidget *parent, QTextEdit *editor, bool *showingDocs) : QListWidget(parent),parentw(parent),editor(editor),showingDocs(showingDocs)
+FileManager::FileManager(QWidget *parent, QTextEdit *editor, bool *showingDocs, Console *console) : QListWidget(parent),parentw(parent),editor(editor),showingDocs(showingDocs),console(console)
 {
     // load settings
     settings = new QSettings(COMPANY, APPNAME);
@@ -80,11 +81,37 @@ void FileManager::setupNewFileDialog() {
 void FileManager::openFile(QListWidgetItem* item) {
     QString fpath = dirP.absolutePath() + "/" + item->text();
     if (dirP.exists(fpath)) {
+        // save current file savefirst
+        saveFile();
         // get file path and load
         loadFile(fpath);
         // save last opened file to settings
         settings->setValue("LastOpenedFile", fpath);
         *showingDocs = false;
+    }
+}
+
+void FileManager::saveFile(bool prompt) {
+    // check if (read-only) documentation is open
+    if (*showingDocs) {
+        console->log("Please select and open a file before saving.");
+    } else {
+        // prompt to ask to confirm?
+        int promptRes;
+        if (prompt)
+            promptRes = QMessageBox(QMessageBox::Information, "Save "+QFileInfo(fileP).fileName(), "Save "+QFileInfo(fileP).fileName()+" first? Or discard changes?", QMessageBox::Yes|QMessageBox::No).exec();
+        if (prompt==false || promptRes==QMessageBox::Yes) {
+            //save file here
+            QFile file(fileP);
+            if(file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+                QTextStream fstream(&file);
+                fstream << editor->toPlainText();
+                file.close();
+                console->log("Saved file "+fileP);
+            } else {
+                console->err("Error saving file "+fileP);
+            }
+        }
     }
 }
 
@@ -129,6 +156,8 @@ void FileManager::loadFile(QString fileName) {
 
 
 void FileManager::createNewFileRequest() { //change to bool, rename to request
+    // save previous file
+    saveFile(true);
     // open new file dialog
     newFileD->exec();
 }

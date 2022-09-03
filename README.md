@@ -28,16 +28,18 @@ Still WIP.
 - Clean project folder
 - View menu for zoom in and out.
 - Error handling when launching procceses.
+- File save.
+- Line number goto.
 
 ### Work in Progress
 - *Code Folding.
-- File save.
 - Change file open to QTreeView to support subfolders.
+- Save as.
 
 ### Planned
 - Switch between .cpp and .h file.
 - Bottom status bar.
-    - Line number and column display and locate.
+    - Line number and column display.
 - Debugger support.
     - Breakpoint setting.
     - Support to use multiple debuggers.

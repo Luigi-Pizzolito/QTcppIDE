@@ -47,7 +47,6 @@ public slots:
     void newFolder();
     void openFile(const QString &path = QString());
     void deleteFile();
-    void saveFile();
 
     // for right click menu on windows only
     #ifdef _WIN32
