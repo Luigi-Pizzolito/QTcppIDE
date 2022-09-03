@@ -15,6 +15,7 @@
 
 #include "globaldefs.h"
 
+
 Console::Console(QWidget *parent) : QTextEdit(parent)
 {
     // Setup console widget
@@ -49,6 +50,16 @@ void Console::processProcStarted() {
 
 void Console::processProcFinished(int exitCode, QProcess::ExitStatus exitStatus) {
     prunner->procFinished(exitCode, exitStatus);
+    // call next proccess if doing batch jobs
+    if (batchJob) {
+        // run the next commands, if any and if previous was succesful
+        if (batchOpts.first.size() > 0 && exitCode == 0 && exitStatus == QProcess::NormalExit) {
+            runBatch(batchOpts.first, batchOpts.second);
+        } else {
+            // on fail or end of jobs, reset batch flag
+            batchJob = false;
+        }
+    }
 }
 
 void Console::clearLog() {
@@ -71,4 +82,18 @@ void Console::run(QString comm, QString cwd) {
     QString bin = args[0];
     args.removeFirst();
     prunner->run(bin, args, cwd);
+}
+
+void Console::runBatch(QStringList comms, QString cwd) {
+    // run command
+    run(comms.front(), cwd);
+    // store the rest of batch
+    comms.pop_front();
+    batchOpts = {comms, cwd};
+    // callback is set above to call next command without ui blocking, set flag to do batch
+    batchJob = true;
+}
+
+void Console::stop() {
+    prunner->proc->kill();
 }

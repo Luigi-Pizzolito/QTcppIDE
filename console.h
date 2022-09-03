@@ -26,11 +26,15 @@ public:
 public slots:
     void clearLog();
     void run(QString comm, QString cwd);
+    void runBatch(QStringList comms, QString cwd);
     void processProcOutput();
     void processProcStarted();
     void processProcFinished(int exitCode, QProcess::ExitStatus exitStatus);
+    void stop();
 private:
     ProcRunner *prunner;
+    QPair<QStringList,QString> batchOpts;
+    bool batchJob = false;
 protected:
     void keyPressEvent(QKeyEvent *event);
 };

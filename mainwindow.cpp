@@ -157,6 +157,7 @@ void MainWindow::showDocsRestore() {
 
 void MainWindow::updateComms() {
     commG->update(&fileList->dirP);
+    console->clearLog();
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *ev) {
@@ -193,7 +194,7 @@ void MainWindow::setupHelpMenu()
 {
     QMenu *helpMenu = new QMenu(tr("&Help"), this);
     menuBar()->addMenu(helpMenu);
-    helpMenu->addAction(tr("&Documentation"), this, &MainWindow::showDocs);
+    helpMenu->addAction(tr("&Documentation"), QKeySequence(tr("Ctrl+h")), this, &MainWindow::showDocs);
     helpMenu->addSeparator();
     helpMenu->addAction(tr("&About"), this, &MainWindow::about);
     helpMenu->addAction(tr("About &Qt"), qApp, &QApplication::aboutQt);
@@ -205,7 +206,7 @@ void MainWindow::setupEditor()
     // set font
     efont.setFamily("Courier");
     efont.setFixedPitch(true);
-    efont.setPointSize(10);
+    efont.setPointSize(9);
     // create editor
     editor = new CodeEditor;
     editor->setFont(efont);
@@ -218,18 +219,23 @@ void MainWindow::setupConsole() {
 
     QMenu *ConsoleMenu = new QMenu(tr("&Console"), this);
     menuBar()->addMenu(ConsoleMenu);
-    ConsoleMenu->addAction(tr("Com&pile"), this, [this](){console->run(commG->compile(), fileList->dirP.absolutePath());});
-    ConsoleMenu->addAction(tr("Ru&n"), this, [this](){console->run(commG->run(), fileList->dirP.absolutePath());});
-    //todo: add wait for compile and then run
-    //ConsoleMenu->addAction(tr("Compile and &Run"), this, [this](){console->compile();console->run();});
+    ConsoleMenu->addAction(tr("Com&pile"), QKeySequence(tr("Ctrl+b")), this, [this](){console->run(commG->compile(), fileList->dirP.absolutePath());});
+    ConsoleMenu->addAction(tr("Ru&n"), QKeySequence(tr("Ctrl+e")), this, [this](){console->run(commG->run(), fileList->dirP.absolutePath());});
+    ConsoleMenu->addAction(tr("Compile and &Run"), QKeySequence(tr("Ctrl+r")), this, [this](){
+        QStringList comms;
+        comms << commG->compile();
+        comms << commG->run();
+        console->runBatch(comms, fileList->dirP.absolutePath());
+    });
     ConsoleMenu->addSeparator();
-    ConsoleMenu->addAction(tr("&Clear Console"), this, [this](){console->clearLog();});
+    ConsoleMenu->addAction(tr("Stop Pro&cess"), QKeySequence(tr("Ctrl+Shift+c")), this, [this](){console->stop();});
+    ConsoleMenu->addAction(tr("C&lear Console"), QKeySequence(tr("Ctrl+l")), this, [this](){console->clearLog();});
 
     ConsoleMenu->addSeparator();
     configG = new ConfigGen(this);
     connect(configG, SIGNAL(finished(int)), this, SLOT(updateComms()));
 
-    ConsoleMenu->addAction(tr("&Preferences"), this, [this](){configG->exec();});
+    ConsoleMenu->addAction(tr("&Preferences"), QKeySequence(tr("Ctrl+,")), this, [this](){configG->exec();});
 
 
     commG = new CommandGen(&fileList->dirP);

@@ -21,15 +21,16 @@ Still WIP.
     - Launch in external console.
 - Restore settings on startup and restore defaults.
 - Project starter templates.
-
-### Work in Progress
 - *Toolbar
     - Undo and Redo. (add edit menu)
 - *Search and Replace.
 - *Right click menu.
+
+### Work in Progress
 - *Code Folding.
 - File save.
 - Change file open to QTreeView to support subfolders.
+- Clean project folder
 
 ### Planned
 - Line number and column display and locate.
