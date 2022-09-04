@@ -56,11 +56,14 @@ private:
         bool    ExtCon;
         QString ConArgs;
     };
-    #define numPresets 3
+    #define numPresets 5
+    //todo: test to find windows compile preset and add windows debug present
     ConfigSet ConfigDefaults[numPresets] = {
-        {"Linux G++",     "g++ %in -I %inc -o %out -Wall", "*.cpp", "%root", "bin/%rootn", false, "xterm -e %out"},
-        {"Linux GCC",     "gcc %in -I %inc -o %out -Wall", "*.c",   "%root", "bin/%rootn", false, "xterm -e %out"},
-        {"Windows MinGW", "", "", "", "", false, ""}
+        {"Linux G++",               "g++ %in -I %inc -o %out -Wall",    "*.cpp", "%root", "bin/%rootn", false,  "alacritty -e %out"},
+        {"Linux GCC",               "gcc %in -I %inc -o %out -Wall",    "*.c",   "%root", "bin/%rootn", false,  "alacritty -e %out"},
+        {"Linux G++ with LLDB",     "g++ -g %in -I %inc -o %out -Wall", "*.cpp", "%root", "bin/%rootn", true,   "alacritty -e lldb %out"},
+        {"Linux GCC with LLDB",     "gcc -g %in -I %inc -o %out -Wall", "*.c",   "%root", "bin/%rootn", true,   "alacritty -e lldb %out"},
+        {"Windows MinGW",           "",                                 "",      "",      "",           false,  ""}
     };
 
     // QSettings to store settings non-volatile
