@@ -264,7 +264,12 @@ void MainWindow::setupConsole() {
         console->runBatch(comms, fileList->dirP.absolutePath());
         barStatus->log("Compiling and running project...");
     });
-    ConsoleMenu->addAction(tr("Clea&n"), QKeySequence(tr("Ctrl+Alt+c")), this, [this]() {
+    ConsoleMenu->addAction(tr("Generate &Breakpoints"), QKeySequence(tr("Ctrl+t")), this, [this](){
+        barStatus->log("Generated breakpoints...");
+        editor->generateBPs();
+    });
+    ConsoleMenu->addAction(tr("Clea&n (Build and Breakpoints)"), QKeySequence(tr("Ctrl+Alt+c")), this, [this]() {
+        // remove bin/ folder
         QDir bin(fileList->dirP.absolutePath()+"/bin");
         if (bin.exists()) {
             bin.removeRecursively();
@@ -272,6 +277,9 @@ void MainWindow::setupConsole() {
         } else {
             barStatus->log("No build files to clean.");
         }
+        // remove all breakpoints
+        editor->breakPoints.insert(fileList->fileP, QMap<int,bool>{{}});
+        editor->repaint();
     });
     ConsoleMenu->addSeparator();
     ConsoleMenu->addAction(tr("Stop/&Kill"), QKeySequence(tr("Ctrl+Shift+c")), this, [this](){

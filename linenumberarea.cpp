@@ -37,6 +37,7 @@ void LineNumberArea::paintEvent(QPaintEvent *event) {
 // breakpoint handling when click event happens in line number area
 void LineNumberArea::mousePressEvent(QMouseEvent *e) {
     // repaint editor to refresh line start indexes
+    hoverBP=0;
     codeEditor->repaint();
     this->repaint();
 

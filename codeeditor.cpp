@@ -22,6 +22,7 @@ CodeEditor::CodeEditor(QWidget *parent) :
 {
     // Line numbers
     lineNumberArea = new LineNumberArea(this);
+    setMouseTracking(true);
     // Signals to update line number area
     connect(this->document(), SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
     connect(this->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateLineNumberArea/*_2*/(int)));
@@ -31,7 +32,34 @@ CodeEditor::CodeEditor(QWidget *parent) :
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
     // Initial update
     updateLineNumberAreaWidth(0);
-    setMouseTracking(true);
+
+    //BPgen dialog
+    // initialise dialog
+    BPd = new QDialog();
+    BPd->setWindowTitle("Breakpoints");
+    ly = new QFormLayout();
+    BPd->setLayout(ly);
+    // Monospace Font for LineEdits
+    mfont = new QFont("Courier", 10);
+    mfont->setFixedPitch(true);
+    // display args
+    BPdisp = new QTextEdit(BPd);
+    BPdisp->setFont(*mfont);
+    BPdisp->setMinimumWidth(350);
+    BPdisp->setLineWrapMode(QTextEdit::NoWrap);
+    BPdisp->setReadOnly(true);
+    ly->addRow(tr("Breakpoint Commands"), BPdisp);
+    // help label
+    BPl = new QLabel( \
+                    "Push OK to copy the commands above, then paste into the debugger console to set all the breakpoints." \
+                    , BPd);
+    ly->addRow(tr("Help"), BPl);
+    //ok button
+    BPok = new QPushButton("OK", BPd);
+    BPok->setDefault(true);
+    ly->addWidget(BPok);
+    connect(BPok, SIGNAL(clicked(bool)), this, SLOT(copyBPS()));
+    connect(BPok, SIGNAL(clicked(bool)), BPd, SLOT(close()));
 }
 
 void CodeEditor::passFMP(FileManager *pfmp) {
@@ -256,4 +284,33 @@ void CodeEditor::highlightCurrentLine()
 
 void CodeEditor::mouseMoveEvent(QMouseEvent *e){
     ((LineNumberArea*)lineNumberArea)->hoverBP=0;
+}
+
+// BPgen
+void CodeEditor::generateBPs() {
+
+    // generate BPs
+    bps.clear();
+    QMapIterator<QString,QMap<int,bool>> f(breakPoints);
+    while (f.hasNext()) {
+        f.next();
+        QMapIterator<int,bool> l(f.value());
+        while (l.hasNext()) {
+            l.next();
+            bps+="breakpoint set --file "+QFileInfo(f.key()).fileName()+" --line "+QString::number(l.key())+"\n";
+        }
+    }
+    bps+="run\n";
+
+    // setup dialog
+    BPdisp->setText(bps);
+
+    // show dialog
+    BPd->exec();
+
+}
+
+void CodeEditor::copyBPS() {
+    QClipboard *clipboard = QGuiApplication::clipboard();
+    clipboard->setText(bps);
 }

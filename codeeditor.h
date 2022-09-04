@@ -46,6 +46,8 @@ public slots:
 
     void resizeEvent(QResizeEvent *e);
 
+    void generateBPs();
+
 private slots:
 
     void updateLineNumberAreaWidth(int newBlockCount);
@@ -55,11 +57,23 @@ private slots:
 
     void highlightCurrentLine();
 
+    void copyBPS();
+
 private:
 
     QWidget *lineNumberArea;
 
     FileManager *fmp;
+
+    QString bps;
+
+    QDialog *BPd;
+    QFormLayout *ly;
+    QFont *mfont;
+
+    QTextEdit *BPdisp;
+    QLabel *BPl;
+    QPushButton *BPok;
 
 protected:
     void mouseMoveEvent(QMouseEvent *e);
