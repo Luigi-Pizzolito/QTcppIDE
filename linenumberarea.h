@@ -26,6 +26,8 @@ public:
 protected:
     void paintEvent(QPaintEvent *event);
 
+    void mousePressEvent(QMouseEvent *e);
+
 private:
     QTextEdit *codeEditor;
 

@@ -43,9 +43,14 @@ int CodeEditor::lineNumberAreaWidth()
         ++digits;
     }
 
-    int space = 13 +  fontMetrics().horizontalAdvance(QLatin1Char('9')) * (digits);
+    int space = 13 +  fontMetrics().horizontalAdvance(QLatin1Char('9')) * ((digits)  +1/*for BP width, add one char width*/);
 
     return space;
+}
+
+int CodeEditor::singleCharWidth() {
+    // needed to calculate where to draw breakpoints
+    return 13+fontMetrics().horizontalAdvance(QLatin1Char('9'));
 }
 
 void CodeEditor::updateLineNumberAreaWidth(int /* newBlockCount */)
@@ -170,14 +175,29 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 
     // Draw the numbers (displaying the current line number in green)
     while (block.isValid() && top <= event->rect().bottom()) {
+        QString number = QString::number(blockNumber + 1);
         if (block.isVisible() && bottom >= event->rect().top()) {
-            QString number = QString::number(blockNumber + 1);
+
             painter.setPen(QColor(120, 120, 120));
             painter.setPen((this->textCursor().blockNumber() == blockNumber) ? col_1 : col_0);
             painter.drawText(-5, top,
                              lineNumberArea->width(), fontMetrics().height(),
                              Qt::AlignRight, number);
+            //BP
+            // if there is a breakpoint for this line on map, draw a red circle
+            if (breakPoints.value(number.toInt(),false)) {
+                painter.setPen(Qt::red);
+                painter.drawText(5, top, lineNumberArea->width(),
+                                 fontMetrics().height(), Qt::AlignVCenter | Qt::TextDontClip,
+                                 "●");
+            }
+            //~BP
         }
+
+        //BP
+        // insert the start of line y-coordinate into the line start index for breakpoint calculations
+        lineStarts.insert(number.toInt(), top);
+        //~BP
 
         block = block.next();
         top = bottom;

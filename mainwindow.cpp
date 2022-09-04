@@ -194,7 +194,7 @@ void MainWindow::updateComms() {
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *ev) {
-    if (ev->key() == Qt::Key::Key_Escape) {
+    if (ev->key() == Qt::Key::Key_Escape && showingDocs) {
         // restore if documentation was showing during keypress
         showDocsRestore();
         editor->setFont(efont);

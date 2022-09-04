@@ -22,6 +22,7 @@ StatusBar::StatusBar(QWidget *parent, QDir *folder, QString *file, QTextEdit *ed
     addPermanentWidget(compilerE);
 
     setSizeGripEnabled(false);
+
     // update
     update();
 }

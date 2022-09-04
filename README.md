@@ -39,11 +39,12 @@ Still WIP.
 - *Code Folding.
 - Change file open to QTreeView to support subfolders.
 - Save as.
-
-### Planned
+- save before quit.
 - Debugger support.
     - Breakpoint setting.
     - Support to use multiple debuggers.
+
+### Planned
 - Automatically install compiler/debugger for Windows.
 - *Cross-platform testing.
 - About markdown file.

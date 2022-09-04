@@ -30,6 +30,11 @@ public:
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     int lineNumberAreaWidth();
 
+    // functions to draw breakpoints and maps to keep track of them
+    int singleCharWidth();
+    QMap<int, int> lineStarts;
+    QMap<int, bool> breakPoints;
+
 signals:
 
 
