@@ -27,10 +27,14 @@ public:
 
     void passFMP(FileManager *pfmp);
 
+    int hoverBP=0;
+
 protected:
     void paintEvent(QPaintEvent *event);
 
     void mousePressEvent(QMouseEvent *e);
+
+    void mouseMoveEvent(QMouseEvent *e);
 
 private:
     QTextEdit *codeEditor;

@@ -17,6 +17,7 @@
 
 LineNumberArea::LineNumberArea(QTextEdit *editor) : QWidget(editor) {
     codeEditor = editor;
+    setMouseTracking(true);
 }
 
 void LineNumberArea::passFMP(FileManager *pfmp) {
@@ -67,5 +68,26 @@ void LineNumberArea::mousePressEvent(QMouseEvent *e) {
             this->repaint();
 
         }
+    }
+}
+
+void LineNumberArea::mouseMoveEvent(QMouseEvent *e) {
+    // if in BP area and in widget
+    if (this->rect().contains(e->pos()) && e->pos().x() <= 2*((CodeEditor *)codeEditor)->singleCharWidth()) {
+        QMap<int,int> lineS = ((CodeEditor *)codeEditor)->lineStarts.value(fmp->fileP);
+        hoverBP=0;
+        // iterate over all y-triggers of line map in order, the first highest one when compared to click-y -1 is the line that was clicked
+        for(auto l : lineS.toStdMap()) {
+            if (e->pos().y() < l.second) {
+                hoverBP = l.first -1;
+                break;
+            }
+        }
+        if (hoverBP==0) hoverBP=lineS.size();
+        // repaint editor to refresh breakpoints display
+        codeEditor->repaint();
+        this->repaint();
+    } else {
+        hoverBP = 0;
     }
 }

@@ -61,5 +61,8 @@ private:
 
     FileManager *fmp;
 
+protected:
+    void mouseMoveEvent(QMouseEvent *e);
+
 };
 #endif // CODEEDITOR_H

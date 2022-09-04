@@ -31,6 +31,7 @@ CodeEditor::CodeEditor(QWidget *parent) :
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
     // Initial update
     updateLineNumberAreaWidth(0);
+    setMouseTracking(true);
 }
 
 void CodeEditor::passFMP(FileManager *pfmp) {
@@ -190,6 +191,14 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
                              Qt::AlignRight, number);
             //BP
             if (!*fmp->showingDocs) { //breakpoints disabled if showing docs
+                // draw hover point
+                if (((LineNumberArea*)lineNumberArea)->hoverBP == number.toInt()) {
+                    painter.setPen(QColor(255,0,0).darker(180));
+                    painter.drawText(5, top, lineNumberArea->width(),
+                                     fontMetrics().height(), Qt::AlignVCenter | Qt::TextDontClip,
+                                     "●");
+                }
+
                 // if there is a breakpoint for this line on map, draw a red circle
                 QMap<int, bool> fileBreakPoints = breakPoints.value(fmp->fileP);
                 if (fileBreakPoints.value(number.toInt(),false)) {
@@ -198,6 +207,7 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
                                      fontMetrics().height(), Qt::AlignVCenter | Qt::TextDontClip,
                                      "●");
                 }
+
             }
             //~BP
         }
@@ -242,4 +252,8 @@ void CodeEditor::highlightCurrentLine()
     }
 
     setExtraSelections(extraSelections);
+}
+
+void CodeEditor::mouseMoveEvent(QMouseEvent *e){
+    ((LineNumberArea*)lineNumberArea)->hoverBP=0;
 }
