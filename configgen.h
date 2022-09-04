@@ -31,6 +31,7 @@ class ConfigGen : public QDialog
     Q_OBJECT
 public:
     explicit ConfigGen(QWidget *parent = 0);
+    QPushButton *okbtn;
 
 private:
     // GUI Elements
@@ -44,7 +45,7 @@ private:
     QLabel *compilerabt;
     QCheckBox *extCon;
     QLineEdit *conCom;
-    QPushButton *okbtn;
+
     // Struct to store default configuration hardcoded
     struct ConfigSet {
         QString name;

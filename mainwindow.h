@@ -22,6 +22,7 @@
 #include "configgen.h"
 #include "commandgen.h"
 #include "search_replace.h"
+#include "statusbar.h"
 
 #include <QMainWindow>
 #include <QSettings>
@@ -75,6 +76,7 @@ private:
     QTextEdit *editor;
     Highlighter *highlighter;
     // other GUI elements
+    StatusBar *barStatus;
     Console *console;
     ConfigGen *configG;
     CommandGen *commG;

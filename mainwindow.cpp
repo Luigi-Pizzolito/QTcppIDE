@@ -74,6 +74,13 @@ MainWindow::MainWindow(QWidget *parent)
     // add help
     setupHelpMenu();
 
+    // add bottom status bar
+    barStatus = new StatusBar(this, &fileList->dirP, &fileList->fileP, editor);
+    connect(editor, SIGNAL(textChanged()), barStatus, SLOT(update()));
+    connect(editor, SIGNAL(cursorPositionChanged()), barStatus, SLOT(update()));
+    connect(configG->okbtn, SIGNAL(clicked(bool)), barStatus, SLOT(update()));
+    setStatusBar(barStatus);
+
     // set window
     setWindowTitle(tr(APPHNAME));
     // open last opened file
