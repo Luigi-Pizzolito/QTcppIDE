@@ -27,6 +27,7 @@ StatusBar::StatusBar(QWidget *parent, QDir *folder, QString *file, QTextEdit *ed
 }
 
 void StatusBar::update() {
+    // refresh label texts
     folderE->setText(folder->absolutePath().split("/").last());
     fileE->setText(QFileInfo(*file).fileName());
     cursorE->setText(QString::number( \
@@ -36,4 +37,9 @@ void StatusBar::update() {
                                      1 + editor->textCursor().positionInBlock()) \
                      );
     compilerE->setText(settings->value("CompileArgs").toString().split(" ").first());
+}
+
+void StatusBar::log(QString msg) {
+    // show message for 5s
+    showMessage(msg, 5*1000);
 }

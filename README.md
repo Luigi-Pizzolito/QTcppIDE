@@ -32,13 +32,13 @@ Still WIP.
 - File save.
 - Line number goto.
 - Switch between .cpp and .h file.
+- Bottom status bar.
+    - Line number and column display.
 
 ### Work in Progress
 - *Code Folding.
 - Change file open to QTreeView to support subfolders.
 - Save as.
-- Bottom status bar.
-    - Line number and column display.
 
 ### Planned
 - Debugger support.

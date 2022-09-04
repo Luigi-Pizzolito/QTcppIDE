@@ -76,10 +76,12 @@ MainWindow::MainWindow(QWidget *parent)
 
     // add bottom status bar
     barStatus = new StatusBar(this, &fileList->dirP, &fileList->fileP, editor);
+    setStatusBar(barStatus);
+    fileList->passStatus(barStatus);
+    // connect updates
     connect(editor, SIGNAL(textChanged()), barStatus, SLOT(update()));
     connect(editor, SIGNAL(cursorPositionChanged()), barStatus, SLOT(update()));
     connect(configG->okbtn, SIGNAL(clicked(bool)), barStatus, SLOT(update()));
-    setStatusBar(barStatus);
 
     // set window
     setWindowTitle(tr(APPHNAME));
@@ -133,6 +135,7 @@ void MainWindow::openFile(const QString &path)
     // open folder
     bool wasShowingDocs = showingDocs;
     fileList->openFolder(path);
+    barStatus->log("Opened file: "+QFileInfo(path).fileName());
     // and update command generator
     updateComms();
 
@@ -146,8 +149,10 @@ void MainWindow::openFile(const QString &path)
 void MainWindow::deleteFile() {
     if (QMessageBox(QMessageBox::Information, "Delete "+QFileInfo(fileList->fileP).fileName(), "Are you sure you want to delete "+QFileInfo(fileList->fileP).fileName()+"?", QMessageBox::Yes|QMessageBox::No).exec() == QMessageBox::Yes) {
         fileList->dirP.remove(fileList->fileP);
+        QString deletedF = QFileInfo(fileList->fileP).fileName();
         fileList->dirP.setPath(fileList->dirP.absolutePath());
         fileList->clear();
+        barStatus->log("Deleted file "+deletedF);
         if (fileList->dirP.isEmpty()) {
             // if there are n more files prompt to create
             editor->clear();
@@ -157,6 +162,7 @@ void MainWindow::deleteFile() {
             // otherwise open first file
             QString ffile = fileList->dirP.absolutePath()+"/"+fileList->dirP.entryList().at(0);
             openFile(ffile);
+            barStatus->log("Deleted file "+deletedF);
         }
     }
 }
@@ -244,26 +250,39 @@ void MainWindow::setupEditor()
 void MainWindow::setupConsole() {
     QMenu *ConsoleMenu = new QMenu(tr("&Run"), this);
     menuBar()->addMenu(ConsoleMenu);
-    ConsoleMenu->addAction(tr("Com&pile"), QKeySequence(tr("Ctrl+b")), this, [this](){console->run(commG->compile(), fileList->dirP.absolutePath());});
-    ConsoleMenu->addAction(tr("Ru&n"), QKeySequence(tr("Ctrl+e")), this, [this](){console->run(commG->run(), fileList->dirP.absolutePath());});
+    ConsoleMenu->addAction(tr("Com&pile"), QKeySequence(tr("Ctrl+b")), this, [this](){
+        console->run(commG->compile(), fileList->dirP.absolutePath());
+        barStatus->log("Compiling project...");
+    });
+    ConsoleMenu->addAction(tr("Ru&n"), QKeySequence(tr("Ctrl+e")), this, [this](){
+        console->run(commG->run(), fileList->dirP.absolutePath());
+        barStatus->log("Running project...");
+    });
     ConsoleMenu->addAction(tr("Compile and &Run"), QKeySequence(tr("Ctrl+r")), this, [this](){
         QStringList comms;
         comms << commG->compile();
         comms << commG->run();
         console->runBatch(comms, fileList->dirP.absolutePath());
+        barStatus->log("Compiling and running project...");
     });
     ConsoleMenu->addAction(tr("Clea&n"), QKeySequence(tr("Ctrl+Alt+c")), this, [this]() {
         QDir bin(fileList->dirP.absolutePath()+"/bin");
         if (bin.exists()) {
             bin.removeRecursively();
-            console->log("Cleaned project.");
+            barStatus->log("Cleaned project.");
         } else {
-            console->log("No build files to clean.");
+            barStatus->log("No build files to clean.");
         }
     });
     ConsoleMenu->addSeparator();
-    ConsoleMenu->addAction(tr("Stop/&Kill"), QKeySequence(tr("Ctrl+Shift+c")), this, [this](){console->stop();});
-    ConsoleMenu->addAction(tr("C&lear Console"), QKeySequence(tr("Ctrl+l")), this, [this](){console->clearLog();});
+    ConsoleMenu->addAction(tr("Stop/&Kill"), QKeySequence(tr("Ctrl+Shift+c")), this, [this](){
+        console->stop();
+        barStatus->log("Killed running console processes.");
+    });
+    ConsoleMenu->addAction(tr("C&lear Console"), QKeySequence(tr("Ctrl+l")), this, [this](){
+        console->clearLog();
+        barStatus->log("Cleared console log.");
+    });
 
     ConsoleMenu->addSeparator();
     configG = new ConfigGen(this);
@@ -326,6 +345,7 @@ void MainWindow::setupViewMenu() {
             csr.movePosition(QTextCursor::Start);
             csr.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor, line-1);
             editor->setTextCursor(csr);
+            barStatus->log("Moved cursor to line "+QString::number(line));
         }
     });
 }

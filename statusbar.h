@@ -18,6 +18,7 @@ public:
     explicit StatusBar(QWidget *parent=0, QDir *folder=0, QString *file=0, QTextEdit *editor=0);
 public slots:
     void update();
+    void log(QString msg);
 private:
     // initialisers
     QWidget *parent;

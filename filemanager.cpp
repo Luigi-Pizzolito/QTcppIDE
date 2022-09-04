@@ -102,15 +102,20 @@ void FileManager::swapHC() {
             // found another file with different suffix, open and break
             saveFile();
             openFolder(file);
+            status->log("Found "+QFileInfo(file).fileName());
             break;
         }
     }
 }
 
+void FileManager::passStatus(StatusBar* statusp) {
+    status = statusp;
+}
+
 void FileManager::saveFile(bool prompt) {
     // check if (read-only) documentation is open
     if (*showingDocs) {
-//        console->log("Please select and open a file before saving.");
+//        status->log("Please select and open a file before saving.");
     } else {
         // prompt to ask to confirm?
         int promptRes;
@@ -123,8 +128,9 @@ void FileManager::saveFile(bool prompt) {
                 QTextStream fstream(&file);
                 fstream << editor->toPlainText();
                 file.close();
-                console->log("Saved file "+fileP);
+                status->log("Saved file "+QFileInfo(fileP).fileName()); //todo: changethis to barStatus->log
             } else {
+                status->log("Error saving file "+QFileInfo(fileP).fileName());
                 console->err("Error saving file "+fileP);
             }
         }
@@ -215,6 +221,7 @@ void FileManager::createNewFiles() {
         qfile.write(templatef.toUtf8());
         qfile.close();
     }
+    status->log("Created files "+fileN->text()+" of type "+fileT->currentText());
     // close dialog
     newFileD->close();
     // reset create file dialog

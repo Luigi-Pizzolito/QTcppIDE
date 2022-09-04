@@ -21,6 +21,7 @@
 #include <QDir>
 
 #include "console.h"
+#include "statusbar.h"
 
 #include <QDialog>
 #include <QFormLayout>
@@ -34,6 +35,7 @@ class FileManager : public QListWidget
     Q_OBJECT
 public:
     explicit FileManager(QWidget *parent = 0, QTextEdit *editor=0, bool *showingDocs=0, Console *console=0);
+    void passStatus(StatusBar* statusp);
     QDir dirP;
     QString fileP;
 public slots:
@@ -50,6 +52,7 @@ private:
     QTextEdit *editor;
     bool *showingDocs;
     Console *console;
+    StatusBar *status;
     void loadFile(QString fileName);
     // new file dialog
     void setupNewFileDialog();
