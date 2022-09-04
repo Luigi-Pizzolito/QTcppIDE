@@ -33,6 +33,11 @@ CodeEditor::CodeEditor(QWidget *parent) :
     updateLineNumberAreaWidth(0);
 }
 
+void CodeEditor::passFMP(FileManager *pfmp) {
+    fmp = pfmp;
+    ((LineNumberArea*)lineNumberArea)->passFMP(fmp);
+};
+
 int CodeEditor::lineNumberAreaWidth()
 {
     // calculate max line number area width given the amount of digits
@@ -184,19 +189,30 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
                              lineNumberArea->width(), fontMetrics().height(),
                              Qt::AlignRight, number);
             //BP
-            // if there is a breakpoint for this line on map, draw a red circle
-            if (breakPoints.value(number.toInt(),false)) {
-                painter.setPen(Qt::red);
-                painter.drawText(5, top, lineNumberArea->width(),
-                                 fontMetrics().height(), Qt::AlignVCenter | Qt::TextDontClip,
-                                 "●");
+            if (!*fmp->showingDocs) { //breakpoints disabled if showing docs
+                // if there is a breakpoint for this line on map, draw a red circle
+                QMap<int, bool> fileBreakPoints = breakPoints.value(fmp->fileP);
+                if (fileBreakPoints.value(number.toInt(),false)) {
+                    painter.setPen(Qt::red);
+                    painter.drawText(5, top, lineNumberArea->width(),
+                                     fontMetrics().height(), Qt::AlignVCenter | Qt::TextDontClip,
+                                     "●");
+                }
             }
             //~BP
         }
 
         //BP
         // insert the start of line y-coordinate into the line start index for breakpoint calculations
-        lineStarts.insert(number.toInt(), top);
+        if (!*fmp->showingDocs) { // breakpoints disabled if showing docs
+            if (!lineStarts.contains(fmp->fileP)) {
+                lineStarts.insert(fmp->fileP, QMap<int,int> {{number.toInt(), top}});
+            } else {
+                QMap<int,int> bkpBPs = lineStarts.value(fmp->fileP);
+                bkpBPs.insert(number.toInt(), top);
+                lineStarts.insert(fmp->fileP, bkpBPs);
+            }
+        }
         //~BP
 
         block = block.next();

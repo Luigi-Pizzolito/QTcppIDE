@@ -17,8 +17,6 @@
 
 #include "globaldefs.h"
 
-#include "highlighter.h"
-#include "codeeditor.h"
 #include "console.h"
 #include "ui_search_replace.h"
 
@@ -55,6 +53,7 @@ MainWindow::MainWindow(QWidget *parent)
     fileList = new FileManager(this, editor, &showingDocs, console);
     layout->addWidget(fileList, 0, 0, 1, 1);
     layout->setColumnStretch(0, 2);
+    editor->passFMP(fileList);
 
     // add edit menu
     setupEditMenu();

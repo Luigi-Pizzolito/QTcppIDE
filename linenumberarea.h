@@ -16,12 +16,16 @@
 #include <QWidget>
 #include <QtWidgets>
 
+#include "filemanager.h"
+
 class LineNumberArea : public QWidget
 {
     Q_OBJECT
 public:
     LineNumberArea(QTextEdit *editor);
     QSize sizeHint() const;
+
+    void passFMP(FileManager *pfmp);
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -30,6 +34,8 @@ protected:
 
 private:
     QTextEdit *codeEditor;
+
+    FileManager *fmp;
 
 signals:
 

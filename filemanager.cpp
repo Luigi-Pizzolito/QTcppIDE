@@ -30,7 +30,7 @@ void delay( int millisecondsToWait )
     }
 }
 
-FileManager::FileManager(QWidget *parent, QTextEdit *editor, bool *showingDocs, Console *console) : QListWidget(parent),parentw(parent),editor(editor),showingDocs(showingDocs),console(console)
+FileManager::FileManager(QWidget *parent, QTextEdit *editor, bool *showingDocs, Console *console) : QListWidget(parent),showingDocs(showingDocs),parentw(parent),editor(editor),console(console)
 {
     // load settings
     settings = new QSettings(COMPANY, APPNAME);

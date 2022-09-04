@@ -38,6 +38,8 @@ public:
     void passStatus(StatusBar* statusp);
     QDir dirP;
     QString fileP;
+    bool *showingDocs;
+
 public slots:
     void openFolder(QString fileName);
     void openFile(QListWidgetItem* item);
@@ -46,11 +48,12 @@ public slots:
     void setFileMain();
     void saveFile(bool prompt = false);
     void swapHC();
+
 private:
     QWidget *parentw;
     QSettings *settings;
     QTextEdit *editor;
-    bool *showingDocs;
+
     Console *console;
     StatusBar *status;
     void loadFile(QString fileName);

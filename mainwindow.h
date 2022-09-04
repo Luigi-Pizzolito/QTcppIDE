@@ -23,6 +23,7 @@
 #include "commandgen.h"
 #include "search_replace.h"
 #include "statusbar.h"
+#include "codeeditor.h"
 
 #include <QMainWindow>
 #include <QSettings>
@@ -73,7 +74,7 @@ private:
     void setupViewMenu();
     // code editor
     QFont efont;
-    QTextEdit *editor;
+    CodeEditor *editor;
     Highlighter *highlighter;
     // other GUI elements
     StatusBar *barStatus;

@@ -18,6 +18,8 @@
 #include <QTextEdit>
 #include <QWidget>
 
+#include "filemanager.h"
+
 class CodeEditor : public QTextEdit
 {
     Q_OBJECT
@@ -32,8 +34,10 @@ public:
 
     // functions to draw breakpoints and maps to keep track of them
     int singleCharWidth();
-    QMap<int, int> lineStarts;
-    QMap<int, bool> breakPoints;
+    // nested maps, to store the maps individually for each open file
+    QMap<QString,QMap<int, int>> lineStarts; // store the y-coordinates where each line starts for breakpoint click event calculations
+    QMap<QString,QMap<int, bool>> breakPoints; // store bools for each line to determine if there is a breakpoint
+    void passFMP(FileManager *pfmp);
 
 signals:
 
@@ -54,6 +58,8 @@ private slots:
 private:
 
     QWidget *lineNumberArea;
+
+    FileManager *fmp;
 
 };
 #endif // CODEEDITOR_H
