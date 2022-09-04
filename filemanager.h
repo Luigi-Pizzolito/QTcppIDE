@@ -43,6 +43,7 @@ public slots:
     void createNewFiles();
     void setFileMain();
     void saveFile(bool prompt = false);
+    void swapHC();
 private:
     QWidget *parentw;
     QSettings *settings;

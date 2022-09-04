@@ -12,7 +12,8 @@ HEADERS         = \
                   linenumberarea.h \
                   mainwindow.h \
                   procrunner.h \
-                  search_replace.h
+                  search_replace.h \
+                  statusbar.h
 SOURCES         = \
                   codeeditor.cpp \
                   commandgen.cpp \
@@ -24,7 +25,8 @@ SOURCES         = \
                   mainwindow.cpp \
                   main.cpp \
                   procrunner.cpp \
-                  search_replace.cpp
+                  search_replace.cpp \
+                  statusbar.cpp
 
 # install
 target.path = $$[QT_INSTALL_EXAMPLES]/widgets/richtext/syntaxhighlighter

@@ -124,13 +124,14 @@ void MainWindow::openFile(const QString &path)
 {
     bool pfileexist = QFile(fileList->fileP).exists();
     // open folder
+    bool wasShowingDocs = showingDocs;
     fileList->openFolder(path);
     // and update command generator
     updateComms();
 
-    // save to last opened file settings and prompt to save previous file, if it was not deleted
+    // save to last opened file settings and prompt to save previous file, if it was not deleted and if it is not readme
     if (!path.isNull() && pfileexist) {
-        fileList->saveFile(true);
+        if (!wasShowingDocs) fileList->saveFile(true);
         settings->setValue("LastOpenedFile", path);
     }
 }
@@ -342,6 +343,11 @@ void MainWindow::setupSearchMenu(QTextEdit *search_object)//当前文档页的�
         srMenu->setCurrentTab(2);
         srMenu->show();
         QTimer::singleShot(0, srMenu->ui->keywords_2, SLOT(setFocus()));
+    });
+
+    SearchMenu->addSeparator();
+    SearchMenu->addAction(tr("Switch Header/Source"), QKeySequence(tr("F4")), this, [=](){
+        fileList->swapHC();
     });
 }
 

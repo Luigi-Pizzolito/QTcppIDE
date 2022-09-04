@@ -4,6 +4,7 @@ Still WIP.
 
 <!-- TOC -->
 - [Features](#features)
+    - [Done](#done)
     - [Work in Progress](#work-in-progress)
     - [Planned](#planned)
 - [How to use](#how-to-use)
@@ -30,16 +31,16 @@ Still WIP.
 - Error handling when launching procceses.
 - File save.
 - Line number goto.
+- Switch between .cpp and .h file.
 
 ### Work in Progress
 - *Code Folding.
 - Change file open to QTreeView to support subfolders.
 - Save as.
-
-### Planned
-- Switch between .cpp and .h file.
 - Bottom status bar.
     - Line number and column display.
+
+### Planned
 - Debugger support.
     - Breakpoint setting.
     - Support to use multiple debuggers.

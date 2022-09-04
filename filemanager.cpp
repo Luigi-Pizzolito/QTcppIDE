@@ -91,10 +91,26 @@ void FileManager::openFile(QListWidgetItem* item) {
     }
 }
 
+void FileManager::swapHC() {
+    // check if matching h/cpp file exists
+    // get all files with the same basename
+    QStringList files = dirP.entryList(QStringList()<<QFileInfo(fileP).baseName()+".*",QDir::Files);
+    QString currSufx = QFileInfo(fileP).suffix();
+    foreach (QString file, files) {
+        file = dirP.absolutePath()+"/"+file;
+        if (QFileInfo(file).suffix() != currSufx) {
+            // found another file with different suffix, open and break
+            saveFile();
+            openFolder(file);
+            break;
+        }
+    }
+}
+
 void FileManager::saveFile(bool prompt) {
     // check if (read-only) documentation is open
     if (*showingDocs) {
-        console->log("Please select and open a file before saving.");
+//        console->log("Please select and open a file before saving.");
     } else {
         // prompt to ask to confirm?
         int promptRes;
@@ -126,7 +142,6 @@ void FileManager::openFolder(QString fileName) {
     if (!fileName.isEmpty() && dirP.exists(fileName)) {
 
         //todo: save current file if there is contetn before opening, add flag above in isNull to detect opening over previous
-
         // file manager part
         dirP = QFileInfo(fileName).absoluteDir();
         QStringList filters;
@@ -142,6 +157,8 @@ void FileManager::openFolder(QString fileName) {
         setCurrentItem(findItems(QFileInfo(fileName).fileName(), Qt::MatchExactly).at(0));
         // open file
         loadFile(fileName);
+        settings->setValue("LastOpenedFile", fileName);
+        *showingDocs = false;
     }
 
 }
