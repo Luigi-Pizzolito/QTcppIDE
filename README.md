@@ -2,6 +2,8 @@
 A simple C/C++ IDE made with the Qt C++ framework.
 Still WIP.
 
+[Demo Video]
+
 <!-- TOC -->
 - [Features](#features)
     - [Done](#done)
@@ -35,22 +37,22 @@ Still WIP.
 - Switch between .cpp and .h file.
 - Bottom status bar.
     - Line number and column display.
+- Debugger support.
+    - Breakpoint setting.
+    - Support to use multiple debuggers.
 
 ### Work in Progress
 - *Code Folding.
 - Change file open to QTreeView to support subfolders.
 - Save as.
 - save before quit.
-- Debugger support.
-    - Breakpoint setting.
-    - Support to use multiple debuggers.
-
-### Planned
-- Automatically install compiler/debugger for Windows.
 - *Cross-platform testing.
 - About markdown file.
 - Documentation markdown file.
 - Alternative welcome screen markdown file.
+
+### ~~Planned~~ Dropped Features
+- Automatically install compiler/debugger for Windows.
 
 
 ## How to use
