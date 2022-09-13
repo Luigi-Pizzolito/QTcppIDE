@@ -119,6 +119,7 @@ void Console::processProcError(QProcess::ProcessError error) {
     switch (error) {
         case QProcess::ProcessError::FailedToStart:
             append("Process failed to start.");
+            append(prunner->proc->errorString());
             break;
         case QProcess::ProcessError::Crashed:
             //append("Process crashed.");

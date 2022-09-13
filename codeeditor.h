@@ -66,12 +66,14 @@ private:
     FileManager *fmp;
 
     QString bps;
+    QString bps2;
 
     QDialog *BPd;
     QFormLayout *ly;
     QFont *mfont;
 
     QTextEdit *BPdisp;
+    QTextEdit *BPdisp2;
     QLabel *BPl;
     QPushButton *BPok;
 

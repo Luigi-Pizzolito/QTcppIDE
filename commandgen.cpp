@@ -14,7 +14,7 @@
 
 #include "globaldefs.h"
 
-CommandGen::CommandGen(QDir *dir)
+CommandGen::CommandGen(QDir *dir) : dir(dir)
 {
     // Load Settings
     csettings = new QSettings(COMPANY, APPNAME);
@@ -45,7 +45,23 @@ QString CommandGen::run() {
     if (csettings->value("ExtCon").toBool()) {
         comm = rplr->Gext;
     } else {
+        // for UNIX systems, just run the output file
         comm = rplr->Gout;
+        // for WINDOWS we must launch it inside cmd, cd to the directory first and pause after.
+#ifdef _WIN32
+        comm = "cmd /k ";
+        if (rplr->Gout.contains("/")) {
+            QStringList subp = rplr->Gout.split("/");
+            QString exe = subp.back();
+            subp.pop_back();
+            comm += "cd " + subp.join("/") + " & ";
+            comm += exe;
+        } else {
+            comm += rplr->Gout;
+
+        }
+        comm += " & pause & exit";
+#endif
     }
     return comm;
 }

@@ -43,12 +43,20 @@ CodeEditor::CodeEditor(QWidget *parent) :
     mfont = new QFont("Courier", 10);
     mfont->setFixedPitch(true);
     // display args
+#ifndef _WIN32
     BPdisp = new QTextEdit(BPd);
     BPdisp->setFont(*mfont);
     BPdisp->setMinimumWidth(350);
     BPdisp->setLineWrapMode(QTextEdit::NoWrap);
     BPdisp->setReadOnly(true);
-    ly->addRow(tr("Breakpoint Commands"), BPdisp);
+    ly->addRow(tr("LLDB Breakpoint Commands"), BPdisp);
+#endif
+    BPdisp2 = new QTextEdit(BPd);
+    BPdisp2->setFont(*mfont);
+    BPdisp2->setMinimumWidth(350);
+    BPdisp2->setLineWrapMode(QTextEdit::NoWrap);
+    BPdisp2->setReadOnly(true);
+    ly->addRow(tr("GDB Breakpoint Commands"), BPdisp2);
     // help label
     BPl = new QLabel( \
                     "Push OK to copy the commands above, then paste into the debugger console to set all the breakpoints." \
@@ -290,20 +298,42 @@ void CodeEditor::mouseMoveEvent(QMouseEvent *e){
 void CodeEditor::generateBPs() {
 
     // generate BPs
+#ifndef _WIN32
     bps.clear();
-    QMapIterator<QString,QMap<int,bool>> f(breakPoints);
+    auto breakPointsc = breakPoints;
+    QMapIterator<QString,QMap<int,bool>> f(breakPointsc);
     while (f.hasNext()) {
         f.next();
         QMapIterator<int,bool> l(f.value());
         while (l.hasNext()) {
             l.next();
-            bps+="breakpoint set --file "+QFileInfo(f.key()).fileName()+" --line "+QString::number(l.key())+"\n";
+            if (l.key() !=0) {
+                bps+="breakpoint set --file "+QFileInfo(f.key()).fileName()+" --line "+QString::number(l.key())+"\n";
+            }
         }
     }
     bps+="run\n";
+#endif
+    bps2.clear();
+    auto breakPointsc2 = breakPoints;
+    QMapIterator<QString,QMap<int,bool>> f2(breakPointsc2);
+    while (f2.hasNext()) {
+        f2.next();
+        QMapIterator<int,bool> l(f2.value());
+        while (l.hasNext()) {
+            l.next();
+            if (l.key() !=0) {
+                bps2+="break "+QFileInfo(f2.key()).fileName()+":"+QString::number(l.key())+"\n";
+            }
+        }
+    }
+    bps2+="run\n";
 
     // setup dialog
+#ifndef _WIN32
     BPdisp->setText(bps);
+#endif
+    BPdisp2->setText(bps2);
 
     // show dialog
     BPd->exec();
@@ -312,5 +342,10 @@ void CodeEditor::generateBPs() {
 
 void CodeEditor::copyBPS() {
     QClipboard *clipboard = QGuiApplication::clipboard();
+#ifdef _WIN32
+    clipboard->setText(bps2);
+#else
     clipboard->setText(bps);
+#endif
+
 }

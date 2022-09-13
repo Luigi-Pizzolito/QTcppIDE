@@ -57,8 +57,15 @@ Still WIP.
 2. Choose which file to edit with the sidebar, edit files as needed.
 3. Configure compiler for your OS, or just pick from preset.
 4. Compile.
-5. Run.
+5. If using a debugging preset, you may click on the line numbers to create breakpoints and generate the breakpoint commands from the run menu.
+6. Run, paste in the breakpoint commands if using a debugging preset.
 
-[Google](http://www.google.com)
-
-![img](../doc/duck.png)
+## How to use on Windows
+1. Install [w64devkit](https://github.com/skeeto/w64devkit), recommended to copy w64devkit folder directly to `C:\`.
+2. Add the w64devkit install directory to your path: Open `cmd` as administrator and then run `set PATH=c:\path\to\w64devkit\bin;%PATH%`.
+3. Open a folder containing C/C++ files or create a new project.
+4. Choose which file to edit with the sidebar, edit files as needed.
+5. Configure compiler for your OS, or just pick from preset.
+6. Compile.
+7. If using a debugging preset, you may click on the line numbers to create breakpoints and generate the breakpoint commands from the run menu.
+8. Run, paste in the breakpoint commands if using a debugging preset.

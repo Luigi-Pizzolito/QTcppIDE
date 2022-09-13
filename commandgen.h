@@ -28,6 +28,7 @@ public:
 
 private:
     QSettings *csettings;
+    QDir *dir;
     class ReplaceEngine {
         public:
             ReplaceEngine(QDir *dir, QSettings *cfg);

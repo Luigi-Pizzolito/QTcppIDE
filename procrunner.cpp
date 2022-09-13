@@ -14,6 +14,12 @@
 
 #include "globaldefs.h"
 
+#ifdef _WIN32
+    #include "Windows.h"
+#endif
+
+#include <iostream>
+
 ProcRunner::ProcRunner(QWidget *parent, QTextEdit *text_edit) : parentw(parent),tedit(text_edit)
 {
     // Create process runner
@@ -26,7 +32,19 @@ void ProcRunner::run(QString program, QStringList arguments, QString cwd) {
     //todo: check errors from starting proccess (wrong bin path, etc)
     proc->setProcessChannelMode(QProcess::MergedChannels); // merge stdout and stderr
     proc->setWorkingDirectory(cwd);
+
+#ifdef _WIN32
+    proc->setCreateProcessArgumentsModifier([] (QProcess::CreateProcessArguments *args)
+        {
+            args->flags |= CREATE_NEW_CONSOLE;
+            args->startupInfo->dwFlags &= ~STARTF_USESTDHANDLES;
+        });
+#endif
+
     proc->start(program, arguments);
+
+    std::cout << program.toStdString() << " " << arguments.join(" ").toStdString() << "\n";
+
     proc->waitForStarted();
 }
 
