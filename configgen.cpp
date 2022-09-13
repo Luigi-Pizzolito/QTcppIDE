@@ -73,7 +73,7 @@ The following fields are available:\n\n\
 **%inc**: Parsed include directories absolute path expression, may only be used in compiler arguments section.\n\n\
 **%out**: Parsed output absolute path expression, may only be used in compiler arguments section.\n\n\
 On Linux systems, you probably already have gcc/g++ installed. Otherwise you may install via your package manager.\n\n\
-On Windows systems, it is recommended to install MinGW to *C:\\MinGW*.\n\n\
+On Windows systems, it is recommended to install w64devkit to *C:\\w64devkit*, and add it to your PATH.\n\n\
     ");
     flayout->addRow(tr("Help"), compilerabt);
 
