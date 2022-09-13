@@ -8,6 +8,7 @@ Still WIP.
     - [Work in Progress](#work-in-progress)
     - [Planned](#planned)
 - [How to use](#how-to-use)
+- [How to use on Windows](#how-to-use-on-windows)
 <!-- /TOC -->
 
 ## Features
