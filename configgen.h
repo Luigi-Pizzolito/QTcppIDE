@@ -61,10 +61,10 @@ private:
 #ifdef _WIN32
     #define numPresets 4
     ConfigSet ConfigDefaults[numPresets] = {
-        {"Windows GCC with w64devkit",                       "gcc %in -I %inc -o %out -static -Wall",    "*.c",   "%root", "bin/%rootn", true,   "cmd /k cd bin & %rootn & pause & exit"},
-        {"Windows G++ with w64devkit",                       "g++ %in -I %inc -o %out -static -Wall",    "*.cpp", "%root", "bin/%rootn", true,   "cmd /k cd bin & %rootn & pause & exit"},
-        {"Windows GCC with w64devkit and GDB Debugger",      "gcc -g %in -I %inc -o %out -static -Wall",    "*.c", "%root", "bin/%rootn", true,   "cmd /k cd bin & gdb %rootn & pause & exit"},
-        {"Windows G++ with w64devkit and GDB Debugger",      "g++ -g %in -I %inc -o %out -static -Wall",    "*.cpp", "%root", "bin/%rootn", true,   "cmd /k cd bin & gdb %rootn & pause & exit"}
+        {"Windows GCC with w64devkit",                                "gcc %in -I %inc -o %out -static -Wall",    "*.c",   "%root", "bin/%rootn", true,   "cmd /k cd bin & %rootn & pause & exit"},
+        {"Windows G++ with w64devkit",                                "g++ %in -I %inc -o %out -static -Wall",    "*.cpp", "%root", "bin/%rootn", true,   "cmd /k cd bin & %rootn & pause & exit"},
+        {"Windows GCC with w64devkit and GDB Debugger (调试器)",      "gcc -g %in -I %inc -o %out -static -Wall",    "*.c", "%root", "bin/%rootn", true,   "cmd /k cd bin & gdb %rootn & pause & exit"},
+        {"Windows G++ with w64devkit and GDB Debugger (调试器)",      "g++ -g %in -I %inc -o %out -static -Wall",    "*.cpp", "%root", "bin/%rootn", true,   "cmd /k cd bin & gdb %rootn & pause & exit"}
     };
 #else
     #define numPresets 4

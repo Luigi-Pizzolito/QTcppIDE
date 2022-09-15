@@ -118,23 +118,23 @@ void Console::processProcError(QProcess::ProcessError error) {
     setTextColor(CONSOLEERRCOLOR);
     switch (error) {
         case QProcess::ProcessError::FailedToStart:
-            append("Process failed to start.");
+            append("程序打开失败 Process failed to start.");
             append(prunner->proc->errorString());
             break;
         case QProcess::ProcessError::Crashed:
             //append("Process crashed.");
             break;
         case QProcess::ProcessError::Timedout:
-            append("Process timeout.");
+            append("程序超时 Process timeout.");
             break;
         case QProcess::ProcessError::ReadError:
-            append("Process read error.");
+            append("程序读入错误 Process read error.");
             break;
         case QProcess::ProcessError::WriteError:
-            append("Process write error.");
+            append("程序输出错误 Process write error.");
             break;
         case QProcess::ProcessError::UnknownError:
-            append("Process unknown error.");
+            append("程序未知错误Process unknown error.");
             break;
     }
 }

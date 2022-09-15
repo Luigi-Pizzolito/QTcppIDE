@@ -121,7 +121,7 @@ void MainWindow::newFile()
 void MainWindow::newFolder() {
     fileList->saveFile(true); //prompt to save file before loosing work
     // prompt folder name
-    QString dirp = QFileDialog::getExistingDirectory(this, tr("Open Directory"), "/", QFileDialog::ShowDirsOnly);
+    QString dirp = QFileDialog::getExistingDirectory(this, tr("Open Directory 打开目录"), "/", QFileDialog::ShowDirsOnly);
     if (!dirp.isNull()) {
         // create new folder
         QDir dir;
@@ -142,7 +142,7 @@ void MainWindow::openFile(const QString &path)
     bool wasShowingDocs = showingDocs;
     editor->setReadOnly(false);
     fileList->openFolder(path);
-    barStatus->log("Opened file: "+QFileInfo(path).fileName());
+    barStatus->log("Opened file 打开文件: "+QFileInfo(path).fileName());
     // and update command generator
     updateComms();
 
@@ -155,12 +155,12 @@ void MainWindow::openFile(const QString &path)
 }
 
 void MainWindow::deleteFile() {
-    if (QMessageBox(QMessageBox::Information, "Delete "+QFileInfo(fileList->fileP).fileName(), "Are you sure you want to delete "+QFileInfo(fileList->fileP).fileName()+"?", QMessageBox::Yes|QMessageBox::No).exec() == QMessageBox::Yes) {
+    if (QMessageBox(QMessageBox::Information, "Delete 删除 "+QFileInfo(fileList->fileP).fileName(), "Are you sure you want to delete "+QFileInfo(fileList->fileP).fileName()+"?", QMessageBox::Yes|QMessageBox::No).exec() == QMessageBox::Yes) {
         fileList->dirP.remove(fileList->fileP);
         QString deletedF = QFileInfo(fileList->fileP).fileName();
         fileList->dirP.setPath(fileList->dirP.absolutePath());
         fileList->clear();
-        barStatus->log("Deleted file "+deletedF);
+        barStatus->log("Deleted file 删除文件 "+deletedF);
         if (fileList->dirP.isEmpty()) {
             // if there are n more files prompt to create
             editor->clear();
@@ -170,7 +170,7 @@ void MainWindow::deleteFile() {
             // otherwise open first file
             QString ffile = fileList->dirP.absolutePath()+"/"+fileList->dirP.entryList().at(0);
             openFile(ffile);
-            barStatus->log("Deleted file "+deletedF);
+            barStatus->log("Deleted file 删除文件 "+deletedF);
         }
     }
 }
@@ -227,33 +227,33 @@ void MainWindow::keyPressEvent(QKeyEvent *ev) {
 //----- Setup menu functions
 void MainWindow::setupFileMenu()
 {
-    QMenu *fileMenu = new QMenu(tr("&File"), this);
+    QMenu *fileMenu = new QMenu(tr("&File 文件"), this);
     menuBar()->addMenu(fileMenu);
 
-    fileMenu->addAction(tr("&New File"), QKeySequence::New,
+    fileMenu->addAction(tr("&New File 新建"), QKeySequence::New,
                         this, &MainWindow::newFile);
-    fileMenu->addAction(tr("&New Project"), QKeySequence(tr("Ctrl+Shift+n")),
+    fileMenu->addAction(tr("&New Project 新项目"), QKeySequence(tr("Ctrl+Shift+n")),
                         this, &MainWindow::newFolder);
     fileMenu->addSeparator();
-    fileMenu->addAction(tr("&Open"), QKeySequence::Open,
+    fileMenu->addAction(tr("&Open 打开"), QKeySequence::Open,
                         this, [this](){ openFile(); });
     fileMenu->addSeparator();
     //todo: implement save
-    fileMenu->addAction(tr("&Save"), QKeySequence::Save, this, [=](){fileList->saveFile(false);});
+    fileMenu->addAction(tr("&Save 保存"), QKeySequence::Save, this, [=](){fileList->saveFile(false);});
     fileMenu->addSeparator();
-    fileMenu->addAction(tr("&Delete File"), QKeySequence(tr("Ctrl+Shift+w")), this, &MainWindow::deleteFile);
-    fileMenu->addAction(tr("E&xit"), QKeySequence::Quit,
+    fileMenu->addAction(tr("&Delete File 删除建"), QKeySequence(tr("Ctrl+Shift+w")), this, &MainWindow::deleteFile);
+    fileMenu->addAction(tr("E&xit 退出"), QKeySequence::Quit,
                         qApp, &QApplication::quit);
 }
 
 void MainWindow::setupHelpMenu()
 {
-    QMenu *helpMenu = new QMenu(tr("&Help"), this);
+    QMenu *helpMenu = new QMenu(tr("&Help 帮助"), this);
     menuBar()->addMenu(helpMenu);
-    helpMenu->addAction(tr("&Documentation"), QKeySequence(tr("Ctrl+h")), this, &MainWindow::showDocs);
+    helpMenu->addAction(tr("&Documentation 文档"), QKeySequence(tr("Ctrl+h")), this, &MainWindow::showDocs);
     helpMenu->addSeparator();
-    helpMenu->addAction(tr("&About"), this, &MainWindow::about);
-//    helpMenu->addAction(tr("About &Qt"), qApp, &QApplication::aboutQt);
+    helpMenu->addAction(tr("&About 关于"), this, &MainWindow::about);
+//    helpMenu->addAction(tr("About &Qt 关于Qt"), qApp, &QApplication::aboutQt);
 }
 
 //----- Setup functions
@@ -271,55 +271,55 @@ void MainWindow::setupEditor()
 }
 
 void MainWindow::setupConsole() {
-    QMenu *ConsoleMenu = new QMenu(tr("&Run"), this);
+    QMenu *ConsoleMenu = new QMenu(tr("&Run 运行"), this);
     menuBar()->addMenu(ConsoleMenu);
-    ConsoleMenu->addAction(tr("Com&pile"), QKeySequence(tr("Ctrl+b")), this, [this](){
+    ConsoleMenu->addAction(tr("Com&pile 编译"), QKeySequence(tr("Ctrl+b")), this, [this](){
         console->run(commG->compile(), fileList->dirP.absolutePath());
-        barStatus->log("Compiling project...");
+        barStatus->log("Compiling project... 编译中...");
     });
-    ConsoleMenu->addAction(tr("Ru&n"), QKeySequence(tr("Ctrl+e")), this, [this](){
+    ConsoleMenu->addAction(tr("Ru&n 运行"), QKeySequence(tr("Ctrl+e")), this, [this](){
         console->run(commG->run(), fileList->dirP.absolutePath());
-        barStatus->log("Running project...");
+        barStatus->log("Running project... 运行中...");
     });
-    ConsoleMenu->addAction(tr("Compile and &Run"), QKeySequence(tr("Ctrl+r")), this, [this](){
+    ConsoleMenu->addAction(tr("Compile and &Run 编译并运行"), QKeySequence(tr("Ctrl+r")), this, [this](){
         QStringList comms;
         comms << commG->compile();
         comms << commG->run();
         console->runBatch(comms, fileList->dirP.absolutePath());
-        barStatus->log("Compiling and running project...");
+        barStatus->log("Compiling and running project... 编译并运行中...");
     });
-    ConsoleMenu->addAction(tr("Generate &Breakpoints"), QKeySequence(tr("Ctrl+t")), this, [this](){
-        barStatus->log("Generated breakpoints...");
+    ConsoleMenu->addAction(tr("Generate &Breakpoints 设置断点"), QKeySequence(tr("Ctrl+t")), this, [this](){
+        barStatus->log("Generated breakpoints... 设置断点中...");
         editor->generateBPs();
     });
-    ConsoleMenu->addAction(tr("Clea&n (Build and Breakpoints)"), QKeySequence(tr("Ctrl+Alt+c")), this, [this]() {
+    ConsoleMenu->addAction(tr("Clea&n (Build and Breakpoints) 清除"), QKeySequence(tr("Ctrl+Alt+c")), this, [this]() {
         // remove bin/ folder
         QDir bin(fileList->dirP.absolutePath()+"/bin");
         if (bin.exists()) {
             bin.removeRecursively();
-            barStatus->log("Cleaned project.");
+            barStatus->log("Cleaned project. 清除.");
         } else {
-            barStatus->log("No build files to clean.");
+            barStatus->log("No build files to clean. 没有要清除的文件.");
         }
         // remove all breakpoints
         editor->breakPoints.insert(fileList->fileP, QMap<int,bool>{{}});
         editor->repaint();
     });
     ConsoleMenu->addSeparator();
-    ConsoleMenu->addAction(tr("Stop/&Kill"), QKeySequence(tr("Ctrl+Shift+c")), this, [this](){
+    ConsoleMenu->addAction(tr("Stop/&Kill 结束"), QKeySequence(tr("Ctrl+Shift+c")), this, [this](){
         console->stop();
-        barStatus->log("Killed running console processes.");
+        barStatus->log("Killed running console processes. 结束控制台进程.");
     });
-    ConsoleMenu->addAction(tr("C&lear Console"), QKeySequence(tr("Ctrl+l")), this, [this](){
+    ConsoleMenu->addAction(tr("C&lear Console 清除控制台"), QKeySequence(tr("Ctrl+l")), this, [this](){
         console->clearLog();
-        barStatus->log("Cleared console log.");
+        barStatus->log("Cleared console log. 清除控制台日志.");
     });
 
     ConsoleMenu->addSeparator();
     configG = new ConfigGen(this);
     connect(configG, SIGNAL(finished(int)), this, SLOT(updateComms()));
 
-    ConsoleMenu->addAction(tr("&Settings"), QKeySequence(tr("Ctrl+,")), this, [this](){configG->exec();});
+    ConsoleMenu->addAction(tr("&Settings 设置"), QKeySequence(tr("Ctrl+,")), this, [this](){configG->exec();});
 
 
     commG = new CommandGen(&fileList->dirP);
@@ -327,31 +327,31 @@ void MainWindow::setupConsole() {
 
 void MainWindow::setupEditMenu() {
     // edit menu items
-    QMenu *EditMenu = new QMenu(tr("&Edit"), this);
+    QMenu *EditMenu = new QMenu(tr("&Edit 编辑"), this);
     menuBar()->addMenu(EditMenu);
-    QAction *undo = new QAction(tr("&Undo"), this);
+    QAction *undo = new QAction(tr("&Undo 恢复"), this);
     undo->setShortcut(QKeySequence::Undo);
     EditMenu->addAction(undo);
     connect(undo,SIGNAL(triggered()),editor,SLOT(undo()));
-    QAction *redo = new QAction(tr("&Redo"), this);
+    QAction *redo = new QAction(tr("&Redo 重做"), this);
     redo->setShortcut(QKeySequence::Redo);
     EditMenu->addAction(redo);
     connect(redo,SIGNAL(triggered()),editor,SLOT(redo()));
     EditMenu->addSeparator();
-    QAction *cut = new QAction(tr("Cu&t"), this);
+    QAction *cut = new QAction(tr("Cu&t 剪切"), this);
     cut->setShortcut(QKeySequence::Cut);
     EditMenu->addAction(cut);
     connect(cut,SIGNAL(triggered()),editor,SLOT(cut()));
-    QAction *copy = new QAction(tr("&Copy"), this);
+    QAction *copy = new QAction(tr("&Copy 复制"), this);
     copy->setShortcut(QKeySequence::Copy);
     EditMenu->addAction(copy);
     connect(copy,SIGNAL(triggered()),editor,SLOT(copy()));
-    QAction *paste = new QAction(tr("&Paste"), this);
+    QAction *paste = new QAction(tr("&Paste 粘贴"), this);
     paste->setShortcut(QKeySequence::Paste);
     EditMenu->addAction(paste);
     connect(paste,SIGNAL(triggered()),editor,SLOT(paste()));
     EditMenu->addSeparator();
-    QAction *selectAll = new QAction(tr("Select &All"), this);
+    QAction *selectAll = new QAction(tr("Select &All 选择全部"), this);
     selectAll->setShortcut(QKeySequence::SelectAll);
     EditMenu->addAction(selectAll);
     connect(selectAll,SIGNAL(triggered()),editor,SLOT(selectAll()));
@@ -359,24 +359,24 @@ void MainWindow::setupEditMenu() {
 }
 
 void MainWindow::setupViewMenu() {
-    QMenu *ViewMenu = new QMenu(tr("&View"), this);
+    QMenu *ViewMenu = new QMenu(tr("&View 视图"), this);
     menuBar()->addMenu(ViewMenu);
-    ViewMenu->addAction(tr("Zoom &In"), QKeySequence::ZoomIn, this, [=](){
+    ViewMenu->addAction(tr("Zoom &In 放大"), QKeySequence::ZoomIn, this, [=](){
         editor->zoomIn();
     });
-    ViewMenu->addAction(tr("Zoom &Out"), QKeySequence::ZoomOut, this, [=](){
+    ViewMenu->addAction(tr("Zoom &Out 缩小"), QKeySequence::ZoomOut, this, [=](){
         editor->zoomOut();
     });
     ViewMenu->addSeparator();
-    ViewMenu->addAction(tr("&Goto Line"), QKeySequence(tr("Ctrl+g")), this, [=](){
-        int line = QInputDialog::getInt(this, tr("Goto Line"), tr("Line Number:"), 1, 1);
+    ViewMenu->addAction(tr("&Goto Line 跳转至行"), QKeySequence(tr("Ctrl+g")), this, [=](){
+        int line = QInputDialog::getInt(this, tr("Goto Line 转到线"), tr("Line Number, 线号:"), 1, 1);
         if (line > 0) {
             QTextCursor csr = editor->textCursor();
             csr.movePosition(QTextCursor::StartOfLine);
             csr.movePosition(QTextCursor::Start);
             csr.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor, line-1);
             editor->setTextCursor(csr);
-            barStatus->log("Moved cursor to line "+QString::number(line));
+            barStatus->log("Moved cursor to line, 移动光标至行 "+QString::number(line));
         }
     });
 }
@@ -386,25 +386,25 @@ void MainWindow::setupViewMenu() {
 
 void MainWindow::setupSearchMenu(QTextEdit *search_object)//当前文档页的指针
 {
-    QMenu *SearchMenu = new QMenu(tr("&Search"), this);
+    QMenu *SearchMenu = new QMenu(tr("&Search 搜索"), this);
     menuBar()->addMenu(SearchMenu);
 
     // search and replace menu items
     srMenu=new Search_Replace(search_object,this);
-    SearchMenu->addAction(tr("&Search"), QKeySequence::Find, this, [=](){
+    SearchMenu->addAction(tr("&Search 搜索"), QKeySequence::Find, this, [=](){
         srMenu->setCurrentTab(1);
         srMenu->show();
         QTimer::singleShot(0, srMenu->ui->keywords, SLOT(setFocus()));
     });
 
-    SearchMenu->addAction(tr("Search and &Replace"), QKeySequence(tr("Ctrl+Shift+f")), this, [=](){
+    SearchMenu->addAction(tr("Search and &Replace 替换"), QKeySequence(tr("Ctrl+Shift+f")), this, [=](){
         srMenu->setCurrentTab(2);
         srMenu->show();
         QTimer::singleShot(0, srMenu->ui->keywords_2, SLOT(setFocus()));
     });
 
     SearchMenu->addSeparator();
-    SearchMenu->addAction(tr("Switch Header/Source"), QKeySequence(tr("F4")), this, [=](){
+    SearchMenu->addAction(tr("Switch Header/Source 切换头文件"), QKeySequence(tr("F4")), this, [=](){
         fileList->swapHC();
     });
 }
@@ -421,32 +421,32 @@ void QWidget::mousePressEvent(QMouseEvent *event)
         QMenu *menu=new QMenu(this);
 
         QAction *undo = new QAction(menu);
-        undo->setText("&Undo");
+        undo->setText("&Undo 恢复");
         menu->addAction(undo);
         connect(undo,SIGNAL(triggered()),this,SLOT(CMundo()));
 
         QAction *redo = new QAction(menu);
-        redo->setText("&Redo");
+        redo->setText("&Redo 重做");
         menu->addAction(redo);
         connect(redo,SIGNAL(triggered()),this,SLOT(CMredo()));
 
         QAction *cut = new QAction(menu);
-        cut->setText("Cu&t");
+        cut->setText("Cu&t 剪切");
         menu->addAction(cut);
         connect(cut,SIGNAL(triggered()),this,SLOT(CMcut()));
 
         QAction *copy = new QAction(menu);
-        copy->setText("&Copy");
+        copy->setText("&Copy 复制");
         menu->addAction(copy);
         connect(copy,SIGNAL(triggered()),this,SLOT(CMcopy()));
 
         QAction *paste = new QAction(menu);
-        paste->setText("&Paste");
+        paste->setText("&Paste 粘贴");
         menu->addAction(paste);
         connect(paste,SIGNAL(triggered()),this,SLOT(CMpaste()));
 
         QAction *selectAll = new QAction(menu);
-        selectAll->setText("Select &All");
+        selectAll->setText("Select &All 选择全部");
         menu->addAction(selectAll);
         connect(selectAll,SIGNAL(triggered()),this,SLOT(CMselectAll()));
 

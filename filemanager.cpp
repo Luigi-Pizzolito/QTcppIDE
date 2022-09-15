@@ -52,7 +52,7 @@ void FileManager::setupNewFileDialog() {
     mfont.setPointSize(10);
     fileN->setFont(mfont);
     fileN->setMinimumWidth(200);
-    flayout->addRow(tr("Filename"), fileN);
+    flayout->addRow(tr("Filename 文件名"), fileN);
 
     fileT = new QComboBox();
     //fileT->setEditable(true);
@@ -71,7 +71,7 @@ void FileManager::setupNewFileDialog() {
     fileT->addItem("cxx/h");
     fileT->addItem("cxx/hpp");
     fileT->setCurrentIndex(0);
-    flayout->addRow(tr("Filetype"), fileT);
+    flayout->addRow(tr("Filetype 文件类型"), fileT);
 
     okbtn = new QPushButton("OK", this);
     connect(okbtn, SIGNAL(clicked(bool)), this, SLOT(createNewFiles())); //change to other func in this
@@ -102,7 +102,7 @@ void FileManager::swapHC() {
             // found another file with different suffix, open and break
             saveFile();
             openFolder(file);
-            status->log("Found "+QFileInfo(file).fileName());
+            status->log("Found, 找到 "+QFileInfo(file).fileName());
             break;
         }
     }
@@ -120,7 +120,7 @@ void FileManager::saveFile(bool prompt) {
         // prompt to ask to confirm?
         int promptRes;
         if (prompt)
-            promptRes = QMessageBox(QMessageBox::Information, "Save "+QFileInfo(fileP).fileName(), "Save "+QFileInfo(fileP).fileName()+" first? Or discard changes?", QMessageBox::Yes|QMessageBox::No).exec();
+            promptRes = QMessageBox(QMessageBox::Information, "Save, 保存 "+QFileInfo(fileP).fileName(), "Save "+QFileInfo(fileP).fileName()+" first? Or discard changes?\n先保存"+QFileInfo(fileP).fileName()+"？还是丢弃修改？", QMessageBox::Yes|QMessageBox::No).exec();
         if (prompt==false || promptRes==QMessageBox::Yes) {
             //save file here
             QFile file(fileP);
@@ -128,10 +128,10 @@ void FileManager::saveFile(bool prompt) {
                 QTextStream fstream(&file);
                 fstream << editor->toPlainText();
                 file.close();
-                status->log("Saved file "+QFileInfo(fileP).fileName()); //todo: changethis to barStatus->log
+                status->log("Saved file, 保存文件 "+QFileInfo(fileP).fileName()); //todo: changethis to barStatus->log
             } else {
-                status->log("Error saving file "+QFileInfo(fileP).fileName());
-                console->err("Error saving file "+fileP);
+                status->log("Error saving file, 保存文件错误 "+QFileInfo(fileP).fileName());
+                console->err("Error saving file, 保存文件错误 "+fileP);
             }
         }
     }
@@ -142,7 +142,7 @@ void FileManager::openFolder(QString fileName) {
 
     if (fileName.isNull()) {
         // Display dialog if no file is pased
-        fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", "C++ Files (*.cpp *.hpp *.h *.cxx *.cc);;C Files (*.c *.h);;Any files (*)");
+        fileName = QFileDialog::getOpenFileName(this, tr("Open File 打开文件"), "", "C++ Files (*.cpp *.hpp *.h *.cxx *.cc);;C Files (*.c *.h);;Any files (*)");
     }
 
     if (!fileName.isEmpty() && dirP.exists(fileName)) {
@@ -222,6 +222,7 @@ void FileManager::createNewFiles() {
         qfile.close();
     }
     status->log("Created files "+fileN->text()+" of type "+fileT->currentText());
+    status->log("创建 "+fileT->currentText()+" 类型的文件 "+fileN->text());
     // close dialog
     newFileD->close();
     // reset create file dialog

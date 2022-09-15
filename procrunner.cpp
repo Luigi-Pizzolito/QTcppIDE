@@ -51,11 +51,18 @@ void ProcRunner::run(QString program, QStringList arguments, QString cwd) {
 void ProcRunner::procStarted() {
     // started message to console
     tedit->setTextColor(CONSOLETCOLOR);
+    QString strc = "打开进程 ";
     QString str = "Started process ";
+    strc+=proc->program();
     str+=proc->program();
+    strc+=" ";
     str+=" ";
+    strc+=proc->arguments().join(" ");
     str+=proc->arguments().join(" ");
+    strc+="\n";
     str+="\n";
+    tedit->append(strc);
+    tedit->ensureCursorVisible();
     tedit->append(str);
     tedit->ensureCursorVisible();
 }
@@ -64,18 +71,24 @@ void ProcRunner::procFinished(int exitCode,QProcess::ExitStatus exitStatus) {
     // print process finished message to console
     tedit->setTextColor(CONSOLETCOLOR);
     QString str;
+    QString strc;
     if (exitStatus == QProcess::CrashExit) {
         tedit->setTextColor(CONSOLEERRCOLOR);
         str+="Process crashed with exit code ";
+        strc+="进程崩溃，退出码为";
     } else {
         str+="Process finished with exit code ";
+        strc+="进程结束，退出码为";
     }
     str+=QString::number(exitCode);
+    strc+=QString::number(exitCode);
     if (exitCode != 0) {
         tedit->setTextColor(CONSOLEERRCOLOR);
         str+="\n";
         str+=proc->errorString();
     }
+    tedit->append(strc);
+    tedit->ensureCursorVisible();
     tedit->append(str);
     tedit->ensureCursorVisible();
 }

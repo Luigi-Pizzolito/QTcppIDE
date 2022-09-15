@@ -36,7 +36,7 @@ CodeEditor::CodeEditor(QWidget *parent) :
     //BPgen dialog
     // initialise dialog
     BPd = new QDialog();
-    BPd->setWindowTitle("Breakpoints");
+    BPd->setWindowTitle("Breakpoints 断点");
     ly = new QFormLayout();
     BPd->setLayout(ly);
     // Monospace Font for LineEdits
@@ -49,19 +49,20 @@ CodeEditor::CodeEditor(QWidget *parent) :
     BPdisp->setMinimumWidth(350);
     BPdisp->setLineWrapMode(QTextEdit::NoWrap);
     BPdisp->setReadOnly(true);
-    ly->addRow(tr("LLDB Breakpoint Commands"), BPdisp);
+    ly->addRow(tr("LLDB Breakpoint Commands LLDB断点命令"), BPdisp);
 #endif
     BPdisp2 = new QTextEdit(BPd);
     BPdisp2->setFont(*mfont);
     BPdisp2->setMinimumWidth(350);
     BPdisp2->setLineWrapMode(QTextEdit::NoWrap);
     BPdisp2->setReadOnly(true);
-    ly->addRow(tr("GDB Breakpoint Commands"), BPdisp2);
+    ly->addRow(tr("GDB Breakpoint Commands GDB断点命令"), BPdisp2);
     // help label
     BPl = new QLabel( \
-                    "Push OK to copy the commands above, then paste into the debugger console to set all the breakpoints." \
+                    "Push OK to copy the commands above, then paste into the debugger console to set all the breakpoints.\n\
+按OK键复制上面的命令，然后粘贴到调试器控制台，设置所有断点。" \
                     , BPd);
-    ly->addRow(tr("Help"), BPl);
+    ly->addRow(tr("Help 帮助"), BPl);
     //ok button
     BPok = new QPushButton("OK", BPd);
     BPok->setDefault(true);

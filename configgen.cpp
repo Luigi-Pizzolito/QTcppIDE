@@ -17,7 +17,7 @@
 ConfigGen::ConfigGen(QWidget *parent):QDialog(parent)
 {
     // Setup config screen GUI Elements
-    setWindowTitle("Preferences");
+    setWindowTitle("Preferences 偏好");
     flayout = new QFormLayout();
     setLayout(flayout);
 
@@ -26,8 +26,8 @@ ConfigGen::ConfigGen(QWidget *parent):QDialog(parent)
     for (auto &preset : ConfigDefaults) {
         presetS->addItem(preset.name);
     }
-    presetS->addItem("Custom");
-    flayout->addRow(tr("Compiler Settings Preset"), presetS);
+    presetS->addItem("Custom 习惯");
+    flayout->addRow(tr("Compiler Settings Preset 编译器设置预设"), presetS);
     connect(presetS, SIGNAL(currentIndexChanged(int)), this, SLOT(loadPresetGUI(int)));
 
     // Monospace Font for LineEdits
@@ -39,25 +39,25 @@ ConfigGen::ConfigGen(QWidget *parent):QDialog(parent)
     cargs = new QLineEdit();
     cargs->setMinimumWidth(350);
     cargs->setFont(mfont);
-    flayout->addRow(tr("Compiler Arguments"), cargs);
+    flayout->addRow(tr("Compiler Arguments 编译器参数"), cargs);
     connect(cargs, SIGNAL(textEdited(QString)), this, SLOT(switchCustomPreset()));
 
     cinf = new QLineEdit();
     cinf->setMinimumWidth(350);
     cinf->setFont(mfont);
-    flayout->addRow(tr("Input Files"), cinf);
+    flayout->addRow(tr("Input Files 输入文件"), cinf);
     connect(cinf, SIGNAL(textEdited(QString)), this, SLOT(switchCustomPreset()));
 
     cicd = new QLineEdit();
     cicd->setMinimumWidth(350);
     cicd->setFont(mfont);
-    flayout->addRow(tr("Include Directories"), cicd);
+    flayout->addRow(tr("Include Directories 包括目录"), cicd);
     connect(cicd, SIGNAL(textEdited(QString)), this, SLOT(switchCustomPreset()));
 
     coutf = new QLineEdit();
     coutf->setMinimumWidth(350);
     coutf->setFont(mfont);
-    flayout->addRow(tr("Output File"), coutf);
+    flayout->addRow(tr("Output File 输出文件"), coutf);
     connect(coutf, SIGNAL(textEdited(QString)), this, SLOT(switchCustomPreset()));
 
     // Help label explaining fields system.
@@ -74,19 +74,29 @@ The following fields are available:\n\n\
 **%out**: Parsed output absolute path expression, may only be used in compiler arguments section.\n\n\
 On Linux systems, you probably already have gcc/g++ installed. Otherwise you may install via your package manager.\n\n\
 On Windows systems, it is recommended to install w64devkit to *C:\\w64devkit*, and add it to your PATH.\n\n\
+您可以在此处设置要使用的编译器以及传递给编译器的命令行标志。\n\n\
+还有一些默认预设可供选择，它们应该适用于安装了相应编译器的系统。\n\n\
+以下字段可用：\n\n\
+**%root**：项目根目录的绝对路径。\n\n\
+**%rootn**：项目根目录的名称。\n\n\
+**%in**: 输入文件相对路径的解析列表，只能用于编译器参数部分。\n\n\
+**%inc**: 解析的包含目录绝对路径表达式，只能在编译器参数部分使用。\n\n\
+**%out**: 解析后的输出绝对路径表达式，只能在编译器参数部分使用。\n\n\
+在 Linux 系统上，您可能已经安装了 gcc/g++。 否则你可以通过你的软件包管理器安装。\n\n\
+在 Windows 系统上，建议将 w64devkit 安装到 *C:\\w64devkit*，并将其添加到您的 PATH。\n\n\
     ");
-    flayout->addRow(tr("Help"), compilerabt);
+    flayout->addRow(tr("Help 帮助"), compilerabt);
 
     // Settings for launching in external console.
 #ifndef _WIN32
     extCon = new QCheckBox();
-    flayout->addRow(tr("Launch in External Console"), extCon);
+    flayout->addRow(tr("Launch in External Console 外部控制台中启动"), extCon);
     connect(extCon, SIGNAL(stateChanged(int)), this, SLOT(switchCustomPreset()));
 #endif
     conCom = new QLineEdit();
     conCom->setMinimumWidth(350);
     conCom->setFont(mfont);
-    flayout->addRow(tr("Ext. Console Arguments"), conCom);
+    flayout->addRow(tr("Ext. Console Arguments 外部控制台参数"), conCom);
     connect(conCom, SIGNAL(textEdited(QString)), this, SLOT(switchCustomPreset()));
 
     // Close button
