@@ -9,9 +9,9 @@ Still WIP.
 - [QTcppIDE](#qtcppide)
     - [Features](#features)
         - [Complete](#complete)
-        - [~~Planned~~ Dropped Features](#planned-dropped-features)
+        - [Dropped Features](#dropped-features)
+    - [Install](#install)
     - [How to use](#how-to-use)
-    - [How to use on Windows](#how-to-use-on-windows)
 
 <!-- /TOC -->
 
@@ -27,10 +27,10 @@ Still WIP.
     - Launch in external console.
 - Restore settings on startup and restore defaults.
 - Project starter templates.
-- *Toolbar
-    - Undo and Redo. (add edit menu)
-- *Search and Replace.
-- *Right click menu.
+- Toolbar
+    - Undo and Redo. (edit menu)
+- Search and Replace.
+- Right click menu.
 - Clean project folder
 - View menu for zoom in and out.
 - Error handling when launching procceses.
@@ -44,15 +44,23 @@ Still WIP.
     - Support to use multiple debuggers.
 - About markdown file.
 - Documentation markdown file.
-- *Cross-platform testing.
+- Cross-platform: Linux and Windows.
 
-### ~~Planned~~ Dropped Features
+### Dropped Features
 - Automatically install compiler/debugger for Windows.
 - *Code Folding.
 - Change file open to QTreeView to support subfolders.
 - Save as.
 - Save before quit.
 
+## Install
+
+On Linux, ensure you have the `g++`, `gcc`, `gdb` or `lldb` packages installed from your package manager.
+
+
+On Windows, before using the IDE you must install `w64devkit` to provide the compiler and debugger.
+1. Install [w64devkit](https://github.com/skeeto/w64devkit), recommended to copy w64devkit folder directly to `C:\`.
+2. Add the w64devkit install directory to your path: Open `cmd` as administrator and then run `set PATH=C:\path\to\w64devkit\bin;%PATH%` (change this path to the path where you installed the w64devkit folder first! For example `set PATH=C:\w64devkit\bin;%PATH%`).
 
 ## How to use
 1. Open a folder containing C/C++ files or create a new project.
@@ -61,13 +69,3 @@ Still WIP.
 4. Compile.
 5. If using a debugging preset, you may click on the line numbers to create breakpoints and generate the breakpoint commands from the run menu.
 6. Run, paste in the breakpoint commands if using a debugging preset.
-
-## How to use on Windows
-1. Install [w64devkit](https://github.com/skeeto/w64devkit), recommended to copy w64devkit folder directly to `C:\`.
-2. Add the w64devkit install directory to your path: Open `cmd` as administrator and then run `set PATH=C:\path\to\w64devkit\bin;%PATH%` (change this path to the path where you installed the w64devkit folder first! For example `set PATH=C:\w64devkit\bin;%PATH%`).
-3. Open a folder containing C/C++ files or create a new project.
-4. Choose which file to edit with the sidebar, edit files as needed.
-5. Configure compiler for your OS, or just pick from preset.
-6. Compile.
-7. If using a debugging preset, you may click on the line numbers to create breakpoints and generate the breakpoint commands from the run menu.
-8. Run, paste in the breakpoint commands if using a debugging preset.
