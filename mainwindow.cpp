@@ -86,8 +86,15 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowTitle(tr(APPHNAME));
     // open last opened file
     QString lastfile = settings->value("LastOpenedFile").toString();
-    if (!lastfile.isNull() && !lastfile.isEmpty())
-           openFile(lastfile);
+    if (!lastfile.isNull() && !lastfile.isEmpty() && QFileInfo(lastfile).exists()) {
+        // if last opened file is saved, open it
+        openFile(lastfile);
+    } else {
+        //otherwise show warning to open/create project first! AVOID mistake of null file
+        console->setTextColor(QColor(Qt::green).darker(160));
+        console->append("Please open a folder or create a new project to get started!");
+        console->ensureCursorVisible();
+    }
     showDocs();
 }
 
@@ -133,6 +140,7 @@ void MainWindow::openFile(const QString &path)
     bool pfileexist = QFile(fileList->fileP).exists();
     // open folder
     bool wasShowingDocs = showingDocs;
+    editor->setReadOnly(false);
     fileList->openFolder(path);
     barStatus->log("Opened file: "+QFileInfo(path).fileName());
     // and update command generator
@@ -142,6 +150,7 @@ void MainWindow::openFile(const QString &path)
     if (!path.isNull() && pfileexist) {
         if (!wasShowingDocs) fileList->saveFile(true);
         settings->setValue("LastOpenedFile", path);
+        editor->setReadOnly(false);
     }
 }
 
@@ -177,11 +186,13 @@ void MainWindow::showDocs() {
     if (file.open(QFile::ReadOnly | QFile::Text)) {
         editor->setMarkdown(file.readAll());
         showingDocs = true;
+        editor->setReadOnly(true);
     }
 }
 
 void MainWindow::showDocsRestore() {
     if (!DocsPFile.isNull()) { //if there is a prior open document to restore
+        editor->setReadOnly(false);
         openFile(fileList->fileP);
         showingDocs = false;
     }
