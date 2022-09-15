@@ -43,7 +43,9 @@ private:
     QLineEdit *cicd;
     QLineEdit *coutf;
     QLabel *compilerabt;
+    #ifndef _WIN32
     QCheckBox *extCon;
+    #endif
     QLineEdit *conCom;
 
     // Struct to store default configuration hardcoded
@@ -56,19 +58,23 @@ private:
         bool    ExtCon;
         QString ConArgs;
     };
-    #define numPresets 8
-    //todo: test to find windows compile preset and add windows debug present
+#ifdef _WIN32
+    #define numPresets 4
     ConfigSet ConfigDefaults[numPresets] = {
-        {"Linux G++",                       "g++ %in -I %inc -o %out -Wall",            "*.cpp", "%root", "bin/%rootn", false,  "alacritty -e %out"},
-        {"Linux GCC",                       "gcc %in -I %inc -o %out -Wall",            "*.c",   "%root", "bin/%rootn", false,  "alacritty -e %out"},
-        {"Linux G++ with LLDB",             "g++ -g %in -I %inc -o %out -Wall",         "*.cpp", "%root", "bin/%rootn", true,   "alacritty -e lldb %out"},
-        {"Linux GCC with LLDB",             "gcc -g %in -I %inc -o %out -Wall",         "*.c",   "%root", "bin/%rootn", true,   "alacritty -e lldb %out"},
         {"Windows GCC with w64devkit",      "gcc %in -I %inc -o %out -static -Wall",    "*.c",   "%root", "bin/%rootn", true,   "cmd /k cd bin & %rootn & pause & exit"},
         {"Windows G++ with w64devkit",      "g++ %in -I %inc -o %out -static -Wall",    "*.cpp", "%root", "bin/%rootn", true,   "cmd /k cd bin & %rootn & pause & exit"},
         {"Windows GCC with w64devkit and GDB",      "gcc -g %in -I %inc -o %out -static -Wall",    "*.c", "%root", "bin/%rootn", true,   "cmd /k cd bin & gdb %rootn & pause & exit"},
         {"Windows G++ with w64devkit and GDB",      "g++ -g %in -I %inc -o %out -static -Wall",    "*.cpp", "%root", "bin/%rootn", true,   "cmd /k cd bin & gdb %rootn & pause & exit"}
     };
-
+#else
+    #define numPresets 4
+    ConfigSet ConfigDefaults[numPresets] = {
+        {"Linux G++",                       "g++ %in -I %inc -o %out -Wall",            "*.cpp", "%root", "bin/%rootn", false,  "alacritty -e %out"},
+        {"Linux GCC",                       "gcc %in -I %inc -o %out -Wall",            "*.c",   "%root", "bin/%rootn", false,  "alacritty -e %out"},
+        {"Linux G++ with LLDB",             "g++ -g %in -I %inc -o %out -Wall",         "*.cpp", "%root", "bin/%rootn", true,   "alacritty -e lldb %out"},
+        {"Linux GCC with LLDB",             "gcc -g %in -I %inc -o %out -Wall",         "*.c",   "%root", "bin/%rootn", true,   "alacritty -e lldb %out"}
+    };
+#endif
     // QSettings to store settings non-volatile
     QSettings *csettings;
 

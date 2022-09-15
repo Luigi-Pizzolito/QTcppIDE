@@ -78,10 +78,11 @@ On Windows systems, it is recommended to install w64devkit to *C:\\w64devkit*, a
     flayout->addRow(tr("Help"), compilerabt);
 
     // Settings for launching in external console.
+#ifndef _WIN32
     extCon = new QCheckBox();
     flayout->addRow(tr("Launch in External Console"), extCon);
     connect(extCon, SIGNAL(stateChanged(int)), this, SLOT(switchCustomPreset()));
-
+#endif
     conCom = new QLineEdit();
     conCom->setMinimumWidth(350);
     conCom->setFont(mfont);
@@ -110,7 +111,9 @@ void ConfigGen::loadPresetGUI(int i) {
         cinf->setText(ConfigDefaults[i].InFiles);
         cicd->setText(ConfigDefaults[i].IncDirs);
         coutf->setText(ConfigDefaults[i].OutFile);
+        #ifndef _WIN32
         extCon->setChecked(ConfigDefaults[i].ExtCon);
+        #endif
         conCom->setText(ConfigDefaults[i].ConArgs);
         // save to non-volatile
         saveConfig(i);
@@ -123,7 +126,9 @@ void ConfigGen::loadPresetGUI(int i) {
         cicd->setText(csettings->value("IncDirs").toString());
         coutf->setText(csettings->value("OutFile").toString());
         conCom->setText(csettings->value("ConArgs").toString());
+        #ifndef _WIN32
         extCon->setChecked(csettings->value("ExtCon").toBool());
+        #endif
     }
 }
 
@@ -142,6 +147,8 @@ void ConfigGen::saveConfig(int Pi) {
     csettings->setValue("IncDirs",      cicd->text());
     csettings->setValue("OutFile",      coutf->text());
     csettings->setValue("ConArgs",      conCom->text());
+    #ifndef _WIN32
     csettings->setValue("ExtCon",       extCon->isChecked());
+    #endif
     csettings->sync();
 }
