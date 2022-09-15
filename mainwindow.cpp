@@ -229,7 +229,7 @@ void MainWindow::setupHelpMenu()
     helpMenu->addAction(tr("&Documentation"), QKeySequence(tr("Ctrl+h")), this, &MainWindow::showDocs);
     helpMenu->addSeparator();
     helpMenu->addAction(tr("&About"), this, &MainWindow::about);
-    helpMenu->addAction(tr("About &Qt"), qApp, &QApplication::aboutQt);
+//    helpMenu->addAction(tr("About &Qt"), qApp, &QApplication::aboutQt);
 }
 
 //----- Setup functions
