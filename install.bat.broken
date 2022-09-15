@@ -1,0 +1,49 @@
+@REM @echo off
+@REM check for admin provilleges
+@REM echo Administrative permissions required for install. Detecting permissions...
+@REM net session >nul 2>&1
+@REM if %errorLevel% == 0 (
+@REM     echo Success: Administrative permissions confirmed.
+@REM     goto check_w64devkit
+@REM ) else (
+@REM     echo Failure: Current permissions inadequate.
+@REM     echo Please run the script again as administrator.
+@REM )
+@REM pause
+@REM EXIT
+
+:check_w64devkit
+ECHO Checking if w64devkit is installed...
+@REM check if tools are installed
+WHERE g++
+IF %ERRORLEVEL% NEQ 0 GOTO :install_w64devkit
+WHERE gcc
+IF %ERRORLEVEL% NEQ 0 GOTO :install_w64devkit
+WHERE gdb
+IF %ERRORLEVEL% NEQ 0 GOTO :install_w64devkit
+
+ECHO w64devkit is already installed!
+
+:install_IDE
+ECHO Installing QtC++IDE...
+@REM install IDE to program files and add desktop shortcut
+ECHO Installation finished!
+PAUSE
+EXIT
+
+:install_w64devkit
+
+@REM check if w64devkit folder exists
+IF EXIST C:\w64devkit\bin (
+    ECHO w64devkit is installed but not in PATH, adding to PATH...
+    @REM set PATH=C:\w64devkit\bin;%PATH%
+    @REM echo %PATH%
+) else (
+    @REM rmdir /s /q C:\w64devkit\
+    @REM download latest w64devkit from github
+    ECHO Downloading w64devkit from GitHub...
+    for /f "tokens=1,* delims=:" %%A in ('curl -ks https://api.github.com/repos/skeeto/w64devkit/releases/latest ^| find "browser_download_url"') do (
+        curl -kOL %%B
+    )
+)
+GOTO install_IDE

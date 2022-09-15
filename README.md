@@ -5,17 +5,19 @@ Still WIP.
 [Demo Video]
 
 <!-- TOC -->
-- [Features](#features)
-    - [Done](#done)
-    - [Work in Progress](#work-in-progress)
-    - [Planned](#planned)
-- [How to use](#how-to-use)
-- [How to use on Windows](#how-to-use-on-windows)
+
+- [QTcppIDE](#qtcppide)
+    - [Features](#features)
+        - [Complete](#complete)
+        - [~~Planned~~ Dropped Features](#planned-dropped-features)
+    - [How to use](#how-to-use)
+    - [How to use on Windows](#how-to-use-on-windows)
+
 <!-- /TOC -->
 
 ## Features
 
-### Done
+### Complete
 - Text editor with line numbers and syntax highlighting.
 - In-Editor help/documentation.
 - File Open.
@@ -40,19 +42,16 @@ Still WIP.
 - Debugger support.
     - Breakpoint setting.
     - Support to use multiple debuggers.
-
-### Work in Progress
-- *Code Folding.
-- Change file open to QTreeView to support subfolders.
-- Save as.
-- save before quit.
-- *Cross-platform testing.
 - About markdown file.
 - Documentation markdown file.
-- Alternative welcome screen markdown file.
+- *Cross-platform testing.
 
 ### ~~Planned~~ Dropped Features
 - Automatically install compiler/debugger for Windows.
+- *Code Folding.
+- Change file open to QTreeView to support subfolders.
+- Save as.
+- Save before quit.
 
 
 ## How to use
@@ -65,7 +64,7 @@ Still WIP.
 
 ## How to use on Windows
 1. Install [w64devkit](https://github.com/skeeto/w64devkit), recommended to copy w64devkit folder directly to `C:\`.
-2. Add the w64devkit install directory to your path: Open `cmd` as administrator and then run `set PATH=C:\path\to\w64devkit\bin;%PATH%` (change this path to the path where you installed the w64devkit folder first!).
+2. Add the w64devkit install directory to your path: Open `cmd` as administrator and then run `set PATH=C:\path\to\w64devkit\bin;%PATH%` (change this path to the path where you installed the w64devkit folder first! For example `set PATH=C:\w64devkit\bin;%PATH%`).
 3. Open a folder containing C/C++ files or create a new project.
 4. Choose which file to edit with the sidebar, edit files as needed.
 5. Configure compiler for your OS, or just pick from preset.
