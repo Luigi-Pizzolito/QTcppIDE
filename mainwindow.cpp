@@ -187,6 +187,12 @@ void MainWindow::showDocs() {
         editor->setMarkdown(file.readAll());
         showingDocs = true;
         editor->setReadOnly(true);
+        // move cursor to line to, to avoid highlihgting title big font glitch/bug
+        QTextCursor csr = editor->textCursor();
+        csr.movePosition(QTextCursor::StartOfLine);
+        csr.movePosition(QTextCursor::Start);
+        csr.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor, 1);
+        editor->setTextCursor(csr);
     }
 }
 
@@ -205,6 +211,13 @@ void MainWindow::updateComms() {
 
 void MainWindow::keyPressEvent(QKeyEvent *ev) {
     if (ev->key() == Qt::Key::Key_Escape && showingDocs) {
+        // move cursor to line to, to avoid highlihgting title big font glitch/bug
+        QTextCursor csr = editor->textCursor();
+        csr.movePosition(QTextCursor::StartOfLine);
+        csr.movePosition(QTextCursor::Start);
+        csr.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor, 1);
+        editor->setTextCursor(csr);
+
         // restore if documentation was showing during keypress
         showDocsRestore();
         editor->setFont(efont);
