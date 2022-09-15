@@ -28,9 +28,9 @@ SOURCES         = \
                   search_replace.cpp \
                   statusbar.cpp
 
-# install
-target.path = $$[QT_INSTALL_EXAMPLES]/widgets/richtext/syntaxhighlighter
-INSTALLS += target
+## install
+#target.path = $$[QT_INSTALL_EXAMPLES]/widgets/richtext/syntaxhighlighter
+#INSTALLS += target
 
 FORMS += \
     search_replace.ui

@@ -33,4 +33,5 @@
 
 # QT Custom
 bin/
+release/
 .vscode/

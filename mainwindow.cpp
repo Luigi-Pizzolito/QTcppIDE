@@ -104,7 +104,7 @@ void MainWindow::about()
     // show about message box with about markdown file.
     //todo: add about description here
     QString md = "";
-    QFile file("../doc/about.md");
+    QFile file(ABOUTDOCPATH);
         if (file.open(QFile::ReadOnly | QFile::Text))
             md = file.readAll();
     QMessageBox aboutb;
