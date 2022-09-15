@@ -36,6 +36,10 @@ QString CommandGen::compile() {
     comm.replace("%out", rplr->Gout);
     comm.replace("%inc", rplr->Ginc);
     comm.replace("%in", rplr->Gin);
+#ifdef _WIN32
+    comm = "cmd /k echo Compiling... & "+comm;
+    comm+=" & pause & exit";
+#endif
     return comm;
 }
 
