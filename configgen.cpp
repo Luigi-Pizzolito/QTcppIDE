@@ -105,7 +105,7 @@ On Windows systems, it is recommended to install w64devkit to *C:\\w64devkit*, a
 }
 
 void ConfigGen::loadPresetGUI(int i) {
-    if (i>numPresets-1) i=0; // fix in case invalid preset was saved from previous version of the program.
+    if (i>numPresets) i=0; // fix in case invalid preset was saved from previous version of the program.
     if (i<numPresets) {
         // load selected default preset
         cargs->setText(ConfigDefaults[i].CompileArgs);
