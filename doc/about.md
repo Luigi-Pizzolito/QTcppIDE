@@ -5,6 +5,8 @@ Basic editing, compiling and debugging features implemented for both Linux and W
 
 September 2022.
 
+---
+
 ## 关于QtC++IDE 
 这个用Qt制作的简单的C/C++集成开发环境是北京理工大学的Luigi Pizzolito、杨钊毅、林振民、张瑞清和阮子航的ECE实习班编程项目的一部分，由聂青和吴浩教授制作。
 
