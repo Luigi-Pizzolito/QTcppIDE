@@ -12,7 +12,7 @@ Basic editing, compiling and debugging features implemented for both Linux and W
 
 ---
 
-[Demo Video]
+[![Demo Video](https://luigi-pizzolito.github.io/QtCPPIDE/DemoVideo_thumb.jpg)](https://youtu.be/AzCr1G2014A)
 
 ---
 
